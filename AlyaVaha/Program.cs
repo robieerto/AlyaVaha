@@ -73,7 +73,7 @@ class Program
 
         window.LogVerbosity = 0;
 
-        Task.Run(async () => CommunicationTask.Run(window));
+        Task.Run(async () => DataCommunicator.Run());
 
         window.WaitForClose(); // Starts the application event loop
     }

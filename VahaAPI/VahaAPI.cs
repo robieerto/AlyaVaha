@@ -4,19 +4,14 @@ using System.Reflection;
 
 namespace VahaAPI
 {
-    public class VahaCommunicator
+    public class VahaAPI
     {
         private readonly UdpCommunicator udpCommunicator;
         public VahaModel Vaha { get; set; } = new VahaModel();
 
-        public VahaCommunicator(String ipAddress, int port)
+        public VahaAPI(String ipAddress, int port)
         {
             udpCommunicator = new UdpCommunicator(ipAddress, port);
-        }
-
-        public void Close()
-        {
-            udpCommunicator.Close();
         }
 
         public void ReadValues()
@@ -25,7 +20,6 @@ namespace VahaAPI
             PropertyInfo[] properties = typeof(VahaModel).GetProperties();
             foreach (PropertyInfo property in properties)
             {
-                string name = property.Name;
                 string? displayName = property.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
                 if (displayName != null)
                 {
@@ -54,6 +48,35 @@ namespace VahaAPI
                     }
                 }
             }
+        }
+
+        public void SetValues(VahaModel inputVahaModel)
+        {
+            PropertyInfo[] properties = typeof(VahaModel).GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                object? value = property.GetValue(inputVahaModel);
+                if (value != null)
+                {
+                    string? displayName = property.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
+                    if (displayName != null)
+                    {
+                        udpCommunicator.Send("!" + displayName + "=" + value);
+                    }
+                }
+            }
+        }
+
+        private CancellationTokenSource scheduleReconnect()
+        {
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = cancellationTokenSource.Token;
+            _ = Task.Delay(500).ContinueWith(async (t) =>
+            {
+                Console.WriteLine("Reopen communication");
+                udpCommunicator.Reconnect();
+            }, cancellationToken);
+            return cancellationTokenSource;
         }
     }
 }

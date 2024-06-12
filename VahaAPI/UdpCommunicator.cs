@@ -41,6 +41,13 @@ namespace VahaAPI
             return Receive();
         }
 
+        public void Reconnect()
+        {
+            Close();
+            remoteEndPoint = new IPEndPoint(IPAddress.Parse(ipAddress), port);
+            udpClient.Connect(remoteEndPoint);
+        }
+
         public void Close()
         {
             udpClient.Close();
