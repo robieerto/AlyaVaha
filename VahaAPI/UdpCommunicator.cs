@@ -37,8 +37,30 @@ namespace VahaAPI
 
         public string SendAndReceive(string message)
         {
-            Send(message);
-            return Receive();
+            string output = "";
+            bool repeat = true;
+            while (repeat)
+            {
+                repeat = false;
+                try
+                {
+                    Send(message);
+                    var scheduledReconnect = scheduleReconnect();
+                    output = Receive();
+                    scheduledReconnect.Cancel();
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    if (ex.GetType() == typeof(SocketException))
+                    {
+                        repeat = true;
+                    }
+                }
+            }
+
+            return output;
         }
 
         public void Reconnect()
@@ -52,6 +74,18 @@ namespace VahaAPI
         public void Close()
         {
             udpClient.Close();
+        }
+
+        private CancellationTokenSource scheduleReconnect()
+        {
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = cancellationTokenSource.Token;
+            Task.Delay(200).ContinueWith(async (t) =>
+            {
+                Console.WriteLine("Reopen communication");
+                Reconnect();
+            }, cancellationToken);
+            return cancellationTokenSource;
         }
     }
 }
