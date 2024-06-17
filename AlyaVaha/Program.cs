@@ -73,6 +73,9 @@ class Program
 
         window.LogVerbosity = 0;
 
+        // Initialize the DataCommunicator
+        DataCommunicator.Init(window);
+        // Start the DataCommunicator
         Task.Run(async () => DataCommunicator.Run());
 
         window.WaitForClose(); // Starts the application event loop

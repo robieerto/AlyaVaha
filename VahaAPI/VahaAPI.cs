@@ -16,35 +16,53 @@ namespace VahaAPI
 
         public void ReadValues()
         {
-            string output = "", value = "";
             PropertyInfo[] properties = typeof(VahaModel).GetProperties();
             foreach (PropertyInfo property in properties)
             {
-                string? displayName = property.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
-                if (displayName != null)
+                bool repeat = true;
+                while (repeat)
                 {
-                    udpCommunicator.Send("?" + displayName + "=");
-                    output = udpCommunicator.Receive();
-                    string[] delimitted = output.Split('=');
-                    value = delimitted[1].Replace(" ", "");
-                    if (value.Length == 0)
+                    repeat = false;
+                    try
                     {
-                        continue;
-                    }
+                        string? displayName = property.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
+                        if (displayName != null)
+                        {
+                            var scheduledReconnect = scheduleReconnect();
+                            string output = udpCommunicator.SendAndReceive("?" + displayName + "=");
+                            scheduledReconnect.Cancel();
 
-                    if (property.PropertyType == typeof(float))
-                    {
-                        var floatValue = float.Parse(value, CultureInfo.InvariantCulture);
-                        property.SetValue(Vaha, floatValue);
+                            string[] delimitted = output.Split('=');
+                            string value = delimitted[1].Replace(" ", "");
+                            if (value.Length == 0)
+                            {
+                                continue;
+                            }
+
+                            var propertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+                            if (propertyType == typeof(float))
+                            {
+                                var floatValue = float.Parse(value, CultureInfo.InvariantCulture);
+                                property.SetValue(Vaha, floatValue);
+                            }
+                            else if (propertyType == typeof(int))
+                            {
+                                var intValue = int.Parse(value);
+                                property.SetValue(Vaha, intValue);
+                            }
+                            else
+                            {
+                                property.SetValue(Vaha, value);
+                            }
+                        }
                     }
-                    else if (property.PropertyType == typeof(int))
+                    catch (Exception ex)
                     {
-                        var intValue = int.Parse(value);
-                        property.SetValue(Vaha, intValue);
-                    }
-                    else
-                    {
-                        property.SetValue(Vaha, value);
+                        Console.WriteLine(ex.Message);
+                        if (ex.GetType() == typeof(System.Net.Sockets.SocketException))
+                        {
+                            repeat = true;
+                        }
                     }
                 }
             }
@@ -55,15 +73,34 @@ namespace VahaAPI
             PropertyInfo[] properties = typeof(VahaModel).GetProperties();
             foreach (PropertyInfo property in properties)
             {
-                object? value = property.GetValue(inputVahaModel);
-                if (value != null)
+                bool repeat = true;
+                while (repeat)
                 {
-                    string? displayName = property.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
-                    if (displayName != null)
+                    repeat = false;
+                    try
                     {
-                        udpCommunicator.Send("!" + displayName + "=" + value);
+                        object? value = property.GetValue(inputVahaModel);
+                        if (value != null)
+                        {
+                            string? displayName = property.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
+                            if (displayName != null)
+                            {
+                                var scheduledReconnect = scheduleReconnect();
+                                udpCommunicator.SendAndReceive("!" + displayName + "=" + value);
+                                scheduledReconnect.Cancel();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        if (ex.GetType() == typeof(System.Net.Sockets.SocketException))
+                        {
+                            repeat = true;
+                        }
                     }
                 }
+
             }
         }
 

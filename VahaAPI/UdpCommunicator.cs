@@ -44,6 +44,7 @@ namespace VahaAPI
         public void Reconnect()
         {
             Close();
+            udpClient = new UdpClient();
             remoteEndPoint = new IPEndPoint(IPAddress.Parse(ipAddress), port);
             udpClient.Connect(remoteEndPoint);
         }

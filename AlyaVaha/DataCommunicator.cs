@@ -5,7 +5,7 @@ namespace AlyaVaha
 {
     public static class DataCommunicator
     {
-        private static VahaAPI.VahaAPI? vahaCommunicator { get; set; }
+        private static VahaAPI.VahaAPI? vahaAPI { get; set; }
         private static PhotinoWindow? Window { get; set; }
 
         public static Queue<WindowCommand> CommandQueue { get; set; } = new Queue<WindowCommand>();
@@ -18,38 +18,43 @@ namespace AlyaVaha
 
         private static void InitVahaCommunicator()
         {
-            vahaCommunicator = new VahaAPI.VahaAPI("192.168.1.10", 3396);
+            vahaAPI = new VahaAPI.VahaAPI("192.168.1.10", 3396);
         }
 
         public static async Task Run()
         {
-            await Task.Delay(100);
+            await Task.Delay(1000);
 
             while (true)
             {
                 try
                 {
-                    var command = CommandQueue.Dequeue();
-                    if (command != null)
+                    // Execute commands from frontend
+                    if (CommandQueue.Count > 0)
                     {
-                        switch (command.Command)
+                        var command = CommandQueue.Dequeue();
+                        if (command != null)
                         {
-                            case "SetValues":
-                                var vahaModel = JsonSerializer.Deserialize<VahaAPI.VahaModel>(command.Value);
-                                if (vahaModel != null)
-                                {
-                                    vahaCommunicator?.SetValues(vahaModel);
-                                }
-                                break;
-                            default:
-                                break;
+                            switch (command.Command)
+                            {
+                                case "SetValues":
+                                    var vahaModel = JsonSerializer.Deserialize<VahaAPI.VahaModel>(command.Value);
+                                    if (vahaModel != null)
+                                    {
+                                        vahaAPI?.SetValues(vahaModel);
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
 
-                    vahaCommunicator?.ReadValues();
+                    // Read values from Vaha
+                    vahaAPI?.ReadValues();
                     // Send values to frontend
-                    Window?.SendWebMessage(JsonSerializer.Serialize(vahaCommunicator?.Vaha));
-                    Console.WriteLine(JsonSerializer.Serialize(vahaCommunicator?.Vaha.BruttoVaha));
+                    Window?.SendWebMessage(JsonSerializer.Serialize(vahaAPI?.Vaha));
+                    Console.WriteLine(JsonSerializer.Serialize(vahaAPI?.Vaha.BruttoVaha));
                 }
                 catch (Exception ex)
                 {

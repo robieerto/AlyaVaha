@@ -35,7 +35,7 @@ namespace VahaAPI
         public int? PozadovanyPocetDavok { get; set; }
 
         [DisplayName("SD")]
-        public int PocetDavokSirena { get; set; }
+        public int? PocetDavokSirena { get; set; }
 
         [DisplayName("SH")]
         public float? VahaSirena { get; set; }

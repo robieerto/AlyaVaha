@@ -1,3 +1,8 @@
+export interface WindowCommand {
+  command: string
+  value: string
+}
+
 export interface VahaModel {
   vahaNavazovania: number
   bruttoVaha: number
