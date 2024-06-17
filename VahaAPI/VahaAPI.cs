@@ -57,26 +57,35 @@ namespace VahaAPI
             }
         }
 
-        public void SetValues(VahaModel inputVahaModel)
+        public List<string> SetValues(VahaModel vahaValues)
         {
+            var notSetValues = new List<string>();
             PropertyInfo[] properties = typeof(VahaModel).GetProperties();
             foreach (PropertyInfo property in properties)
             {
                 try
                 {
                     string? displayName = property.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
-                    object? value = property.GetValue(inputVahaModel);
-                    if (displayName != null && value != null)
+                    object? value = property.GetValue(vahaValues);
+                    if (value != null && displayName != null)
                     {
-                        udpCommunicator.SendAndReceive("!" + displayName + "=" + value);
+                        string sendData = "!" + displayName + "=" + value.ToString();
+                        string output = udpCommunicator.SendAndReceive(sendData);
+                        string[] delimitted = output.Split('=');
+                        string receivedValue = delimitted[1].Replace(" ", "");
+                        if (receivedValue.Length == 0 || receivedValue != "OK")
+                        {
+                            notSetValues.Add(property.Name);
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
-
             }
+
+            return notSetValues;
         }
     }
 }

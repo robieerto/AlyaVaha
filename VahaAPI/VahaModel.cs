@@ -139,4 +139,97 @@ namespace VahaAPI
         public bool Blokovanie2 { get; set; }
         public bool HornuKlapkuNaStred { get; set; }
     }
+
+    public enum StavNavazovaniaPovel
+    {
+        StartNavazovania = 1,
+        PrerusenieNavazovania = 2,
+        PokracovanieNavazovania = 3,
+        OkamziteUkoncenie = 4,
+        UkonceniePoUkonceniDavky = 5,
+    }
+
+    public enum StavNavazovania
+    {
+        Nedefinovane = 0,
+        NavazovanieBezi = 1,
+        NavazovaniePrerusene = 2,
+        NavazovanieUkoncene = 3,
+    }
+
+    public enum StavVahy
+    {
+        ZiadnaChyba = 0,
+        VahaPodMinimum = 1,
+        VahaNadMaximum = 2,
+    }
+
+    public enum StavPrevodnika
+    {
+        ZiadnaChyba = 0,
+        PrevodNemozeDokoncitVcas = 16,
+        ElektronikaSaNemozeSpojit = 32,
+        NemozeSaSpojitSTenzometrom = 48,
+        ZarusenieEMCRusenim = 64,
+    }
+
+    public enum StavSirenyPovel
+    {
+        VypniSirenu = 1,
+        ZapniSirenu = 2,
+        ZapniSirenuPrerusovane = 3,
+    }
+
+    public enum StavSireny
+    {
+        SirenaVypnuta = 0,
+        SirenaZapnuta = 1,
+        SirenaZapnutaPrerusovane = 2,
+    }
+
+    public enum StavVibratoraPovel
+    {
+        VypniVibrator = 1,
+        ZapniVibrator = 2,
+    }
+
+    public enum StavVibratora
+    {
+        VibratorVypnuty = 0,
+        VibratorZapnuty = 1,
+    }
+
+    public enum StavKlapkyPovel
+    {
+        OtvorKlapku = 1,
+        ZatvorKlapku = 2,
+    }
+
+    public enum StavKlapky
+    {
+        Nedefinovane = 0,
+        KlapkaOtvorena = 1,
+        KlapkaSaOtvara = 2,
+        KlapkaZatvorena = 3,
+        KlapkaSaZatvara = 4,
+        KlapkaVPoruche = 5,
+    }
+
+    public enum StavRiadeniaNavazovania
+    {
+        Nedefinovane = 0,
+        CakaNaStart = 1,
+        CakaPredNulovanimNaZatvorenieKlapiek = 2,
+        CakaNaVynulovanieVahy = 3,
+        NavazujeSa = 4,
+        CakaPredOdvazenimNaZatvorenieKlapiek = 5,
+        CakaNaOdvazenie = 6,
+        BlokovanieVypustenia = 7,
+        PrebiehaVyprazdnovanie = 8,
+        CakaPoVyprazdneni = 9,
+        CakaPoVyprazdneniNaZatvorenieKlapiek = 10,
+        CakaPredNovymCyklom = 11,
+        CakaVPreruseni = 12,
+        JeVPoruche = 13,
+    }
 }

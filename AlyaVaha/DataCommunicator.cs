@@ -38,10 +38,12 @@ namespace AlyaVaha
                             switch (command.Command)
                             {
                                 case "SetValues":
-                                    var vahaModel = JsonSerializer.Deserialize<VahaAPI.VahaModel>(command.Value);
-                                    if (vahaModel != null)
+                                    var vahaValues = JsonSerializer.Deserialize<VahaAPI.VahaModel>(command.Value);
+                                    if (vahaValues != null)
                                     {
-                                        vahaAPI?.SetValues(vahaModel);
+                                        var notSetValues = vahaAPI?.SetValues(vahaValues);
+                                        WindowCommand responseCommand = new WindowCommand("SetValues", JsonSerializer.Serialize(notSetValues));
+                                        Window?.SendWebMessage(JsonSerializer.Serialize(responseCommand));
                                     }
                                     break;
                                 default:
@@ -53,7 +55,9 @@ namespace AlyaVaha
                     // Read values from Vaha
                     vahaAPI?.ReadValues();
                     // Send values to frontend
-                    Window?.SendWebMessage(JsonSerializer.Serialize(vahaAPI?.Vaha));
+                    WindowCommand windowCommand = new WindowCommand("ActualData", JsonSerializer.Serialize(vahaAPI?.Vaha));
+                    Window?.SendWebMessage(JsonSerializer.Serialize(windowCommand));
+
                     Console.WriteLine(JsonSerializer.Serialize(vahaAPI?.Vaha.BruttoVaha));
                 }
                 catch (Exception ex)

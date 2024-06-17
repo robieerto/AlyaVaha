@@ -25,7 +25,6 @@ namespace AlyaVaha
             {
                 case "SetValues":
                     DataCommunicator.CommandQueue.Enqueue(windowCommand);
-                    while (DataCommunicator.CommandQueue.Contains(windowCommand)) ;
                     break;
                 default:
                     break;

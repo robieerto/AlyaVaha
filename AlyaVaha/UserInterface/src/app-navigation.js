@@ -1,6 +1,6 @@
 export default [
   {
-    text: 'Home',
+    text: 'Domov',
     path: '/home',
     icon: 'home'
   }

@@ -57,18 +57,7 @@ class Program
             // PhotinoWindow was instantiated by calling a registration 
             // method like the following RegisterWebMessageReceivedHandler.
             // This could be added in the PhotinoWindowOptions if preferred.
-            .RegisterWebMessageReceivedHandler((object sender, string message) =>
-            {
-                var window = (PhotinoWindow)sender;
-
-                // The message argument is coming in from sendMessage.
-                // "window.external.sendMessage(message: string)"
-                string response = $"Received message: \"{message}\"";
-
-                // Send a message back the to JavaScript event handler.
-                // "window.external.receiveMessage(callback: Function)"
-                window.SendWebMessage(response);
-            })
+            .RegisterWebMessageReceivedHandler(MainMessageHandler.MessageHandler)
             .Load(appUrl); // Can be used with relative path strings or "new URI()" instance to load a website.
 
         window.LogVerbosity = 0;
