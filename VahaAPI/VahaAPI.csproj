@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Reinforced.Typings" Version="1.6.3" />
+  </ItemGroup>
+
 </Project>

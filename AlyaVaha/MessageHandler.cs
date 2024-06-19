@@ -1,4 +1,5 @@
-﻿using Photino.NET;
+﻿using AlyaVaha.DAL.Repositories;
+using Photino.NET;
 using System.Text.Json;
 
 namespace AlyaVaha
@@ -21,13 +22,33 @@ namespace AlyaVaha
                 return;
             }
 
+            object? responseValue = null;
+
             switch (windowCommand.Command)
             {
                 case "SetValues":
                     DataCommunicator.CommandQueue.Enqueue(windowCommand);
                     break;
+                case "GetNavazovania":
+                    responseValue = NavazovanieRepository.GetList();
+                    break;
+                case "GetMaterialy":
+                    responseValue = MaterialRepository.GetList();
+                    break;
+                case "GetZasobniky":
+                    responseValue = ZasobnikRepository.GetList();
+                    break;
+                case "GetCesty":
+                    responseValue = CestaRepository.GetList();
+                    break;
                 default:
                     break;
+            }
+
+            if (responseValue != null)
+            {
+                WindowCommand response = new WindowCommand(windowCommand.Command, JsonSerializer.Serialize(responseValue));
+                window?.SendWebMessage(JsonSerializer.Serialize(response));
             }
         }
     }

@@ -1,8 +1,9 @@
 import { reactive } from 'vue'
-import * as types from '@/types'
 
 const store = reactive({
-  actualData: {} as types.VahaModel
+  actualData: {} as VahaAPI.IVahaModel,
+  materialy: [] as AlyaVaha.Models.IMaterial[],
+  materialyLoading: true
 })
 
 export default store

@@ -80,7 +80,7 @@ namespace VahaAPI
         {
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
-            Task.Delay(200).ContinueWith(async (t) =>
+            Task.Delay(100).ContinueWith(async (t) =>
             {
                 Console.WriteLine("Reopen communication");
                 Reconnect();

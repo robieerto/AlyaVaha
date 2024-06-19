@@ -2,6 +2,7 @@ import auth from './auth'
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from './views/home-page.vue'
+import Materialy from './views/materialy-page.vue'
 import Profile from './views/profile-page.vue'
 import Tasks from './views/tasks-page.vue'
 import defaultLayout from './layouts/side-nav-outer-toolbar.vue'
@@ -22,6 +23,15 @@ const router = new createRouter({
         layout: defaultLayout
       },
       component: Home
+    },
+    {
+      path: '/materialy',
+      name: 'materialy',
+      meta: {
+        requiresAuth: true,
+        layout: defaultLayout
+      },
+      component: Materialy
     },
     {
       path: '/profile',

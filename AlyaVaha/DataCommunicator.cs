@@ -35,19 +35,27 @@ namespace AlyaVaha
                         var command = CommandQueue.Dequeue();
                         if (command != null)
                         {
+                            object? responseValue = null;
                             switch (command.Command)
                             {
                                 case "SetValues":
-                                    var vahaValues = JsonSerializer.Deserialize<VahaAPI.VahaModel>(command.Value);
-                                    if (vahaValues != null)
+                                    if (command.Value != null)
                                     {
-                                        var notSetValues = vahaAPI?.SetValues(vahaValues);
-                                        WindowCommand responseCommand = new WindowCommand("SetValues", JsonSerializer.Serialize(notSetValues));
-                                        Window?.SendWebMessage(JsonSerializer.Serialize(responseCommand));
+                                        var vahaValues = JsonSerializer.Deserialize<VahaAPI.VahaModel>(command.Value);
+                                        if (vahaValues != null)
+                                        {
+                                            responseValue = vahaAPI?.SetValues(vahaValues);
+                                        }
                                     }
                                     break;
                                 default:
                                     break;
+                            }
+
+                            if (responseValue != null)
+                            {
+                                WindowCommand response = new WindowCommand(command.Command, JsonSerializer.Serialize(responseValue));
+                                Window?.SendWebMessage(JsonSerializer.Serialize(response));
                             }
                         }
                     }

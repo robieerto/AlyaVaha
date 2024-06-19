@@ -1,7 +1,9 @@
-﻿using System.ComponentModel;
+﻿using Reinforced.Typings.Attributes;
+using System.ComponentModel;
 
 namespace VahaAPI
 {
+    [TsInterface]
     public class VahaModel
     {
         [DisplayName("NV")]
@@ -112,6 +114,7 @@ namespace VahaAPI
         public int? IdCisloPracovnika { get; set; }
     }
 
+    [TsInterface]
     public class ProgramVahaInput
     {
         public bool HornaKlapkaOtvorena { get; set; }
@@ -124,6 +127,7 @@ namespace VahaAPI
         public bool HornaKlapkaStred { get; set; }
     }
 
+    [TsInterface]
     public class ProgramVahaOutput
     {
         public bool HornuKlapkuOtvor { get; set; }
@@ -140,6 +144,7 @@ namespace VahaAPI
         public bool HornuKlapkuNaStred { get; set; }
     }
 
+    [TsEnum]
     public enum StavNavazovaniaPovel
     {
         StartNavazovania = 1,
@@ -149,6 +154,7 @@ namespace VahaAPI
         UkonceniePoUkonceniDavky = 5,
     }
 
+    [TsEnum]
     public enum StavNavazovania
     {
         Nedefinovane = 0,
@@ -157,6 +163,7 @@ namespace VahaAPI
         NavazovanieUkoncene = 3,
     }
 
+    [TsEnum]
     public enum StavVahy
     {
         ZiadnaChyba = 0,
@@ -164,6 +171,7 @@ namespace VahaAPI
         VahaNadMaximum = 2,
     }
 
+    [TsEnum]
     public enum StavPrevodnika
     {
         ZiadnaChyba = 0,
@@ -173,6 +181,7 @@ namespace VahaAPI
         ZarusenieEMCRusenim = 64,
     }
 
+    [TsEnum]
     public enum StavSirenyPovel
     {
         VypniSirenu = 1,
@@ -180,6 +189,7 @@ namespace VahaAPI
         ZapniSirenuPrerusovane = 3,
     }
 
+    [TsEnum]
     public enum StavSireny
     {
         SirenaVypnuta = 0,
@@ -187,24 +197,28 @@ namespace VahaAPI
         SirenaZapnutaPrerusovane = 2,
     }
 
+    [TsEnum]
     public enum StavVibratoraPovel
     {
         VypniVibrator = 1,
         ZapniVibrator = 2,
     }
 
+    [TsEnum]
     public enum StavVibratora
     {
         VibratorVypnuty = 0,
         VibratorZapnuty = 1,
     }
 
+    [TsEnum]
     public enum StavKlapkyPovel
     {
         OtvorKlapku = 1,
         ZatvorKlapku = 2,
     }
 
+    [TsEnum]
     public enum StavKlapky
     {
         Nedefinovane = 0,
@@ -215,6 +229,7 @@ namespace VahaAPI
         KlapkaVPoruche = 5,
     }
 
+    [TsEnum]
     public enum StavRiadeniaNavazovania
     {
         Nedefinovane = 0,
@@ -231,5 +246,13 @@ namespace VahaAPI
         CakaPredNovymCyklom = 11,
         CakaVPreruseni = 12,
         JeVPoruche = 13,
+    }
+
+    [TsEnum]
+    public enum TypNavazovania
+    {
+        Donekonecna = 0,
+        PozadovanaVaha = 1,
+        PozadovanyPocetDavok = 2,
     }
 }

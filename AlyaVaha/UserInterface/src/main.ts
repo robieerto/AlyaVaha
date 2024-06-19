@@ -21,7 +21,7 @@ localizeMessages('sk')
 
 themes.initialized(() => {
   const app = createApp(App)
-  app.use(createPinia())
+  // app.use(createPinia())
   app.use(router)
   initMessageHandler()
   app.config.globalProperties.$appInfo = appInfo
