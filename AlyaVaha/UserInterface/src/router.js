@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from './views/home-page.vue'
 import Materialy from './views/materialy-page.vue'
+import Zasobniky from './views/zasobniky-page.vue'
+import Navazovania from './views/navazovania-page.vue'
 import Profile from './views/profile-page.vue'
 import Tasks from './views/tasks-page.vue'
 import defaultLayout from './layouts/side-nav-outer-toolbar.vue'
@@ -25,6 +27,15 @@ const router = new createRouter({
       component: Home
     },
     {
+      path: '/navazovania',
+      name: 'navazovania',
+      meta: {
+        requiresAuth: true,
+        layout: defaultLayout
+      },
+      component: Navazovania
+    },
+    {
       path: '/materialy',
       name: 'materialy',
       meta: {
@@ -32,6 +43,15 @@ const router = new createRouter({
         layout: defaultLayout
       },
       component: Materialy
+    },
+    {
+      path: '/zasobniky',
+      name: 'zasobniky',
+      meta: {
+        requiresAuth: true,
+        layout: defaultLayout
+      },
+      component: Zasobniky
     },
     {
       path: '/profile',

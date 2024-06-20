@@ -1,8 +1,10 @@
+import DxNotify from 'devextreme/ui/notify'
+
 const floatFormat = '#,##0.00'
 const dateFormat = 'd.M.yyyy H:mm'
 const timeFormat = 'H:mm'
 
-const actualDate = new Date(new Date().setUTCHours(0, 0, 0, 0))
+const actualDate = () => new Date(new Date().setUTCHours(0, 0, 0, 0))
 
 const toFloatNumber = (value, digits) =>
   value != null && value != undefined && !isNaN(value)
@@ -31,6 +33,26 @@ const getTomorrow = (date) => {
   return tomorrow
 }
 
+const notify = (message, type) => {
+  DxNotify({
+    message: message,
+    type: type,
+    displayTime: 5000,
+    position: 'top center',
+    closeOnClick: true
+  })
+}
+
+const shortNotify = (message, type) => {
+  DxNotify({
+    message: message,
+    type: type,
+    displayTime: 3000,
+    position: 'bottom center',
+    closeOnClick: true
+  })
+}
+
 export {
   actualDate,
   floatFormat,
@@ -39,5 +61,7 @@ export {
   toFloatNumber,
   toDate,
   toCustomDate,
-  getTomorrow
+  getTomorrow,
+  notify,
+  shortNotify
 }

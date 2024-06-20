@@ -13,6 +13,8 @@ namespace AlyaVaha.DAL.Repositories
         public static void Add(Zasobnik zasobnik)
         {
             var context = new AlyaVahaDbContext();
+            zasobnik.DatumVytvorenia = DateTime.Now;
+            zasobnik.DatumUpravy = DateTime.Now;
             context.Zasobniky.Add(zasobnik);
             context.SaveChanges();
         }
@@ -20,6 +22,7 @@ namespace AlyaVaha.DAL.Repositories
         public static void Update(Zasobnik zasobnik)
         {
             var context = new AlyaVahaDbContext();
+            zasobnik.DatumUpravy = DateTime.Now;
             context.Zasobniky.Update(zasobnik);
             context.SaveChanges();
         }

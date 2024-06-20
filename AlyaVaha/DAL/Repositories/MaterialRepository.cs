@@ -13,6 +13,8 @@ namespace AlyaVaha.DAL.Repositories
         public static void Add(Material material)
         {
             var context = new AlyaVahaDbContext();
+            material.DatumVytvorenia = DateTime.Now;
+            material.DatumUpravy = DateTime.Now;
             context.Materialy.Add(material);
             context.SaveChanges();
         }
@@ -20,6 +22,7 @@ namespace AlyaVaha.DAL.Repositories
         public static void Update(Material material)
         {
             var context = new AlyaVahaDbContext();
+            material.DatumUpravy = DateTime.Now;
             context.Materialy.Update(material);
             context.SaveChanges();
         }

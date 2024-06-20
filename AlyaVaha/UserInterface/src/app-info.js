@@ -1,3 +1,3 @@
 export default {
-  title: 'Alya'
+  title: 'Alya Váha'
 }

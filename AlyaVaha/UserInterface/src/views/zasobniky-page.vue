@@ -23,15 +23,16 @@ function onDataGridInitialized(e) {
 }
 
 function addRow(rowEvent) {
-  sendCommand('AddMaterial', rowEvent.data)
+  sendCommand('AddZasobnik', rowEvent.data)
 }
 
 function updateRow(rowEvent) {
-  sendCommand('UpdateMaterial', { ...rowEvent.oldData, ...rowEvent.newData })
+  console.log(rowEvent)
+  sendCommand('UpdateZasobnik', { ...rowEvent.oldData, ...rowEvent.newData })
 }
 
 function deleteRow(rowEvent) {
-  sendCommand('DeleteMaterial', rowEvent.data.Id)
+  sendCommand('DeleteZasobnik', rowEvent.data.Id)
 }
 
 // const calculatePoradie = (rowIndex) =>
@@ -40,12 +41,12 @@ function deleteRow(rowEvent) {
 
 <template>
   <div>
-    <h2 class="content-block">Evidencia materiálov</h2>
-    <DxLoadPanel v-model:visible="store.materialyLoading" :position="{ of: '#data-grid' }" />
+    <h2 class="content-block">Evidencia zásobníkov</h2>
+    <DxLoadPanel v-model:visible="store.zasobnikyLoading" :position="{ of: '#data-grid' }" />
     <DxDataGrid
       id="data-grid"
       class="dx-card wide-card"
-      :data-source="store.materialy"
+      :data-source="store.zasobniky"
       :key-expr="'Id'"
       :width="'100%'"
       :show-borders="false"
@@ -67,7 +68,7 @@ function deleteRow(rowEvent) {
       <DxEditing :allow-updating="true" :allow-deleting="true" :allow-adding="true" mode="row" />
       <!-- <dx-column caption="Riadok" :allow-search="false" :allow-sorting="false" :alignment="'right'" cell-template="poradieTemplate" /> -->
       <DxColumn data-field="Id" caption="Id" :width="100" :visible="false" />
-      <DxColumn data-field="NazovMaterialu" caption="Názov materiálu" />
+      <DxColumn data-field="NazovZasobnika" caption="Názov zásobníka" />
       <DxColumn
         data-field="DatumVytvorenia"
         caption="Dátum vytvorenia"
@@ -84,12 +85,7 @@ function deleteRow(rowEvent) {
         :allow-editing="false"
         :editor-options="{ max: actualDate() }"
       />
-      <DxColumn
-        data-field="HmotnostMaterialu"
-        caption="Hmotnosť materiálu (kg)"
-        data-type="number"
-        alignment="left"
-      />
+      <DxColumn data-field="Skratka" caption="Skratka" />
       <!-- <template #poradieTemplate="{ data }">{{ calculatePoradie(data.row.rowIndex) }}</template> -->
     </DxDataGrid>
   </div>

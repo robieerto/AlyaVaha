@@ -23,6 +23,8 @@ import AppFooter from './components/app-footer.vue'
 import { sizes, subscribe, unsubscribe } from './utils/media-query'
 import { getCurrentInstance, reactive, onMounted, onBeforeUnmount, computed } from 'vue'
 
+import { getAllData } from '@/commandHandler'
+
 function getScreenSizeInfo() {
   const screenSizes = sizes()
 
@@ -50,6 +52,7 @@ export default {
 
     onMounted(() => {
       subscribe(screenSizeChanged)
+      getAllData()
     })
 
     onBeforeUnmount(() => {

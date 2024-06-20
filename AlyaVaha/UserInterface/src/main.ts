@@ -14,7 +14,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import appInfo from './app-info'
 import router from './router'
-import { initMessageHandler } from './messageHandler'
+import { initCommandHandler } from './commandHandler'
 
 locale('sk')
 localizeMessages('sk')
@@ -23,7 +23,7 @@ themes.initialized(() => {
   const app = createApp(App)
   // app.use(createPinia())
   app.use(router)
-  initMessageHandler()
+  initCommandHandler()
   app.config.globalProperties.$appInfo = appInfo
   app.mount('#app')
 })
