@@ -6,7 +6,7 @@ module AlyaVaha {
 	export interface IWindowCommand
 	{
 		Command: string;
-		Value: string;
+		Value?: string;
 	}
 }
 module AlyaVaha.Models {

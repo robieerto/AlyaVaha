@@ -42,11 +42,23 @@ export const Messages = {
     VibratorVypnuty: 'Vypnutý',
     VibratorZapnuty: 'Zapnutý'
   },
-  StavKlapkyPovel: {
+  StavHornejKlapkyPovel: {
     OtvorKlapku: 'Otvor',
     ZatvorKlapku: 'Zatvor'
   },
-  StavKlapky: {
+  StavHornejKlapky: {
+    Nedefinovane: 'Nedefinované',
+    KlapkaOtvorena: 'Otvorená',
+    KlapkaSaOtvara: 'Otvára sa',
+    KlapkaZatvorena: 'Zatvorená',
+    KlapkaSaZatvara: 'Zatvára sa',
+    KlapkaVPoruche: 'V poruche'
+  },
+  StavDolnejKlapkyPovel: {
+    OtvorKlapku: 'Otvor',
+    ZatvorKlapku: 'Zatvor'
+  },
+  StavDolnejKlapky: {
     Nedefinovane: 'Nedefinované',
     KlapkaOtvorena: 'Otvorená',
     KlapkaSaOtvara: 'Otvára sa',

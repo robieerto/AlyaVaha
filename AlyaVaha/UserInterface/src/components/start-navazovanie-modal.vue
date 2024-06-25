@@ -11,6 +11,7 @@ import {
 
 import store from '@/store'
 import { sendCommand } from '@/commandHandler'
+import * as VahaAPI from '@/types/vahaTypes'
 
 const radioTypNavazovania = [
   { text: 'Nedefinované', value: 'nedefinovane' },
