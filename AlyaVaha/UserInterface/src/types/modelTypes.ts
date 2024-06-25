@@ -13,63 +13,63 @@ module AlyaVaha.Models {
 	export interface ICesta
 	{
 		Id: number;
-		DatumVytvorenia: any;
-		DatumUpravy: any;
-		ZariadenieId: number;
-		Zariadenie: AlyaVaha.Models.IZariadenie;
-		ZasobnikId: number;
-		Zasobnik: AlyaVaha.Models.IZasobnik;
-		DoVahy: boolean;
-		ZVahy: boolean;
+		DatumVytvorenia?: any;
+		DatumUpravy?: any;
+		ZariadenieId?: number;
+		Zariadenie?: AlyaVaha.Models.IZariadenie;
+		ZasobnikId?: number;
+		Zasobnik?: AlyaVaha.Models.IZasobnik;
+		DoVahy?: boolean;
+		ZVahy?: boolean;
 	}
 	export interface IMaterial
 	{
 		Id: number;
-		NazovMaterialu: string;
-		DatumVytvorenia: any;
-		DatumUpravy: any;
-		HmotnostMaterialu: number;
+		NazovMaterialu?: string;
+		DatumVytvorenia?: any;
+		DatumUpravy?: any;
+		HmotnostMaterialu?: number;
 	}
 	export interface INavazovanie
 	{
 		Id: number;
-		CasStartu: any;
-		CasKonca: any;
-		ZariadenieId: number;
-		Zariadenie: AlyaVaha.Models.IZariadenie;
-		NavazeneMnozstvo: number;
-		NavazenyPocetDavok: number;
-		PozadovaneMnozstvo: number;
-		PozadovanyPocetDavok: number;
-		VelkostDavky: number;
-		OdkialId: number;
-		Odkial: AlyaVaha.Models.IZasobnik;
-		KamId: number;
-		Kam: AlyaVaha.Models.IZasobnik;
-		UzivatelId: number;
-		Uzivatel: AlyaVaha.Models.IUzivatel;
+		CasStartu?: any;
+		CasKonca?: any;
+		ZariadenieId?: number;
+		Zariadenie?: AlyaVaha.Models.IZariadenie;
+		NavazeneMnozstvo?: number;
+		NavazenyPocetDavok?: number;
+		PozadovaneMnozstvo?: number;
+		PozadovanyPocetDavok?: number;
+		VelkostDavky?: number;
+		OdkialId?: number;
+		Odkial?: AlyaVaha.Models.IZasobnik;
+		KamId?: number;
+		Kam?: AlyaVaha.Models.IZasobnik;
+		UzivatelId?: number;
+		Uzivatel?: AlyaVaha.Models.IUzivatel;
 	}
 	export interface IUzivatel
 	{
 		Id: number;
-		Login: string;
-		Heslo: string;
-		Email: string;
-		JeAdmin: boolean;
+		Login?: string;
+		Heslo?: string;
+		Email?: string;
+		JeAdmin?: boolean;
 	}
 	export interface IZariadenie
 	{
 		Id: number;
-		NazovZariadenia: string;
-		IpAdresa: string;
-		Port: number;
+		NazovZariadenia?: string;
+		IpAdresa?: string;
+		Port?: number;
 	}
 	export interface IZasobnik
 	{
 		Id: number;
-		NazovZasobnika: string;
-		DatumVytvorenia: any;
-		DatumUpravy: any;
-		Skratka: string;
+		NazovZasobnika?: string;
+		DatumVytvorenia?: any;
+		DatumUpravy?: any;
+		Skratka?: string;
 	}
 }

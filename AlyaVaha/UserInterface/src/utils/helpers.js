@@ -38,7 +38,7 @@ const notify = (message, type) => {
     message: message,
     type: type,
     displayTime: 5000,
-    position: 'top center',
+    position: { at: 'top center', my: 'top center', offset: '0 3' },
     closeOnClick: true
   })
 }
@@ -48,7 +48,7 @@ const shortNotify = (message, type) => {
     message: message,
     type: type,
     displayTime: 3000,
-    position: 'bottom center',
+    position: { at: 'top center', my: 'top center', offset: '0 3' },
     closeOnClick: true
   })
 }

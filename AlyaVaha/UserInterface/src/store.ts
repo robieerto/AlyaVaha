@@ -8,7 +8,8 @@ const store = reactive({
   zasobniky: [] as AlyaVaha.Models.IZasobnik[],
   navazovaniaLoading: true,
   materialyLoading: true,
-  zasobnikyLoading: true
+  zasobnikyLoading: true,
+  isStartNavazovanieModalOpened: false
 })
 
 export default store

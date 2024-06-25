@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.dx-popup-content {
+  padding-top: 0;
+}
+
+.dx-checkbox-text {
+  margin-left: 1rem;
+}

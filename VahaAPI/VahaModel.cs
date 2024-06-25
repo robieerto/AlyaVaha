@@ -6,110 +6,145 @@ namespace VahaAPI
     [TsInterface]
     public class VahaModel
     {
+        [TsProperty(ForceNullable = true)]
         [DisplayName("NV")]
         public float? VahaNavazovania { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("BV")]
         public float? BruttoVaha { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("CV")]
         public float? CelkovaVaha { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("PC")]
         public int? PocetVyrobenychCyklovVazenia { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("SP")]
         public float? PoslednaDokoncenaCelkovaVaha { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("DP")]
         public int? PoslednyDokoncenyPocetDavok { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("VD")]
         public float? PozadovanaVahaDavky { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("CD")]
         public int? CasCykluDavky { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("PV")]
         public float? PozadovanaCelkovaVaha { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("PD")]
         public int? PozadovanyPocetDavok { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("SD")]
         public int? PocetDavokSirena { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("SH")]
         public float? VahaSirena { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("SN")]
         public int? StavNavazovania { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("EV")]
         public int? ErrorStavVahy { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("PR")]
         public int? ErrorStavPrevodnikaVahy { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("VC")]
         public float? VykonCelkovy { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("VA")]
         public float? VykonAktualny { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("SS")]
         public int? StavSireny { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("SV")]
         public int? StavVibratora { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("TM")]
         public string? AktualnyCas { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("DT")]
         public string? AktualnyDatum { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("NC")]
         public string? DatumCasStartuNavazovania { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("CK")]
         public int? CasDoKoncaDavky { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("LG")]
         public string? TabulkaUdalosti { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("KH")]
         public int? StavHornejKlapky { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("KD")]
         public int? StavDolnejKlapky { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("IO")]
         public string? DigitalneVstupy { get; set; }
         //public ProgramVahaInput? DigitalneVstupy { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("OO")]
         public string? DigitalneVystupy { get; set; }
         //public ProgramVahaOutput? DigitalneVystupy { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("VS")]
         public string? VerziaSoftware { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("SR")]
         public int? StavRiadeniaNavazovania { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("NN")]
         public string? TabulkaVazeni { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("MA")]
         public int? IdCisloMaterialu { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("OD")]
         public int? IdOdbernehoMiesta { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("KA")]
         public int? IdSmerovaciehoMiesta { get; set; }
 
+        [TsProperty(ForceNullable = true)]
         [DisplayName("US")]
         public int? IdCisloPracovnika { get; set; }
     }
