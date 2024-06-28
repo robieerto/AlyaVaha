@@ -1,19 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import DxButton from 'devextreme-vue/button'
+import { DxButton } from 'devextreme-vue'
+
 import StartNavazovanieModal from '../components/start-navazovanie-modal.vue'
+import VstupyStatus from '../components/vstupy-status.vue'
+import StavyStatus from '../components/stavy-status.vue'
+import DataStatus from '../components/data-status.vue'
 
 import store from '@/store'
-import { Messages } from '@/messages'
-import * as VahaAPI from '@/types/vahaTypes'
-
-// const stavNavazovania = ref(
-//   Messages['StavNavazovania'][
-//     VahaAPI.StavNavazovania[
-//       store.actualData['StavNavazovania']!
-//     ] as keyof typeof Messages.StavNavazovania
-//   ]
-// )
 
 function openStartNavazovanieModal() {
   store.isStartNavazovanieModalOpened = true
@@ -22,40 +15,60 @@ function openStartNavazovanieModal() {
 
 <template>
   <div>
-    <h2 class="content-block">Aktuálne dáta</h2>
-    <div class="content-block">
-      <div class="row">
-        <DxButton class="col-3 ml-3" @click="openStartNavazovanieModal" text="Štart navažovania" />
+    <div class="d-flex justify-content-between">
+      <div class="d-flex justify-content-start">
+        <h2 class="col-6 content-block">Aktuálne dáta</h2>
+        <DxButton
+          class="col-6 ml-3 mt-3"
+          @click="openStartNavazovanieModal"
+          text="Štart navažovania"
+          type="default"
+        />
       </div>
-      <div class="row">
-        <div class="col-4" v-for="(value, index) in store.actualStateTexts" :key="index">
-          <div class="card mt-3">
+    </div>
+    <div class="content-block mt-0">
+      <div class="row mb-3">
+        <div class="col-auto">
+          <div class="card">
             <div class="card-body">
-              <h5 class="card-title">{{ index }}</h5>
-              <p class="card-text fw-bold fs-3">{{ value }}</p>
+              <h5 class="card-title">Aktuálna váha (kg)</h5>
+              <p class="card-text fw-bold fs-3">{{ store.actualData.BruttoVaha }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Váha navažovania (kg)</h5>
+              <p class="card-text fw-bold fs-3">{{ store.actualData.VahaNavazovania }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Súčtová váha (kg)</h5>
+              <p class="card-text fw-bold fs-3">{{ store.actualData.CelkovaVaha }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Počet vyrobených cyklov</h5>
+              <p class="card-text fw-bold fs-3">
+                {{ store.actualData.PocetVyrobenychCyklovVazenia }}
+              </p>
             </div>
           </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-4" v-for="(value, index) in store.actualInputs" :key="index">
-          <div class="card mt-3">
-            <div class="card-body">
-              <h5 class="card-title">{{ index }}</h5>
-              <p class="card-text fw-bold fs-3">{{ value ? 'Áno' : 'Nie' }}</p>
-            </div>
-          </div>
-        </div>
+        <VstupyStatus class="col" />
+        <StavyStatus class="col" />
       </div>
-      <div class="row">
-        <div class="col-4" v-for="(value, index) in store.actualData" :key="index">
-          <div class="card mt-3">
-            <div class="card-body">
-              <h5 class="card-title">{{ index }}</h5>
-              <p class="card-text fw-bold fs-3">{{ value }}</p>
-            </div>
-          </div>
-        </div>
+      <div class="row mt-3">
+        <DataStatus />
       </div>
     </div>
   </div>
