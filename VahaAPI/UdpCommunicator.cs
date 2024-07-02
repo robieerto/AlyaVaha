@@ -35,7 +35,7 @@ namespace VahaAPI
             return Encoding.UTF8.GetString(data);
         }
 
-        public string SendAndReceive(string message)
+        public string SendAndReceive(string message, bool isControl = false)
         {
             string output = "";
             bool repeat = true;
@@ -45,7 +45,7 @@ namespace VahaAPI
                 try
                 {
                     Send(message);
-                    var scheduledReconnect = scheduleReconnect();
+                    var scheduledReconnect = isControl ? scheduleLightReconnect() : scheduleReconnect();
                     output = Receive();
                     scheduledReconnect.Cancel();
 
@@ -81,6 +81,18 @@ namespace VahaAPI
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
             Task.Delay(100).ContinueWith(async (t) =>
+            {
+                Console.WriteLine("Reopen communication");
+                Reconnect();
+            }, cancellationToken);
+            return cancellationTokenSource;
+        }
+
+        private CancellationTokenSource scheduleLightReconnect()
+        {
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = cancellationTokenSource.Token;
+            Task.Delay(1000).ContinueWith(async (t) =>
             {
                 Console.WriteLine("Reopen communication");
                 Reconnect();

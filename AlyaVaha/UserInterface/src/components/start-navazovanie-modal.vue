@@ -92,6 +92,10 @@ function startAction() {
   }
 
   sendCommand('SetValues', state.formData)
+  sendCommand('SetControlValues', {
+    StavNavazovania: VahaAPI.StavNavazovaniaPovel.StartNavazovania
+  })
+
   closeModal()
 }
 
@@ -289,12 +293,14 @@ function onModalHidden() {
                         <DxNumberBox
                           v-if="data.value === 'podlaVahy'"
                           v-model:value="state.formData.VahaSirena"
+                          :disabled="state.selectedSpustenieSireny !== 'podlaVahy'"
                           :show-spin-buttons="true"
                           :min="0"
                         />
                         <DxNumberBox
                           v-if="data.value === 'podlaDavok'"
                           v-model:value="state.formData.PocetDavokSirena"
+                          :disabled="state.selectedSpustenieSireny !== 'podlaDavok'"
                           :show-spin-buttons="true"
                           :min="0"
                         />

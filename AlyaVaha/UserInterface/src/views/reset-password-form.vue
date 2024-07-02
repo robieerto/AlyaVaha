@@ -30,8 +30,8 @@
       <template #resetTemplate>
         <div>
           <span class="dx-button-text">
-              <dx-load-indicator v-if="loading" width="24px" height="24px" :visible="true" />
-              <span v-if="!loading">Reset my password</span>
+            <dx-load-indicator v-if="loading" width="24px" height="24px" :visible="true" />
+            <span v-if="!loading">Reset my password</span>
           </span>
         </div>
       </template>
@@ -47,15 +47,15 @@ import DxForm, {
   DxButtonOptions,
   DxRequiredRule,
   DxEmailRule
-} from 'devextreme-vue/form';
-import DxLoadIndicator from 'devextreme-vue/load-indicator';
-import notify from 'devextreme/ui/notify';
-import { ref, reactive } from 'vue';
-import { useRouter } from 'vue-router';
+} from 'devextreme-vue/form'
+import DxLoadIndicator from 'devextreme-vue/load-indicator'
+import { notify } from '@/utils/helpers'
+import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 
-import auth from "../auth";
+import auth from '../auth'
 
-const notificationText = 'We\'ve sent a link to reset your password. Check your inbox.';
+const notificationText = "We've sent a link to reset your password. Check your inbox."
 
 export default {
   components: {
@@ -69,29 +69,29 @@ export default {
     DxLoadIndicator
   },
   setup() {
-    const router = useRouter();
+    const router = useRouter()
 
-    const loading = ref(false);
+    const loading = ref(false)
     const formData = reactive({
-      email:""
-    });
+      email: ''
+    })
 
     async function onSubmit() {
-      const { email } = formData;
-      loading.value = true;
+      const { email } = formData
+      loading.value = true
 
-      const result = await auth.resetPassword(email);
-      loading.value = false;
+      const result = await auth.resetPassword(email)
+      loading.value = false
 
       if (result.isOk) {
-        router.push("/login-form");
-        notify(notificationText, "success", 2500);
+        router.push('/login-form')
+        notify(notificationText, 'success')
       } else {
-        notify(result.message, "error", 2000);
+        notify(result.message, 'error')
       }
     }
 
-    return { 
+    return {
       loading,
       formData,
       onSubmit
@@ -101,7 +101,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../themes/generated/variables.base.scss";
+@import '../themes/generated/variables.base.scss';
 
 .reset-password-form {
   .submit-button {

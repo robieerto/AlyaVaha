@@ -9,3 +9,7 @@
 .dx-checkbox-text {
   margin-left: 1rem;
 }
+
+.dx-toast-info {
+  background-color: #03a9f4 !important;
+}

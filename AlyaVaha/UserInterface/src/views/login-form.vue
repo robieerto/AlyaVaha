@@ -4,27 +4,27 @@
       <dx-item
         data-field="email"
         editor-type="dxTextBox"
-        :editor-options="{ stylingMode: 'filled', placeholder: 'Email', mode: 'email' }"
+        :editor-options="{ stylingMode: 'filled', placeholder: 'Užívateľské meno' }"
       >
-        <dx-required-rule message="Email is required" />
-        <dx-email-rule message="Email is invalid" />
+        <dx-required-rule message="Užívateľské meno je povinné" />
+        <!-- <dx-email-rule message="Email je nesprávny" /> -->
         <dx-label :visible="false" />
       </dx-item>
       <dx-item
-        data-field='password'
-        editor-type='dxTextBox'
-        :editor-options="{ stylingMode: 'filled', placeholder: 'Password', mode: 'password' }"
+        data-field="password"
+        editor-type="dxTextBox"
+        :editor-options="{ stylingMode: 'filled', placeholder: 'Heslo', mode: 'password' }"
       >
-        <dx-required-rule message="Password is required" />
+        <dx-required-rule message="Heslo je povinné" />
         <dx-label :visible="false" />
       </dx-item>
-      <dx-item
+      <!-- <dx-item
         data-field="rememberMe"
         editor-type="dxCheckBox"
         :editor-options="{ text: 'Remember me', elementAttr: { class: 'form-text' } }"
       >
         <dx-label :visible="false" />
-      </dx-item>
+      </dx-item> -->
       <dx-button-item>
         <dx-button-options
           width="100%"
@@ -34,7 +34,7 @@
         >
         </dx-button-options>
       </dx-button-item>
-      <dx-item>
+      <!-- <dx-item>
         <template #default>
           <div class="link">
             <router-link to="/reset-password">Forgot password?</router-link>
@@ -42,17 +42,13 @@
         </template>
       </dx-item>
       <dx-button-item>
-        <dx-button-options
-          text="Create an account"
-          width="100%"
-          :on-click="onCreateAccountClick"
-        />
-      </dx-button-item>
+        <dx-button-options text="Create an account" width="100%" :on-click="onCreateAccountClick" />
+      </dx-button-item> -->
       <template #signInTemplate>
         <div>
           <span class="dx-button-text">
             <dx-load-indicator v-if="loading" width="24px" height="24px" :visible="true" />
-            <span v-if="!loading">Sign In</span>
+            <span v-if="!loading">Prihlásiť</span>
           </span>
         </div>
       </template>
@@ -61,46 +57,45 @@
 </template>
 
 <script>
-import DxLoadIndicator from "devextreme-vue/load-indicator";
+import DxLoadIndicator from 'devextreme-vue/load-indicator'
 import DxForm, {
   DxItem,
-  DxEmailRule,
   DxRequiredRule,
   DxLabel,
   DxButtonItem,
   DxButtonOptions
-} from "devextreme-vue/form";
-import notify from 'devextreme/ui/notify';
+} from 'devextreme-vue/form'
+import { notify } from '@/utils/helpers'
 
-import auth from "../auth";
+import auth from '../auth'
 
-import { reactive, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { reactive, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 export default {
   setup() {
-    const route = useRoute();
-    const router = useRouter();
+    const route = useRoute()
+    const router = useRouter()
 
     const formData = reactive({
-      email:"",
-      password:""
-    });
-    const loading = ref(false);
+      email: '',
+      password: ''
+    })
+    const loading = ref(false)
 
     function onCreateAccountClick() {
-      router.push("/create-account");
+      router.push('/create-account')
     }
 
     async function onSubmit() {
-      const { email, password } = formData;
-      loading.value = true;
-      const result = await auth.logIn(email, password);
+      const { email, password } = formData
+      loading.value = true
+      const result = await auth.logIn(email, password)
       if (!result.isOk) {
-        loading.value = false;
-        notify(result.message, "error", 2000);
+        loading.value = false
+        notify(result.message, 'error')
       } else {
-        router.push(route.query.redirect || "/home");
+        router.push(route.query.redirect || '/home')
       }
     }
 
@@ -109,23 +104,22 @@ export default {
       loading,
       onCreateAccountClick,
       onSubmit
-    };
+    }
   },
   components: {
     DxLoadIndicator,
     DxForm,
-    DxEmailRule,
     DxRequiredRule,
     DxItem,
     DxLabel,
     DxButtonItem,
     DxButtonOptions
   }
-};
+}
 </script>
 
 <style lang="scss">
-@import "../themes/generated/variables.base.scss";
+@import '../themes/generated/variables.base.scss';
 
 .login-form {
   .link {

@@ -77,7 +77,7 @@ const router = new createRouter({
       meta: {
         requiresAuth: false,
         layout: simpleLayout,
-        title: 'Sign In'
+        title: 'Prihlásenie'
       },
       component: loadView('login-form')
     },

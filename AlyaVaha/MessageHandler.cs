@@ -32,6 +32,12 @@ namespace AlyaVaha
                     case "SetValues":
                         DataCommunicator.CommandQueue.Enqueue(windowCommand);
                         break;
+                    case "SetControlValues":
+                        DataCommunicator.CommandQueue.Enqueue(windowCommand);
+                        break;
+                    case "SetZeroing":
+                        DataCommunicator.CommandQueue.Enqueue(windowCommand);
+                        break;
                     case "GetNavazovania":
                         responseValue = NavazovanieRepository.GetList();
                         break;

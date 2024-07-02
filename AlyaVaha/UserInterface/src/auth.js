@@ -11,7 +11,8 @@ export default {
   async logIn(email, password) {
     try {
       // Send request
-      console.log(email, password)
+      if (email !== 'admin' || password !== 'alya123456') throw new Error()
+
       this._user = { ...defaultUser, email }
 
       return {
@@ -21,7 +22,7 @@ export default {
     } catch {
       return {
         isOk: false,
-        message: 'Autentifikácia zlyhala'
+        message: 'Nesprávne prihlasovacie údaje'
       }
     }
   },

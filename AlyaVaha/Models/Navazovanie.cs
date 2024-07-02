@@ -19,6 +19,8 @@ namespace AlyaVaha.Models
         public Zasobnik? Odkial { get; set; }
         public int? KamId { get; set; }
         public Zasobnik? Kam { get; set; }
+        public int? MaterialId { get; set; }
+        public Material? Material { get; set; }
         public int? UzivatelId { get; set; }
         public Uzivatel? Uzivatel { get; set; }
     }

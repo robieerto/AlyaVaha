@@ -46,6 +46,8 @@ module AlyaVaha.Models {
 		Odkial?: AlyaVaha.Models.IZasobnik;
 		KamId?: number;
 		Kam?: AlyaVaha.Models.IZasobnik;
+		MaterialId?: number;
+		Material?: AlyaVaha.Models.IMaterial;
 		UzivatelId?: number;
 		Uzivatel?: AlyaVaha.Models.IUzivatel;
 	}

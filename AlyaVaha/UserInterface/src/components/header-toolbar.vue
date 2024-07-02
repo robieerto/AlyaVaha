@@ -11,6 +11,16 @@
         <div>{{ title }}</div>
       </dx-item>
 
+      <dx-item v-if="title" location="before" css-class="header-title dx-toolbar-label px-3">
+        <p
+          :class="
+            'col fw-bold status contact-status status-' + store.connected?.toString().toLowerCase()
+          "
+        >
+          {{ store.connected ? 'Pripojená' : 'Odpojená' }}
+        </p>
+      </dx-item>
+
       <dx-item location="after" locate-in-menu="auto" menu-item-template="menuUserItem">
         <template #default>
           <div>
@@ -42,6 +52,8 @@ import { ref } from 'vue'
 
 import UserPanel from './user-panel.vue'
 
+import store from '@/store'
+
 export default {
   props: {
     menuToggleEnabled: Boolean,
@@ -57,13 +69,13 @@ export default {
     auth.getUser().then((e) => (email.value = e.data.email))
 
     const userMenuItems = [
+      // {
+      //   text: 'Profil',
+      //   icon: 'user',
+      //   onClick: onProfileClick
+      // },
       {
-        text: 'Profile',
-        icon: 'user',
-        onClick: onProfileClick
-      },
-      {
-        text: 'Logout',
+        text: 'Odhlásiť sa',
         icon: 'runner',
         onClick: onLogoutClick
       }
@@ -86,7 +98,8 @@ export default {
 
     return {
       email,
-      userMenuItems
+      userMenuItems,
+      store
     }
   },
   components: {
@@ -140,6 +153,56 @@ export default {
 
   .user-button > .dx-button-content {
     padding: 3px;
+  }
+}
+</style>
+
+<style lang="scss">
+.contact-status {
+  @mixin status($status-color) {
+    color: $status-color;
+
+    &.dx-texteditor-input.status-editor-input {
+      color: $status-color;
+    }
+
+    &::before {
+      background: $status-color;
+    }
+  }
+  &.status-undefined {
+    @include status(#03a9f4);
+  }
+
+  &.status-true {
+    @include status(#2eb52c);
+  }
+
+  &.status-false {
+    @include status(#de8e8c);
+  }
+}
+</style>
+
+<style scoped lang="scss">
+@use 'sass:math';
+
+.contact-status {
+  &::before {
+    --diameter: 12px;
+
+    content: ' ';
+    width: var(--diameter);
+    height: var(--diameter);
+    border-radius: calc(var(--diameter) / 2);
+    margin-right: calc(var(--diameter) / 2);
+    display: inline-block;
+    align-self: center;
+  }
+
+  :deep(&.input) {
+    display: block;
+    padding: 15px 16px 14px;
   }
 }
 </style>

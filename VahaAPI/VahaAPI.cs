@@ -25,6 +25,10 @@ namespace VahaAPI
                     if (displayName != null)
                     {
                         string output = udpCommunicator.SendAndReceive("?" + displayName + "=");
+                        if (output.Length == 0)
+                        {
+                            continue;
+                        }
 
                         string[] delimitted = output.Split('=');
                         string value = delimitted[1].Replace(" ", "");
@@ -57,7 +61,7 @@ namespace VahaAPI
             }
         }
 
-        public List<string> SetValues(VahaModel vahaValues)
+        public List<string> SetValues(VahaModel vahaValues, bool isControl = false)
         {
             var notSetValues = new List<string>();
             PropertyInfo[] properties = typeof(VahaModel).GetProperties();
@@ -70,7 +74,7 @@ namespace VahaAPI
                     if (value != null && displayName != null)
                     {
                         string sendData = "!" + displayName + "=" + value.ToString();
-                        string output = udpCommunicator.SendAndReceive(sendData);
+                        string output = udpCommunicator.SendAndReceive(sendData, isControl);
                         string[] delimitted = output.Split('=');
                         string receivedValue = delimitted[1].Replace(" ", "");
                         if (receivedValue.Length == 0 || receivedValue != "OK")
@@ -86,6 +90,38 @@ namespace VahaAPI
             }
 
             return notSetValues;
+        }
+
+        public bool SetZeroing()
+        {
+            string output = udpCommunicator.SendAndReceive("!PZ=0");
+            string[] delimitted = output.Split('=');
+            string receivedValue = delimitted[1].Replace(" ", "");
+            return receivedValue == "OK";
+        }
+
+        public bool SetTabulkaVazeniRemove(int id)
+        {
+            bool isControl = true;
+            string output = udpCommunicator.SendAndReceive("!NN=" + id, isControl);
+            string[] delimitted = output.Split('=');
+            string receivedValue = delimitted[1].Replace(" ", "");
+            return receivedValue == "OK";
+        }
+
+        public bool SetActualDateAndTime()
+        {
+            string output = udpCommunicator.SendAndReceive("!TM=" + DateTime.Now.ToString("HH.mm.ss"));
+            string[] delimitted = output.Split('=');
+            string receivedValue = delimitted[1].Replace(" ", "");
+            if (receivedValue == "OK")
+            {
+                output = udpCommunicator.SendAndReceive("!DT=" + DateTime.Now.ToString("dd.MM.yyyy"));
+                delimitted = output.Split('=');
+                receivedValue = delimitted[1].Replace(" ", "");
+                return receivedValue == "OK";
+            }
+            else return false;
         }
     }
 }

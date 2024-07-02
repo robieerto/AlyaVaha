@@ -22,32 +22,6 @@ import store from '@/store'
   </section>
 </template>
 
-<style lang="scss">
-.contact-status {
-  @mixin status($status-color) {
-    color: $status-color;
-
-    &.dx-texteditor-input.status-editor-input {
-      color: $status-color;
-    }
-
-    &::before {
-      background: $status-color;
-    }
-  }
-  &.status-undefined {
-    @include status(#03a9f4);
-  }
-
-  &.status-true {
-    @include status(#2eb52c);
-  }
-
-  &.status-false {
-    @include status(#de8e8c);
-  }
-}
-</style>
 <style scoped lang="scss">
 @use 'sass:math';
 

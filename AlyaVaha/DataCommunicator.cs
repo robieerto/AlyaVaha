@@ -1,5 +1,7 @@
-﻿using Photino.NET;
+﻿using AlyaVaha.DAL.Repositories;
+using Photino.NET;
 using System.Text.Json;
+using VahaAPI;
 
 namespace AlyaVaha
 {
@@ -25,6 +27,20 @@ namespace AlyaVaha
         {
             await Task.Delay(1000);
 
+            // Send actual date and time in device
+            bool? dateTimeSet = false;
+            do
+            {
+                try
+                {
+                    dateTimeSet = vahaAPI?.SetActualDateAndTime();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            } while (!dateTimeSet ?? true);
+
             while (true)
             {
                 try
@@ -48,6 +64,20 @@ namespace AlyaVaha
                                         }
                                     }
                                     break;
+                                case "SetControlValues":
+                                    if (command.Value != null)
+                                    {
+                                        bool isControl = true;
+                                        var vahaValues = JsonSerializer.Deserialize<VahaAPI.VahaModel>(command.Value);
+                                        if (vahaValues != null)
+                                        {
+                                            responseValue = vahaAPI?.SetValues(vahaValues, isControl);
+                                        }
+                                    }
+                                    break;
+                                case "SetZeroing":
+                                    responseValue = vahaAPI?.SetZeroing();
+                                    break;
                                 default:
                                     break;
                             }
@@ -62,11 +92,36 @@ namespace AlyaVaha
 
                     // Read values from Vaha
                     vahaAPI?.ReadValues();
-                    // Send values to frontend
-                    WindowCommand windowCommand = new WindowCommand("ActualData", JsonSerializer.Serialize(vahaAPI?.Vaha));
-                    Window?.SendWebMessage(JsonSerializer.Serialize(windowCommand));
+                    VahaModel? vahaData = vahaAPI?.Vaha;
+                    if (vahaData != null)
+                    {
+                        // If there is new vazenie, save it
+                        if (vahaData.TabulkaVazeni != null && vahaData.TabulkaVazeni.Length > 13)
+                        {
+                            // Parse vazenie and save to database
+                            try
+                            {
+                                var vazenie = NavazovanieParser.Parse(vahaData.TabulkaVazeni);
+                                var externalId = vazenie.Id;
+                                vazenie.Id = 0;
+                                vazenie.ZariadenieId = 1;
+                                NavazovanieRepository.Add(vazenie);
+                                vahaAPI?.SetTabulkaVazeniRemove(externalId);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+                        }
 
-                    Console.WriteLine(JsonSerializer.Serialize(vahaAPI?.Vaha.BruttoVaha));
+                        // Send values to frontend
+                        WindowCommand windowCommand = new WindowCommand("ActualData", JsonSerializer.Serialize(vahaData));
+                        Window?.SendWebMessage(JsonSerializer.Serialize(windowCommand));
+
+                        Console.WriteLine(JsonSerializer.Serialize(vahaData.BruttoVaha));
+                    }
+
+
                 }
                 catch (Exception ex)
                 {

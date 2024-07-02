@@ -12,13 +12,14 @@
       <dx-item
         data-field="confirmedPassword"
         editor-type="dxTextBox"
-        :editor-options="{ stylingMode: 'filled', placeholder: 'Confirm Password', mode: 'password' }"
+        :editor-options="{
+          stylingMode: 'filled',
+          placeholder: 'Confirm Password',
+          mode: 'password'
+        }"
       >
         <dx-required-rule message="Password is required" />
-        <dx-custom-rule
-          message="Passwords do not match"
-          :validation-callback="confirmPassword"
-        />
+        <dx-custom-rule message="Passwords do not match" :validation-callback="confirmPassword" />
         <dx-label :visible="false" />
       </dx-item>
       <dx-button-item>
@@ -34,8 +35,8 @@
       <template #changePassword>
         <div>
           <span class="dx-button-text">
-              <dx-loadIndicator v-if="loading" width="24px" height="24px" :visible="true" />
-              <span v-if="!loading">Continue</span>
+            <dx-loadIndicator v-if="loading" width="24px" height="24px" :visible="true" />
+            <span v-if="!loading">Continue</span>
           </span>
         </div>
       </template>
@@ -51,16 +52,16 @@ import DxForm, {
   DxButtonOptions,
   DxCustomRule,
   DxRequiredRule
-} from 'devextreme-vue/form';
-import DxLoadIndicator from 'devextreme-vue/load-indicator';
-import notify from 'devextreme/ui/notify';
-import { useRouter, useRoute } from 'vue-router';
-import { ref, reactive } from "vue";
+} from 'devextreme-vue/form'
+import DxLoadIndicator from 'devextreme-vue/load-indicator'
+import { notify } from '@/utils/helpers'
+import { useRouter, useRoute } from 'vue-router'
+import { ref, reactive } from 'vue'
 
-import auth from "../auth";
+import auth from '../auth'
 
 export default {
-components: {
+  components: {
     DxForm,
     DxItem,
     DxLabel,
@@ -71,33 +72,33 @@ components: {
     DxLoadIndicator
   },
   setup() {
-    const router = useRouter();
-    const route = useRoute();
+    const router = useRouter()
+    const route = useRoute()
 
-    const recoveryCode = ref("");
-    const loading = ref(false);
+    const recoveryCode = ref('')
+    const loading = ref(false)
     const formData = reactive({
-      password:""
-    });
+      password: ''
+    })
 
-    recoveryCode.value = route.params.recoveryCode;
+    recoveryCode.value = route.params.recoveryCode
 
     async function onSubmit() {
-      const { password } = formData;
-      loading.value = true;
-  
-      const result = await auth.changePassword(password, recoveryCode.value);
-      loading.value = false;
-  
+      const { password } = formData
+      loading.value = true
+
+      const result = await auth.changePassword(password, recoveryCode.value)
+      loading.value = false
+
       if (result.isOk) {
-        router.push("/login-form");
+        router.push('/login-form')
       } else {
-        notify(result.message, 'error', 2000);
+        notify(result.message, 'error')
       }
     }
 
-    function confirmPassword (e) {
-      return e.value === formData.password;
+    function confirmPassword(e) {
+      return e.value === formData.password
     }
 
     return {
@@ -110,6 +111,4 @@ components: {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

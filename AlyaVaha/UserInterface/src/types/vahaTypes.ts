@@ -93,9 +93,9 @@ export enum StavPrevodnika {
 	ZarusenieEMCRusenim = 64
 }
 export enum StavSirenyPovel {
-	VypniSirenu = 1,
-	ZapniSirenu = 2,
-	ZapniSirenuPrerusovane = 3
+	VypniSirenu = 0,
+	ZapniSirenu = 1,
+	ZapniSirenuPrerusovane = 2
 }
 export enum StavSireny {
 	SirenaVypnuta = 0,
@@ -103,8 +103,8 @@ export enum StavSireny {
 	SirenaZapnutaPrerusovane = 2
 }
 export enum StavVibratoraPovel {
-	VypniVibrator = 1,
-	ZapniVibrator = 2
+	VypniVibrator = 0,
+	ZapniVibrator = 1
 }
 export enum StavVibratora {
 	VibratorVypnuty = 0,
@@ -142,4 +142,29 @@ export enum TypNavazovania {
 	Donekonecna = 0,
 	PozadovanaVaha = 1,
 	PozadovanyPocetDavok = 2
+}
+export enum ProgramVahaDigitalInputNumber {
+	HornaKlapkaOtvorena = 1,
+	HornaKlapkaZatvorena = 2,
+	DolnaKlapkaOtvorena = 3,
+	DolnaKlapkaZatvorena = 4,
+	RucnyRezim = 5,
+	Napajanie24V = 6,
+	BlokovanieVypustenia = 7,
+	StopNavazovania = 8,
+	HornaKlapkaStred = 12
+}
+export enum ProgramVahaDigitalOutputNumber {
+	HornuKlapkuOtvor = 1,
+	DolnuKlapkuOtvor = 2,
+	Sirena = 3,
+	NavazovanieBezi = 4,
+	Porucha = 5,
+	Vibrator = 6,
+	Odfuk = 7,
+	Blokovanie1 = 8,
+	Blokovanie2 = 9,
+	HornuKlapkuNaStred = 10,
+	HornuKlapkuZatvor = 11,
+	DolnuKlapkuZatvor = 12
 }
