@@ -50,7 +50,7 @@ function openStartNavazovanieModal() {
                   StavNavazovania: VahaAPI.StavNavazovaniaPovel.PrerusenieNavazovania
                 })
             "
-            text="Prerušenie"
+            text="Prerušenie navažovania"
             type="default"
           />
           <DxButton
@@ -81,7 +81,10 @@ function openStartNavazovanieModal() {
             type="danger"
           />
           <DxButton
-            v-if="store.actualData.StavNavazovania === VahaAPI.StavNavazovania.NavazovanieBezi"
+            v-if="
+              store.actualData.StavNavazovania === VahaAPI.StavNavazovania.NavazovanieBezi ||
+              store.actualData.StavNavazovania === VahaAPI.StavNavazovania.NavazovaniePrerusene
+            "
             class="col-auto ml-3 mt-3"
             @click="
               () =>
@@ -137,23 +140,49 @@ function openStartNavazovanieModal() {
       <div class="mt-3">
         <div class="row">
           <div class="col">
+            <StavyStatus />
+          </div>
+          <div class="col">
             <PovelyControl />
           </div>
         </div>
         <div class="row mt-3">
           <div class="col">
-            <StavyStatus />
-            <VstupyStatus class="mt-3" />
+            <VstupyStatus />
           </div>
           <div class="col">
             <VystupyStatusControl />
           </div>
         </div>
+        <!-- <div class="row mt-3">
+          <StavyStatus />
+        </div> -->
       </div>
       <div class="row mt-3">
         <DataStatus />
+      </div>
+      <div class="row mt-5">
+        <div class="image-container">
+          <div class="vaha-image" />
+        </div>
       </div>
     </div>
   </div>
   <StartNavazovanieModal v-if="store.isStartNavazovanieModalOpened" />
 </template>
+
+<style lang="scss">
+.image-container {
+  overflow: hidden;
+  width: 500px;
+  height: 250px;
+  margin: 0 4px;
+
+  .vaha-image {
+    width: 100%;
+    height: 100%;
+    background: url('../assets/vaha.png') no-repeat #fff;
+    background-size: cover;
+  }
+}
+</style>

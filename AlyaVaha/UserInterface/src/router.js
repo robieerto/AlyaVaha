@@ -7,6 +7,7 @@ import Zasobniky from './views/zasobniky-page.vue'
 import Navazovania from './views/navazovania-page.vue'
 import Profile from './views/profile-page.vue'
 import Tasks from './views/tasks-page.vue'
+import Settings from './views/nastavenia-page.vue'
 import defaultLayout from './layouts/side-nav-outer-toolbar.vue'
 import simpleLayout from './layouts/single-card.vue'
 
@@ -70,6 +71,15 @@ const router = new createRouter({
         layout: defaultLayout
       },
       component: Tasks
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      meta: {
+        requiresAuth: true,
+        layout: defaultLayout
+      },
+      component: Settings
     },
     {
       path: '/login-form',

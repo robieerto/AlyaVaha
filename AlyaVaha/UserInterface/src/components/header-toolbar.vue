@@ -76,7 +76,7 @@ export default {
       // },
       {
         text: 'Odhlásiť sa',
-        icon: 'runner',
+        icon: 'login',
         onClick: onLogoutClick
       }
     ]

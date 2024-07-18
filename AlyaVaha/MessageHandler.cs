@@ -144,6 +144,18 @@ namespace AlyaVaha
                         responseValue = "Navažovanie bolo zmazané";
                         break;
 
+                    case "UpdateZariadenie":
+                        if (windowCommand.Value != null)
+                        {
+                            var zariadenie = JsonSerializer.Deserialize<Zariadenie>(windowCommand.Value);
+                            if (zariadenie != null)
+                            {
+                                ZariadenieRepository.Update(zariadenie);
+                            }
+                        }
+                        responseValue = "Nastavenia zariadenia boli upravené";
+                        break;
+
                     default:
                         break;
                 }

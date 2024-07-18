@@ -14,11 +14,18 @@ namespace VahaAPI
 
         public UdpCommunicator(string remoteAddress, int remotePort)
         {
-            ipAddress = remoteAddress;
-            port = remotePort;
-            udpClient = new UdpClient();
-            remoteEndPoint = new IPEndPoint(IPAddress.Parse(remoteAddress), remotePort);
-            udpClient.Connect(remoteEndPoint);
+            try
+            {
+                ipAddress = remoteAddress;
+                port = remotePort;
+                udpClient = new UdpClient();
+                remoteEndPoint = new IPEndPoint(IPAddress.Parse(remoteAddress), remotePort);
+                udpClient.Connect(remoteEndPoint);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public void Send(string message)

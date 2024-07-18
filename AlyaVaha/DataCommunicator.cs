@@ -20,7 +20,15 @@ namespace AlyaVaha
 
         private static void InitVahaCommunicator()
         {
-            vahaAPI = new VahaAPI.VahaAPI("192.168.1.10", 3396);
+            var zariadenie = ZariadenieRepository.GetList()[0];
+            if (zariadenie != null)
+            {
+                vahaAPI = new VahaAPI.VahaAPI(zariadenie.IpAdresa!, zariadenie.Port ?? 0);
+            }
+            else
+            {
+                vahaAPI = new VahaAPI.VahaAPI("192.168.1.10", 3396);
+            }
         }
 
         public static async Task Run()

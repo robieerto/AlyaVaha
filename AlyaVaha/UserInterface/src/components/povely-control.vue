@@ -29,48 +29,8 @@ const isDolnaKlapkaZatvorena = computed(
     <h6 class="mb-1">Povely</h6>
     <div class="card card-body p-0">
       <div class="row m-0">
-        <div class="card col-3">
-          <div class="row h-100 d-flex align-items-center py-2 pl-3">
-            <p class="col-4">Siréna:</p>
-            <button
-              type="button"
-              :class="'col-6 btn btn-' + (isSirenaVypnuta ? 'success' : 'danger')"
-              @click="
-                () =>
-                  sendCommand('SetValues', {
-                    StavSireny: isSirenaVypnuta
-                      ? VahaAPI.StavSirenyPovel.ZapniSirenu
-                      : VahaAPI.StavSirenyPovel.VypniSirenu
-                  })
-              "
-            >
-              {{ isSirenaVypnuta ? 'Zapnúť' : 'Vypnúť' }}
-            </button>
-          </div>
-        </div>
-
-        <div class="card col-3">
-          <div class="row h-100 d-flex align-items-center py-2 pl-3">
-            <p class="col-4">Vibrátor:</p>
-            <button
-              type="button"
-              :class="'col-6 btn btn-' + (isVibratorVypnuty ? 'success' : 'danger')"
-              @click="
-                () =>
-                  sendCommand('SetValues', {
-                    StavVibratora: isVibratorVypnuty
-                      ? VahaAPI.StavVibratoraPovel.ZapniVibrator
-                      : VahaAPI.StavVibratoraPovel.VypniVibrator
-                  })
-              "
-            >
-              {{ isVibratorVypnuty ? 'Zapnúť' : 'Vypnúť' }}
-            </button>
-          </div>
-        </div>
-
-        <div class="card col-3">
-          <div class="row h-100 d-flex align-items-center py-2 pl-3">
+        <div class="card col-6">
+          <div class="row h-100 d-flex align-items-center py-4 pl-3">
             <p class="col-4">Horná klapka:</p>
             <button
               type="button"
@@ -89,8 +49,8 @@ const isDolnaKlapkaZatvorena = computed(
           </div>
         </div>
 
-        <div class="card col-3">
-          <div class="row h-100 d-flex align-items-center py-2 pl-3">
+        <div class="card col-6">
+          <div class="row h-100 d-flex align-items-center py-4 pl-3">
             <p class="col-4">Dolná klapka:</p>
             <button
               type="button"
@@ -105,6 +65,46 @@ const isDolnaKlapkaZatvorena = computed(
               "
             >
               {{ isDolnaKlapkaZatvorena ? 'Otvoriť' : 'Zatvoriť' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="card col-6">
+          <div class="row h-100 d-flex align-items-center py-4 pl-3">
+            <p class="col-4">Siréna:</p>
+            <button
+              type="button"
+              :class="'col-6 btn btn-' + (isSirenaVypnuta ? 'success' : 'danger')"
+              @click="
+                () =>
+                  sendCommand('SetValues', {
+                    StavSireny: isSirenaVypnuta
+                      ? VahaAPI.StavSirenyPovel.ZapniSirenu
+                      : VahaAPI.StavSirenyPovel.VypniSirenu
+                  })
+              "
+            >
+              {{ isSirenaVypnuta ? 'Zapnúť' : 'Vypnúť' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="card col-6">
+          <div class="row h-100 d-flex align-items-center py-4 pl-3">
+            <p class="col-4">Vibrátor:</p>
+            <button
+              type="button"
+              :class="'col-6 btn btn-' + (isVibratorVypnuty ? 'success' : 'danger')"
+              @click="
+                () =>
+                  sendCommand('SetValues', {
+                    StavVibratora: isVibratorVypnuty
+                      ? VahaAPI.StavVibratoraPovel.ZapniVibrator
+                      : VahaAPI.StavVibratoraPovel.VypniVibrator
+                  })
+              "
+            >
+              {{ isVibratorVypnuty ? 'Zapnúť' : 'Vypnúť' }}
             </button>
           </div>
         </div>

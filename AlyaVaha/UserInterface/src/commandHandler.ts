@@ -48,7 +48,7 @@ function initCommandHandler() {
             case 'SetZeroing': {
               const responseValue = JSON.parse(response.Value!) as boolean
               if (responseValue) {
-                shortNotify('Nulovanie prebehlo úspešne', 'success')
+                // shortNotify('Nulovanie prebehlo úspešne', 'success')
               } else {
                 notify('Nulovanie sa nepodarilo', 'error')
               }

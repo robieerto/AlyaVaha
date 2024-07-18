@@ -22,5 +22,10 @@ export default [
         path: '/zasobniky'
       }
     ]
+  },
+  {
+    text: 'Nastavenia',
+    path: '/settings',
+    icon: 'preferences'
   }
 ]

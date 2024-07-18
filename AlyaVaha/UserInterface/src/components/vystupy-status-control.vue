@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { changeDigitalOutput } from '@/commandHandler'
 import store from '@/store'
 </script>
 
@@ -10,13 +9,7 @@ import store from '@/store'
       <div class="row m-0">
         <div class="card col-6" v-for="(value, index) in store.actualOutputs" :key="index">
           <div class="row h-100 d-flex align-items-center py-2 pl-3">
-            <button
-              type="button"
-              :class="'col btn btn-' + (value ? 'success' : 'secondary')"
-              @click="() => changeDigitalOutput(index)"
-            >
-              {{ index.replace(/([A-Z0-9]+)/g, ' $1').trim() }}
-            </button>
+            <p class="col-7">{{ index.replace(/([A-Z0-9]+)/g, ' $1').trim() }}:</p>
             <p
               :class="'col fw-bold status contact-status status-' + value?.toString().toLowerCase()"
             >

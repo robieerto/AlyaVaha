@@ -20,6 +20,8 @@
     "devextreme": "^23.2.6",
     "devextreme-aspnet-data-nojquery": "^4.0.0",
     "devextreme-vue": "^23.2.6",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
     "pinia": "^2.1.7",
     "sass": "^1.34.1",
     "vue": "^3.4.21",
