@@ -19,7 +19,7 @@ const router = new createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/home',
+      path: '/',
       name: 'home',
       meta: {
         requiresAuth: true,
@@ -124,16 +124,12 @@ const router = new createRouter({
       component: loadView('change-password-form')
     },
     {
-      path: '/',
-      redirect: '/home'
-    },
-    {
       path: '/recovery',
-      redirect: '/home'
+      redirect: '/'
     },
     {
       path: '/:pathMatch(.*)*',
-      redirect: '/home'
+      redirect: '/'
     }
   ]
 })

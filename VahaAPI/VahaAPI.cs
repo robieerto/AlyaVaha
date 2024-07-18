@@ -40,13 +40,27 @@ namespace VahaAPI
                         var propertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
                         if (propertyType == typeof(float))
                         {
-                            var floatValue = float.Parse(value, CultureInfo.InvariantCulture);
-                            property.SetValue(Vaha, floatValue);
+                            try
+                            {
+                                var floatValue = float.Parse(value, CultureInfo.InvariantCulture);
+                                property.SetValue(Vaha, floatValue);
+                            }
+                            catch (Exception)
+                            {
+                                property.SetValue(Vaha, -10000.0f);
+                            }
                         }
                         else if (propertyType == typeof(int))
                         {
-                            var intValue = int.Parse(value);
-                            property.SetValue(Vaha, intValue);
+                            try
+                            {
+                                var intValue = int.Parse(value);
+                                property.SetValue(Vaha, intValue);
+                            }
+                            catch (Exception)
+                            {
+                                property.SetValue(Vaha, -10000);
+                            }
                         }
                         else
                         {

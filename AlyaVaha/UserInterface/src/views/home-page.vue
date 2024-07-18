@@ -31,6 +31,7 @@ function openStartNavazovanieModal() {
             text="Nulovanie váhy"
             type="normal"
           />
+
           <DxButton
             v-if="
               store.actualData.StavNavazovania === VahaAPI.StavNavazovania.NavazovanieUkoncene ||
@@ -41,6 +42,7 @@ function openStartNavazovanieModal() {
             text="Štart navažovania"
             type="default"
           />
+
           <DxButton
             v-if="store.actualData.StavNavazovania === VahaAPI.StavNavazovania.NavazovanieBezi"
             class="col-auto ml-3 mt-3"
@@ -53,6 +55,7 @@ function openStartNavazovanieModal() {
             text="Prerušenie navažovania"
             type="default"
           />
+
           <DxButton
             v-if="store.actualData.StavNavazovania === VahaAPI.StavNavazovania.NavazovaniePrerusene"
             class="col-auto ml-3 mt-3"
@@ -65,6 +68,23 @@ function openStartNavazovanieModal() {
             text="Pokračovanie navažovania"
             type="default"
           />
+
+          <DxButton
+            v-if="
+              store.actualData.StavNavazovania === VahaAPI.StavNavazovania.NavazovanieBezi ||
+              store.actualData.StavNavazovania === VahaAPI.StavNavazovania.NavazovaniePrerusene
+            "
+            class="col-auto ml-3 mt-3"
+            @click="
+              () =>
+                sendCommand('SetControlValues', {
+                  StavNavazovania: VahaAPI.StavNavazovaniaPovel.UkonceniePoUkonceniDavky
+                })
+            "
+            text="Ukončenie po ukončení dávky"
+            type="warning"
+          />
+
           <DxButton
             v-if="
               store.actualData.StavNavazovania === VahaAPI.StavNavazovania.NavazovanieBezi ||
@@ -80,44 +100,41 @@ function openStartNavazovanieModal() {
             text="Okamžité ukončenie"
             type="danger"
           />
-          <DxButton
-            v-if="
-              store.actualData.StavNavazovania === VahaAPI.StavNavazovania.NavazovanieBezi ||
-              store.actualData.StavNavazovania === VahaAPI.StavNavazovania.NavazovaniePrerusene
-            "
-            class="col-auto ml-3 mt-3"
-            @click="
-              () =>
-                sendCommand('SetControlValues', {
-                  StavNavazovania: VahaAPI.StavNavazovaniaPovel.UkonceniePoUkonceniDavky
-                })
-            "
-            text="Ukončenie po ukončení dávky"
-            type="danger"
-          />
         </div>
       </div>
     </div>
     <div class="content-block mt-0" v-if="store.connected">
       <div class="mb-2">
         <div class="row">
-          <div class="col-auto">
+          <div class="col">
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Aktuálna váha (kg)</h5>
-                <p class="card-text fw-bold fs-3">{{ store.actualData.BruttoVaha }}</p>
+                <p class="card-text fw-bold fs-3">
+                  {{
+                    store.actualData.BruttoVaha !== -10000
+                      ? store.actualData.BruttoVaha
+                      : 'pod minimum'
+                  }}
+                </p>
               </div>
             </div>
           </div>
-          <div class="col-auto">
+          <div class="col">
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Váha navažovania (kg)</h5>
-                <p class="card-text fw-bold fs-3">{{ store.actualData.VahaNavazovania }}</p>
+                <p class="card-text fw-bold fs-3">
+                  {{
+                    store.actualData.VahaNavazovania !== -10000
+                      ? store.actualData.VahaNavazovania
+                      : 'pod minimum'
+                  }}
+                </p>
               </div>
             </div>
           </div>
-          <div class="col-auto">
+          <div class="col">
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Súčtová váha (kg)</h5>
@@ -125,10 +142,10 @@ function openStartNavazovanieModal() {
               </div>
             </div>
           </div>
-          <div class="col-auto">
+          <div class="col">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Počet vyrobených cyklov</h5>
+                <h5 class="card-title">Počet dávok</h5>
                 <p class="card-text fw-bold fs-3">
                   {{ store.actualData.PocetVyrobenychCyklovVazenia }}
                 </p>
@@ -137,7 +154,39 @@ function openStartNavazovanieModal() {
           </div>
         </div>
       </div>
-      <div class="mt-3">
+      <div class="row m-0 mt-2">
+        <div class="card col mr-4">
+          <div class="col h-100 align-items-center py-2 pl-3">
+            <p class="row">Požadovaná váha dávky (kg)</p>
+            <p class="row fw-bold">{{ store.actualData.PozadovanaVahaDavky }}</p>
+          </div>
+        </div>
+        <div class="card col mr-4">
+          <div class="row h-100 align-items-center py-2 pl-3">
+            <p class="row">Požadovaná celková váha (kg)</p>
+            <p class="row fw-bold">{{ store.actualData.PozadovanaCelkovaVaha }}</p>
+          </div>
+        </div>
+        <div class="card col mr-4">
+          <div class="row h-100 align-items-center py-2 pl-3">
+            <p class="row">Požadovaný počet dávok:</p>
+            <p class="row fw-bold">{{ store.actualData.PozadovanyPocetDavok }}</p>
+          </div>
+        </div>
+        <div class="card col mr-4">
+          <div class="row h-100 align-items-center py-2 pl-3">
+            <p class="row">Aktuálny výkon:</p>
+            <p class="row fw-bold">{{ store.actualData.VykonAktualny }}</p>
+          </div>
+        </div>
+        <div class="card col">
+          <div class="row h-100 align-items-center py-2 pl-3">
+            <p class="row">Celkový výkon:</p>
+            <p class="row fw-bold">{{ store.actualData.VykonCelkovy }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4">
         <div class="row">
           <div class="col">
             <StavyStatus />

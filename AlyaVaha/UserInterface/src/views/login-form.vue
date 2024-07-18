@@ -95,7 +95,7 @@ export default {
         loading.value = false
         notify(result.message, 'error')
       } else {
-        router.push(route.query.redirect || '/home')
+        router.push(route.query.redirect || '/')
       }
     }
 

@@ -13,3 +13,7 @@
 .dx-toast-info {
   background-color: #03a9f4 !important;
 }
+
+.dx-button.dx-button-warning {
+  background-color: #ffc107;
+}

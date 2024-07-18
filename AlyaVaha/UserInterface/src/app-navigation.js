@@ -1,7 +1,7 @@
 export default [
   {
     text: 'Domov',
-    path: '/home',
+    path: '/',
     icon: 'home'
   },
   {

@@ -7,14 +7,26 @@ namespace AlyaVaha.DAL.Repositories
         public static List<Navazovanie> GetList()
         {
             var context = new AlyaVahaDbContext();
-            return context.Navazovania.ToList();
+            return context.Navazovania.OrderByDescending(x => x.CasStartu).ToList();
         }
 
         public static void Add(Navazovanie navazovanie)
         {
             var context = new AlyaVahaDbContext();
-            context.Navazovania.Add(navazovanie);
-            context.SaveChanges();
+            try
+            {
+                context.Navazovania.Add(navazovanie);
+                context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                navazovanie.ZariadenieId = null;
+                navazovanie.MaterialId = null;
+                navazovanie.OdkialId = null;
+                navazovanie.KamId = null;
+                context.Navazovania.Add(navazovanie);
+                context.SaveChanges();
+            }
         }
 
         public static void Update(Navazovanie navazovanie)

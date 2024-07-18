@@ -117,6 +117,8 @@ function closeModal() {
 function onModalHidden() {
   store.isStartNavazovanieModalOpened = false
 }
+
+store.isNavazovanieInitSuccess = false
 </script>
 
 <template>

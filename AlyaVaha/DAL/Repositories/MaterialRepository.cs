@@ -7,7 +7,7 @@ namespace AlyaVaha.DAL.Repositories
         public static List<Material> GetList()
         {
             var context = new AlyaVahaDbContext();
-            return context.Materialy.ToList();
+            return context.Materialy.OrderByDescending(x => x.DatumUpravy).ToList();
         }
 
         public static void Add(Material material)

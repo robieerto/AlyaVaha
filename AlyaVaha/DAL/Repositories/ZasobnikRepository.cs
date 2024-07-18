@@ -7,7 +7,7 @@ namespace AlyaVaha.DAL.Repositories
         public static List<Zasobnik> GetList()
         {
             var context = new AlyaVahaDbContext();
-            return context.Zasobniky.ToList();
+            return context.Zasobniky.OrderByDescending(x => x.DatumUpravy).ToList();
         }
 
         public static void Add(Zasobnik zasobnik)

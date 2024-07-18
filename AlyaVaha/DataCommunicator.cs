@@ -126,7 +126,7 @@ namespace AlyaVaha
                         WindowCommand windowCommand = new WindowCommand("ActualData", JsonSerializer.Serialize(vahaData));
                         Window?.SendWebMessage(JsonSerializer.Serialize(windowCommand));
 
-                        Console.WriteLine(JsonSerializer.Serialize(vahaData.BruttoVaha));
+                        //Console.WriteLine(JsonSerializer.Serialize(vahaData.BruttoVaha));
                     }
 
 

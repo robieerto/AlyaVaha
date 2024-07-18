@@ -42,6 +42,8 @@ class Program
             // Users can resize windows by default.
             // Let's make this one fixed instead.
             .SetResizable(true)
+            .SetContextMenuEnabled(IsDebugMode)
+            .SetDevToolsEnabled(IsDebugMode)
             .RegisterCustomSchemeHandler("app", (object sender, string scheme, string url, out string contentType) =>
             {
                 contentType = "text/javascript";
