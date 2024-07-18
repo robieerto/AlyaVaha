@@ -18,7 +18,7 @@
 
 <script>
 import DxTreeView from 'devextreme-vue/tree-view'
-import { sizes } from '../utils/media-query'
+// import { sizes } from '../utils/media-query'
 import navigation from '../app-navigation'
 import { onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -31,12 +31,12 @@ export default {
     const route = useRoute()
     const router = useRouter()
 
-    const isLargeScreen = sizes()['screen-large']
+    // const isLargeScreen = sizes()['screen-large']
     const items = navigation.map((item) => {
       if (item.path && !/^\//.test(item.path)) {
         item.path = `/${item.path}`
       }
-      return { ...item, expanded: isLargeScreen }
+      return { ...item, expanded: false }
     })
 
     const treeViewRef = ref(null)

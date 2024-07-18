@@ -7,7 +7,9 @@ import DxDataGrid, {
   DxPaging,
   DxEditing,
   DxLookup,
-  DxExport
+  DxExport,
+  DxSummary,
+  DxTotalItem
 } from 'devextreme-vue/data-grid'
 import { DxLoadPanel } from 'devextreme-vue/load-panel'
 import { reactive } from 'vue'
@@ -16,7 +18,7 @@ import { exportDataGrid } from 'devextreme/excel_exporter'
 import { Workbook } from 'exceljs'
 import saveAs from 'file-saver'
 
-import { dateFormat, actualDate } from '@/utils/helpers'
+import { dateFormat, floatFormat, filterOperations } from '@/utils/helpers'
 import store from '@/store'
 import { sendCommand } from '@/commandHandler'
 
@@ -42,8 +44,8 @@ function deleteRow(rowEvent) {
   sendCommand('DeleteNavazovanie', rowEvent.data.Id)
 }
 
-// const calculatePoradie = (rowIndex) =>
-//   rowIndex + state.dataGridInstance.pageIndex() * state.dataGridInstance.pageSize()
+const calculatePoradie = (rowIndex) =>
+  rowIndex + state.dataGridInstance.pageIndex() * state.dataGridInstance.pageSize()
 
 function exportToXls() {
   if (state.zaznamyCount > 50000) {
@@ -112,12 +114,22 @@ function exportToXls() {
       <!-- <dx-column caption="Riadok" :allow-search="false" :allow-sorting="false" :alignment="'right'" cell-template="poradieTemplate" /> -->
       <DxColumn data-field="Id" caption="Id" width="100" :visible="false" />
       <DxColumn
+        caption="Riadok"
+        :visible="false"
+        :allow-search="false"
+        :allow-sorting="false"
+        :allow-exporting="true"
+        :alignment="'right'"
+        cell-template="poradieTemplate"
+      />
+      <DxColumn
         data-field="CasStartu"
-        caption="Čas navažovania"
-        data-type="datetime"
+        caption="Dátum navažovania"
+        data-type="date"
         min-width="200"
         :format="dateFormat"
         :allow-editing="false"
+        :filterOperations="filterOperations"
       />
       <!-- <DxColumn
         data-field="CasKonca"
@@ -126,7 +138,7 @@ function exportToXls() {
         width="140"
         :format="dateFormat"
         :allow-editing="false"
-        :editor-options="{ max: actualDate() }"
+        :editorOptions="{ type: 'time' }"
       /> -->
       <DxColumn data-field="ZariadenieId" caption="Zariadenie" min-width="150">
         <DxLookup :data-source="store.zariadenia" value-expr="Id" display-expr="NazovZariadenia" />
@@ -136,30 +148,35 @@ function exportToXls() {
         caption="Navážené množstvo"
         data-type="number"
         min-width="100"
+        :filterOperations="filterOperations"
       />
       <DxColumn
         data-field="NavazenyPocetDavok"
         caption="Navážený počet dávok"
         data-type="number"
         min-width="100"
+        :filterOperations="filterOperations"
       />
       <DxColumn
         data-field="PozadovaneMnozstvo"
         caption="Požadované množstvo"
         data-type="number"
         min-width="100"
+        :filterOperations="filterOperations"
       />
       <DxColumn
         data-field="PozadovanyPocetDavok"
         caption="Požadovaný počet dávok"
         data-type="number"
         min-width="100"
+        :filterOperations="filterOperations"
       />
       <DxColumn
         data-field="VelkostDavky"
         caption="Veľkosť dávky"
         data-type="number"
         min-width="100"
+        :filterOperations="filterOperations"
       />
       <DxColumn data-field="OdkialId" caption="Zásobník odkiaľ" min-width="180">
         <DxLookup :data-source="store.zasobniky" value-expr="Id" display-expr="NazovZasobnika" />
@@ -167,7 +184,11 @@ function exportToXls() {
       <DxColumn data-field="KamId" caption="Zásobník kam" min-width="180">
         <DxLookup :data-source="store.zasobniky" value-expr="Id" display-expr="NazovZasobnika" />
       </DxColumn>
-      <!-- <template #poradieTemplate="{ data }">{{ calculatePoradie(data.row.rowIndex) }}</template> -->
+      <DxSummary>
+        <DxTotalItem column="Riadok" summary-type="count" />
+        <DxTotalItem column="NavazeneMnozstvo" summary-type="sum" :value-format="floatFormat" />
+      </DxSummary>
+      <template #poradieTemplate="{ data }">{{ calculatePoradie(data.row.rowIndex) }}</template>
     </DxDataGrid>
   </div>
 </template>

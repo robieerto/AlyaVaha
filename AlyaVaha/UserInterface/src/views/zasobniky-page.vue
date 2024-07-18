@@ -10,7 +10,7 @@ import DxDataGrid, {
 import { DxLoadPanel } from 'devextreme-vue/load-panel'
 import { reactive } from 'vue'
 
-import { dateFormat, actualDate } from '@/utils/helpers'
+import { dateFormat, filterOperations, filterStringOperations } from '@/utils/helpers'
 import store from '@/store'
 import { sendCommand } from '@/commandHandler'
 
@@ -68,14 +68,18 @@ function deleteRow(rowEvent) {
       <DxEditing :allow-updating="true" :allow-deleting="true" :allow-adding="true" mode="row" />
       <!-- <dx-column caption="Riadok" :allow-search="false" :allow-sorting="false" :alignment="'right'" cell-template="poradieTemplate" /> -->
       <DxColumn data-field="Id" caption="Id" :width="100" :visible="false" />
-      <DxColumn data-field="NazovZasobnika" caption="Názov zásobníka" />
+      <DxColumn
+        data-field="NazovZasobnika"
+        caption="Názov zásobníka"
+        :filterOperations="filterStringOperations"
+      />
       <DxColumn
         data-field="DatumVytvorenia"
         caption="Dátum vytvorenia"
         data-type="date"
         :format="dateFormat"
         :allow-editing="false"
-        :editor-options="{ max: actualDate() }"
+        :filterOperations="filterOperations"
       />
       <DxColumn
         data-field="DatumUpravy"
@@ -83,9 +87,9 @@ function deleteRow(rowEvent) {
         data-type="date"
         :format="dateFormat"
         :allow-editing="false"
-        :editor-options="{ max: actualDate() }"
+        :filterOperations="filterOperations"
       />
-      <DxColumn data-field="Skratka" caption="Skratka" />
+      <DxColumn data-field="Skratka" caption="Skratka" :filterOperations="filterStringOperations" />
       <!-- <template #poradieTemplate="{ data }">{{ calculatePoradie(data.row.rowIndex) }}</template> -->
     </DxDataGrid>
   </div>

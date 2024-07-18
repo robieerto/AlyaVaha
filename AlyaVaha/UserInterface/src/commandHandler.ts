@@ -33,6 +33,9 @@ function initCommandHandler() {
                 notify(`Nepodarilo sa nastaviť: ${notSetValues.join(', ')}`, 'error')
               } else {
                 // notify('Hodnoty boli úspešne nastavené', 'success')
+                if (store.isStartNavazovanieModalOpened) {
+                  store.isNavazovanieInitSuccess = true
+                }
               }
               break
             }

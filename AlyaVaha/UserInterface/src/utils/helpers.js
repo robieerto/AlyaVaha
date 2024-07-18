@@ -6,6 +6,10 @@ const timeFormat = 'H:mm'
 
 const actualDate = () => new Date(new Date().setUTCHours(0, 0, 0, 0))
 
+const filterOperations = ['=', 'between', '<', '>', '<=', '>=']
+
+const filterStringOperations = ['startswith', 'contains', '=']
+
 const toFloatNumber = (value, digits) =>
   value != null && value != undefined && !isNaN(value)
     ? parseFloat(value)
@@ -55,6 +59,8 @@ const shortNotify = (message, type) => {
 
 export {
   actualDate,
+  filterOperations,
+  filterStringOperations,
   floatFormat,
   dateFormat,
   timeFormat,

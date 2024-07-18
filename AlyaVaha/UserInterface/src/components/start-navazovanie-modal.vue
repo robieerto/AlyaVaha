@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import {
   DxPopup,
   DxRadioGroup,
@@ -68,6 +68,18 @@ const state = reactive({
   enableSirena: initEnableSirena()
 })
 
+watch(
+  () => store.isNavazovanieInitSuccess,
+  () => {
+    if (store.isNavazovanieInitSuccess) {
+      sendCommand('SetControlValues', {
+        StavNavazovania: VahaAPI.StavNavazovaniaPovel.StartNavazovania
+      })
+      closeModal()
+    }
+  }
+)
+
 function startAction() {
   // Typ navazovania
   if (state.selectedTypNavazovania === 'mnozstvo') {
@@ -92,11 +104,6 @@ function startAction() {
   }
 
   sendCommand('SetValues', state.formData)
-  sendCommand('SetControlValues', {
-    StavNavazovania: VahaAPI.StavNavazovaniaPovel.StartNavazovania
-  })
-
-  closeModal()
 }
 
 function typNavazovaniaChanged(e: any) {}

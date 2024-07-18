@@ -36,7 +36,8 @@ const store = reactive({
   navazovaniaLoading: true,
   materialyLoading: true,
   zasobnikyLoading: true,
-  isStartNavazovanieModalOpened: false
+  isStartNavazovanieModalOpened: false,
+  isNavazovanieInitSuccess: false
 })
 
 export default store
