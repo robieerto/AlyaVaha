@@ -109,22 +109,14 @@ function openStartNavazovanieModal() {
     <div class="content-block mt-0">
       <HlavneUdajeStatus />
       <div class="row mt-3">
+        <div class="col mw-450">
+          <StavyStatus />
+        </div>
         <div class="col-auto">
           <AnimationVaha />
         </div>
-        <div class="col">
-          <div class="row mt-2">
-            <div class="col-7">
-              <PovelyControl />
-              <div class="mt-2">
-                <StavyStatus />
-              </div>
-            </div>
-            <div class="col-5">
-              <UdajeStatus />
-            </div>
-          </div>
-          <div class="row"></div>
+        <div class="col mw-450">
+          <UdajeStatus />
         </div>
       </div>
       <div class="row mt-4">
@@ -136,10 +128,16 @@ function openStartNavazovanieModal() {
         </div>
       </div>
 
-      <div class="row mt-3">
+      <div class="row mt-5">
         <DataStatus />
       </div>
     </div>
   </div>
   <StartNavazovanieModal v-if="store.isStartNavazovanieModalOpened" />
 </template>
+
+<style lang="scss">
+.mw-450 {
+  max-width: 450px;
+}
+</style>

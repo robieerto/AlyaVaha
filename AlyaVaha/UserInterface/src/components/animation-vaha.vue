@@ -4,6 +4,7 @@ import store from '@/store'
 import { computed, reactive, watchEffect } from 'vue'
 
 import * as VahaAPI from '@/types/vahaTypes'
+import { sendCommand } from '@/commandHandler'
 
 const state = reactive({
   stavHornejKlapky: store.actualData.StavHornejKlapky,
@@ -71,6 +72,20 @@ const isVibratorVypnuty = computed(
   () => store.actualData.StavVibratora === VahaAPI.StavVibratora.VibratorVypnuty
 )
 
+// ovladanie klapiek
+const isHornaKlapkaZatvorenaControl = computed(
+  () =>
+    store.actualData.StavHornejKlapky === VahaAPI.StavKlapky.Nedefinovane ||
+    store.actualData.StavHornejKlapky === VahaAPI.StavKlapky.KlapkaZatvorena ||
+    store.actualData.StavHornejKlapky === VahaAPI.StavKlapky.KlapkaSaZatvara
+)
+const isDolnaKlapkaZatvorenaControl = computed(
+  () =>
+    store.actualData.StavDolnejKlapky === VahaAPI.StavKlapky.Nedefinovane ||
+    store.actualData.StavDolnejKlapky === VahaAPI.StavKlapky.KlapkaZatvorena ||
+    store.actualData.StavDolnejKlapky === VahaAPI.StavKlapky.KlapkaSaZatvara
+)
+
 const classHornaKlapka = computed(() => ({
   open: isHornaKlapkaOtvorena.value,
   closed: isHornaKlapkaZatvorena.value,
@@ -106,22 +121,80 @@ const classVibrator = computed(() => ({
   animate__headShake: isVibratorZapnuty.value,
   'is-off': isVibratorVypnuty.value
 }))
+
+const setHornaKlapkaControl = () => {
+  sendCommand('SetValues', {
+    StavHornejKlapky: isHornaKlapkaZatvorenaControl.value
+      ? VahaAPI.StavKlapkyPovel.OtvorKlapku
+      : VahaAPI.StavKlapkyPovel.ZatvorKlapku
+  })
+}
+
+const setDolnaKlapkaControl = () => {
+  sendCommand('SetValues', {
+    StavDolnejKlapky: isDolnaKlapkaZatvorenaControl.value
+      ? VahaAPI.StavKlapkyPovel.OtvorKlapku
+      : VahaAPI.StavKlapkyPovel.ZatvorKlapku
+  })
+}
+
+const setSirenaControl = () => {
+  sendCommand('SetValues', {
+    StavSireny: isSirenaVypnuta.value
+      ? VahaAPI.StavSirenyPovel.ZapniSirenu
+      : VahaAPI.StavSirenyPovel.VypniSirenu
+  })
+}
+
+const setVibratorControl = () => {
+  sendCommand('SetValues', {
+    StavVibratora: isVibratorVypnuty.value
+      ? VahaAPI.StavVibratoraPovel.ZapniVibrator
+      : VahaAPI.StavVibratoraPovel.VypniVibrator
+  })
+}
 </script>
 
 <template>
   <div>
+    <div class="horna-klapka-control" @click="setHornaKlapkaControl">
+      <p class="p-0 text-center">
+        {{ store.actualStateTexts.StavHornejKlapky }}
+      </p>
+    </div>
     <div class="vaha-container">
       <div class="vaha-image" />
       <div class="alya-logo" />
-      <div class="sirena animate__animated animate__infinite" :class="classSirena" />
-      <div class="vibrator animate__animated animate__infinite" :class="classVibrator" />
-      <div class="horna-klapka animate__animated animate__infinite" :class="classHornaKlapka" />
-      <div class="dolna-klapka animate__animated animate__infinite" :class="classDolnaKlapka" />
+      <div
+        class="sirena animate__animated animate__infinite"
+        :class="classSirena"
+        @click="setSirenaControl"
+      />
+      <div
+        class="vibrator animate__animated animate__infinite"
+        :class="classVibrator"
+        @click="setVibratorControl"
+      />
+      <div
+        class="horna-klapka animate__animated animate__infinite"
+        :class="classHornaKlapka"
+        @click="setHornaKlapkaControl"
+      />
+      <div
+        class="dolna-klapka animate__animated animate__infinite"
+        :class="classDolnaKlapka"
+        @click="setDolnaKlapkaControl"
+      />
       <div class="aktualna-vaha text-center">
         <span class="text-center">
           {{ store.actualData.BruttoVaha !== -10000 ? store.actualData.BruttoVaha : 'pod minimum' }}
         </span>
       </div>
+    </div>
+    <div class="dolna-klapka-control" @click="setDolnaKlapkaControl">
+      <p class="p-0 text-center">
+        {{ store.actualStateTexts.StavDolnejKlapky }}
+      </p>
     </div>
   </div>
 </template>
@@ -160,6 +233,7 @@ const classVibrator = computed(() => ({
     height: 50px;
     background: url('../assets/alarm.png') no-repeat;
     background-size: cover;
+    cursor: pointer;
   }
 
   .vibrator {
@@ -170,6 +244,7 @@ const classVibrator = computed(() => ({
     height: 50px;
     background: url('../assets/vibration-new.png') no-repeat;
     background-size: cover;
+    cursor: pointer;
   }
 }
 
@@ -178,6 +253,22 @@ const classVibrator = computed(() => ({
 
 .is-off {
   filter: grayscale(100%);
+}
+
+.dolna-klapka-control {
+  position: relative;
+  width: 200px;
+  top: -10px;
+  left: 155px;
+  cursor: pointer;
+}
+
+.horna-klapka-control {
+  position: relative;
+  width: 200px;
+  top: 0px;
+  left: 155px;
+  cursor: pointer;
 }
 
 .aktualna-vaha {
@@ -198,6 +289,7 @@ const classVibrator = computed(() => ({
   height: 18px;
   margin-top: 20px;
   transform-origin: center;
+  cursor: pointer;
 }
 
 .dolna-klapka {
@@ -208,6 +300,7 @@ const classVibrator = computed(() => ({
   height: 18px;
   margin-top: 20px;
   transform-origin: center;
+  cursor: pointer;
 }
 
 .open {

@@ -33,6 +33,38 @@ import store from '@/store'
         </div>
         <div class="card col-12">
           <div class="row h-100 d-flex align-items-center py-2 pl-3">
+            <p class="col-6">Stav hornej klapky:</p>
+            <p class="col-6 fw-bold">
+              {{ store.actualStateTexts.StavHornejKlapky }}
+            </p>
+          </div>
+        </div>
+        <div class="card col-12">
+          <div class="row h-100 d-flex align-items-center py-2 pl-3">
+            <p class="col-6">Stav dolnej klapky:</p>
+            <p class="col-6 fw-bold">
+              {{ store.actualStateTexts.StavDolnejKlapky }}
+            </p>
+          </div>
+        </div>
+        <div class="card col-12">
+          <div class="row h-100 d-flex align-items-center py-2 pl-3">
+            <p class="col-6">Stav sirény:</p>
+            <p class="col-6 fw-bold">
+              {{ store.actualStateTexts.StavSireny }}
+            </p>
+          </div>
+        </div>
+        <div class="card col-12">
+          <div class="row h-100 d-flex align-items-center py-2 pl-3">
+            <p class="col-6">Stav vibrátora:</p>
+            <p class="col-6 fw-bold">
+              {{ store.actualStateTexts.StavVibratora }}
+            </p>
+          </div>
+        </div>
+        <div class="card col-12">
+          <div class="row h-100 d-flex align-items-center py-2 pl-3">
             <p class="col-6">Stav váhy:</p>
             <p class="col-6 fw-bold">
               {{ store.actualStateTexts.StavVahy }}
