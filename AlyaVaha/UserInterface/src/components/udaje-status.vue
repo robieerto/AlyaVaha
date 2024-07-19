@@ -4,46 +4,53 @@ import store from '@/store'
 
 <template>
   <section>
-    <!-- <h6 class="mb-1">Stavy</h6> -->
-    <div class="card card-body p-0">
+    <div class="row">
       <div class="row m-0">
-        <!-- <div class="card col-12" v-for="(value, index) in store.actualStateTexts" :key="index">
+        <div class="card col">
           <div class="row h-100 d-flex align-items-center py-2 pl-3">
-            <p class="col-6">{{ index.replace(/([A-Z0-9]+)/g, ' $1').trim() }}:</p>
+            <p class="col-6">Požadovaná váha dávky (kg):</p>
             <p class="col-6 fw-bold">
-              {{ value }}
-            </p>
-          </div>
-        </div> -->
-        <div class="card col-12">
-          <div class="row h-100 d-flex align-items-center py-2 pl-3">
-            <p class="col-6">Stav navažovania:</p>
-            <p class="col-6 fw-bold">
-              {{ store.actualStateTexts.StavNavazovania }}
+              {{ store.actualData.PozadovanaVahaDavky }}
             </p>
           </div>
         </div>
-        <div class="card col-12">
+      </div>
+      <div class="row m-0">
+        <div class="card col">
           <div class="row h-100 d-flex align-items-center py-2 pl-3">
-            <p class="col-6">Stav riadenia navažovania:</p>
+            <p class="col-6">Požadovaná celková váha (kg):</p>
             <p class="col-6 fw-bold">
-              {{ store.actualStateTexts.StavRiadeniaNavazovania }}
+              {{ store.actualData.PozadovanaCelkovaVaha }}
             </p>
           </div>
         </div>
-        <div class="card col-12">
+      </div>
+      <div class="row m-0">
+        <div class="card col">
           <div class="row h-100 d-flex align-items-center py-2 pl-3">
-            <p class="col-6">Stav váhy:</p>
+            <p class="col-6">Požadovaný počet dávok:</p>
             <p class="col-6 fw-bold">
-              {{ store.actualStateTexts.StavVahy }}
+              {{ store.actualData.PozadovanyPocetDavok }}
             </p>
           </div>
         </div>
-        <div class="card col-12">
+      </div>
+      <div class="row m-0">
+        <div class="card col">
           <div class="row h-100 d-flex align-items-center py-2 pl-3">
-            <p class="col-6">Stav prevodníka:</p>
+            <p class="col-6">Celkový výkon:</p>
             <p class="col-6 fw-bold">
-              {{ store.actualStateTexts.StavPrevodnika }}
+              {{ store.actualData.VykonCelkovy }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="row m-0">
+        <div class="card col">
+          <div class="row h-100 d-flex align-items-center py-2 pl-3">
+            <p class="col-6">Aktuálny výkon:</p>
+            <p class="col-6 fw-bold">
+              {{ store.actualData.VykonAktualny }}
             </p>
           </div>
         </div>

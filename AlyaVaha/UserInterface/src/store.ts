@@ -4,6 +4,7 @@ import { Messages } from '@/messages'
 
 const store = reactive({
   connected: false,
+  wasConnected: false,
   actualData: {} as VahaAPI.IVahaModel,
   actualInputs: {
     HornaKlapkaOtvorena: false,

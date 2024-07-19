@@ -6,7 +6,7 @@ import { Messages } from './messages'
 
 let timeoutId = setTimeout(() => {
   store.connected = false
-}, 2000)
+}, 3000)
 
 function initCommandHandler() {
   try {
@@ -17,10 +17,11 @@ function initCommandHandler() {
           switch (response.Command) {
             case 'ActualData':
               store.connected = true
+              store.wasConnected = true
               clearTimeout(timeoutId)
               timeoutId = setTimeout(() => {
                 store.connected = false
-              }, 2000)
+              }, 3000)
 
               store.actualData = JSON.parse(response.Value!) as VahaAPI.IVahaModel
               setActualInputs()
