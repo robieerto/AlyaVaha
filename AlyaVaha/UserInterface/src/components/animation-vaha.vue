@@ -61,7 +61,9 @@ const isSirenaZapnuta = computed(
   () => store.actualData.StavSireny === VahaAPI.StavSireny.SirenaZapnuta
 )
 const isSirenaVypnuta = computed(
-  () => store.actualData.StavSireny === VahaAPI.StavSireny.SirenaVypnuta
+  () =>
+    store.actualData.StavSireny === VahaAPI.StavSireny.SirenaVypnuta ||
+    store.actualData.StavSireny === undefined
 )
 
 // vibrator
@@ -69,7 +71,9 @@ const isVibratorZapnuty = computed(
   () => store.actualData.StavVibratora === VahaAPI.StavVibratora.VibratorZapnuty
 )
 const isVibratorVypnuty = computed(
-  () => store.actualData.StavVibratora === VahaAPI.StavVibratora.VibratorVypnuty
+  () =>
+    store.actualData.StavVibratora === VahaAPI.StavVibratora.VibratorVypnuty ||
+    store.actualData.StavVibratora === undefined
 )
 
 // ovladanie klapiek
@@ -157,7 +161,7 @@ const setVibratorControl = () => {
 
 <template>
   <div>
-    <div class="horna-klapka-control" @click="setHornaKlapkaControl">
+    <div class="horna-klapka-control" @click="setHornaKlapkaControl" :disabled="!store.connected">
       <p class="p-0 text-center">
         {{ store.actualStateTexts.StavHornejKlapky }}
       </p>
@@ -169,21 +173,25 @@ const setVibratorControl = () => {
         class="sirena animate__animated animate__infinite"
         :class="classSirena"
         @click="setSirenaControl"
+        :disabled="!store.connected"
       />
       <div
         class="vibrator animate__animated animate__infinite"
         :class="classVibrator"
         @click="setVibratorControl"
+        :disabled="!store.connected"
       />
       <div
         class="horna-klapka animate__animated animate__infinite"
         :class="classHornaKlapka"
         @click="setHornaKlapkaControl"
+        :disabled="!store.connected"
       />
       <div
         class="dolna-klapka animate__animated animate__infinite"
         :class="classDolnaKlapka"
         @click="setDolnaKlapkaControl"
+        :disabled="!store.connected"
       />
       <div class="aktualna-vaha text-center">
         <span class="text-center">
@@ -191,7 +199,7 @@ const setVibratorControl = () => {
         </span>
       </div>
     </div>
-    <div class="dolna-klapka-control" @click="setDolnaKlapkaControl">
+    <div class="dolna-klapka-control" @click="setDolnaKlapkaControl" :disabled="!store.connected">
       <p class="p-0 text-center">
         {{ store.actualStateTexts.StavDolnejKlapky }}
       </p>
