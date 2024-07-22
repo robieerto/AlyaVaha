@@ -7,7 +7,7 @@ namespace AlyaVaha.DAL.Repositories
         public static List<Navazovanie> GetList()
         {
             var context = new AlyaVahaDbContext();
-            return context.Navazovania.OrderByDescending(x => x.CasStartu).ToList();
+            return context.Navazovania.OrderByDescending(x => x.DatumStartu).ToList();
         }
 
         public static void Add(Navazovanie navazovanie)

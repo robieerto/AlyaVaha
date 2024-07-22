@@ -18,7 +18,7 @@ namespace AlyaVaha
             InitVahaCommunicator();
         }
 
-        private static void InitVahaCommunicator()
+        public static void InitVahaCommunicator()
         {
             var zariadenie = ZariadenieRepository.GetList()[0];
             if (zariadenie != null)

@@ -154,6 +154,7 @@ namespace AlyaVaha
                             }
                         }
                         responseValue = "Nastavenia zariadenia boli upravené";
+                        DataCommunicator.InitVahaCommunicator();
                         break;
 
                     default:

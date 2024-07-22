@@ -6,8 +6,8 @@ namespace AlyaVaha.Models
     public class Navazovanie
     {
         public int Id { get; set; }
-        public DateTime? CasStartu { get; set; }
-        public DateTime? CasKonca { get; set; }
+        public DateTime? DatumStartu { get; set; }
+        public DateTime? DatumKonca { get; set; }
         public int? ZariadenieId { get; set; }
         public Zariadenie? Zariadenie { get; set; }
         public double? NavazeneMnozstvo { get; set; }

@@ -66,7 +66,8 @@ const isSirenaZapnutaPrerusovane = computed(
 const isSirenaVypnuta = computed(
   () =>
     store.actualData.StavSireny === VahaAPI.StavSireny.SirenaVypnuta ||
-    store.actualData.StavSireny === undefined
+    store.actualData.StavSireny === undefined ||
+    store.actualData.StavSireny === null
 )
 
 // vibrator
@@ -76,7 +77,8 @@ const isVibratorZapnuty = computed(
 const isVibratorVypnuty = computed(
   () =>
     store.actualData.StavVibratora === VahaAPI.StavVibratora.VibratorVypnuty ||
-    store.actualData.StavVibratora === undefined
+    store.actualData.StavVibratora === undefined ||
+    store.actualData.StavVibratora === null
 )
 
 // ovladanie klapiek
@@ -131,6 +133,8 @@ const classVibrator = computed(() => ({
 }))
 
 const setHornaKlapkaControl = () => {
+  if (!store.connected) return
+
   sendCommand('SetValues', {
     StavHornejKlapky: isHornaKlapkaZatvorenaControl.value
       ? VahaAPI.StavKlapkyPovel.OtvorKlapku
@@ -139,6 +143,8 @@ const setHornaKlapkaControl = () => {
 }
 
 const setDolnaKlapkaControl = () => {
+  if (!store.connected) return
+
   sendCommand('SetValues', {
     StavDolnejKlapky: isDolnaKlapkaZatvorenaControl.value
       ? VahaAPI.StavKlapkyPovel.OtvorKlapku
@@ -147,6 +153,8 @@ const setDolnaKlapkaControl = () => {
 }
 
 const setSirenaControl = () => {
+  if (!store.connected) return
+
   sendCommand('SetValues', {
     StavSireny: isSirenaVypnuta.value
       ? VahaAPI.StavSirenyPovel.ZapniSirenu
@@ -155,6 +163,8 @@ const setSirenaControl = () => {
 }
 
 const setVibratorControl = () => {
+  if (!store.connected) return
+
   sendCommand('SetValues', {
     StavVibratora: isVibratorVypnuty.value
       ? VahaAPI.StavVibratoraPovel.ZapniVibrator
@@ -165,7 +175,7 @@ const setVibratorControl = () => {
 
 <template>
   <div>
-    <div class="horna-klapka-control" @click="setHornaKlapkaControl" :disabled="!store.connected">
+    <div class="horna-klapka-control" @click="setHornaKlapkaControl">
       <p class="p-0 text-center">
         {{ store.actualStateTexts.StavHornejKlapky }}
       </p>
@@ -177,25 +187,21 @@ const setVibratorControl = () => {
         class="sirena animate__animated animate__infinite"
         :class="classSirena"
         @click="setSirenaControl"
-        :disabled="!store.connected"
       />
       <div
         class="vibrator animate__animated animate__infinite"
         :class="classVibrator"
         @click="setVibratorControl"
-        :disabled="!store.connected"
       />
       <div
         class="horna-klapka animate__animated animate__infinite"
         :class="classHornaKlapka"
         @click="setHornaKlapkaControl"
-        :disabled="!store.connected"
       />
       <div
         class="dolna-klapka animate__animated animate__infinite"
         :class="classDolnaKlapka"
         @click="setDolnaKlapkaControl"
-        :disabled="!store.connected"
       />
       <div class="aktualna-vaha text-center">
         <span class="text-center">
@@ -286,7 +292,7 @@ const setVibratorControl = () => {
 
 .aktualna-vaha {
   position: absolute;
-  top: 112px;
+  top: 111px;
   left: 152px;
   width: 200px;
   font-size: 30px;

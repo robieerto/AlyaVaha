@@ -84,6 +84,9 @@ function initCommandHandler() {
                 response.Command.startsWith('Delete')
               ) {
                 shortNotify(JSON.parse(response.Value!), 'info')
+                if (response.Command == 'UpdateZariadenie') {
+                  sendCommand('GetZariadenia')
+                }
               }
               if (response.Command == 'AddMaterial' || response.Command == 'UpdateMaterial') {
                 sendCommand('GetMaterialy')

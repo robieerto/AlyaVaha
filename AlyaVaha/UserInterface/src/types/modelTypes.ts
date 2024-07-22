@@ -33,8 +33,8 @@ module AlyaVaha.Models {
 	export interface INavazovanie
 	{
 		Id: number;
-		CasStartu?: any;
-		CasKonca?: any;
+		DatumStartu?: any;
+		DatumKonca?: any;
 		ZariadenieId?: number;
 		Zariadenie?: AlyaVaha.Models.IZariadenie;
 		NavazeneMnozstvo?: number;
@@ -73,5 +73,7 @@ module AlyaVaha.Models {
 		DatumVytvorenia?: any;
 		DatumUpravy?: any;
 		Skratka?: string;
+		CestaTam?: boolean;
+		CestaSpat?: boolean;
 	}
 }

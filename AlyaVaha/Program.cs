@@ -2,7 +2,6 @@
 using Photino.NET;
 using PhotinoNET.Server;
 using System.Drawing;
-using System.Text;
 
 namespace Photino.HelloPhotino.Vue;
 
@@ -44,17 +43,17 @@ class Program
             .SetResizable(true)
             .SetContextMenuEnabled(IsDebugMode)
             .SetDevToolsEnabled(IsDebugMode)
-            .RegisterCustomSchemeHandler("app", (object sender, string scheme, string url, out string contentType) =>
-            {
-                contentType = "text/javascript";
-                return new MemoryStream(Encoding.UTF8.GetBytes(@"
-                        (() =>{
-                            window.setTimeout(() => {
-                                alert(`🎉 Dynamically inserted JavaScript.`);
-                            }, 1000);
-                        })();
-                    "));
-            })
+            //.RegisterCustomSchemeHandler("app", (object sender, string scheme, string url, out string contentType) =>
+            //{
+            //    contentType = "text/javascript";
+            //    return new MemoryStream(Encoding.UTF8.GetBytes(@"
+            //            (() =>{
+            //                window.setTimeout(() => {
+            //                    alert(`🎉 Dynamically inserted JavaScript.`);
+            //                }, 1000);
+            //            })();
+            //        "));
+            //})
             // Most event handlers can be registered after the
             // PhotinoWindow was instantiated by calling a registration 
             // method like the following RegisterWebMessageReceivedHandler.

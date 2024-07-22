@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlyaVaha.Migrations
 {
     [DbContext(typeof(AlyaVahaDbContext))]
-    [Migration("20240702215950_MaterialNavazovanie")]
-    partial class MaterialNavazovanie
+    [Migration("20240722180114_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,10 +93,10 @@ namespace AlyaVaha.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("CasKonca")
+                    b.Property<DateTime?>("DatumKonca")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("CasStartu")
+                    b.Property<DateTime?>("DatumStartu")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("KamId")
@@ -189,6 +189,15 @@ namespace AlyaVaha.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Zariadenia");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IpAdresa = "192.168.1.10",
+                            NazovZariadenia = "Váha 1",
+                            Port = 3396
+                        });
                 });
 
             modelBuilder.Entity("AlyaVaha.Models.Zasobnik", b =>
@@ -198,6 +207,12 @@ namespace AlyaVaha.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool?>("CestaSpat")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("CestaTam")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("DatumUpravy")
                         .HasColumnType("datetime2");

@@ -18,6 +18,14 @@ import router from './router'
 locale('sk')
 localizeMessages('sk')
 
+// block reload
+document.addEventListener('keydown', (e) => {
+  e = e || window.event
+  if (e.keyCode == 116) {
+    e.preventDefault()
+  }
+})
+
 themes.initialized(() => {
   const app = createApp(App)
   // app.use(createPinia())

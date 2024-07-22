@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AlyaVaha.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDB : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -67,7 +67,9 @@ namespace AlyaVaha.Migrations
                     NazovZasobnika = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DatumVytvorenia = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DatumUpravy = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Skratka = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Skratka = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CestaTam = table.Column<bool>(type: "bit", nullable: true),
+                    CestaSpat = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -108,8 +110,8 @@ namespace AlyaVaha.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CasStartu = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CasKonca = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DatumStartu = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DatumKonca = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ZariadenieId = table.Column<int>(type: "int", nullable: true),
                     NavazeneMnozstvo = table.Column<double>(type: "float", nullable: true),
                     NavazenyPocetDavok = table.Column<int>(type: "int", nullable: true),
@@ -118,11 +120,17 @@ namespace AlyaVaha.Migrations
                     VelkostDavky = table.Column<double>(type: "float", nullable: true),
                     OdkialId = table.Column<int>(type: "int", nullable: true),
                     KamId = table.Column<int>(type: "int", nullable: true),
+                    MaterialId = table.Column<int>(type: "int", nullable: true),
                     UzivatelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Navazovania", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Navazovania_Materialy_MaterialId",
+                        column: x => x.MaterialId,
+                        principalTable: "Materialy",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Navazovania_Uzivatelia_UzivatelId",
                         column: x => x.UzivatelId,
@@ -145,6 +153,11 @@ namespace AlyaVaha.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.InsertData(
+                table: "Zariadenia",
+                columns: new[] { "Id", "IpAdresa", "NazovZariadenia", "Port" },
+                values: new object[] { 1, "192.168.1.10", "Váha 1", 3396 });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Cesty_ZariadenieId",
                 table: "Cesty",
@@ -159,6 +172,11 @@ namespace AlyaVaha.Migrations
                 name: "IX_Navazovania_KamId",
                 table: "Navazovania",
                 column: "KamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Navazovania_MaterialId",
+                table: "Navazovania",
+                column: "MaterialId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Navazovania_OdkialId",
@@ -183,10 +201,10 @@ namespace AlyaVaha.Migrations
                 name: "Cesty");
 
             migrationBuilder.DropTable(
-                name: "Materialy");
+                name: "Navazovania");
 
             migrationBuilder.DropTable(
-                name: "Navazovania");
+                name: "Materialy");
 
             migrationBuilder.DropTable(
                 name: "Uzivatelia");

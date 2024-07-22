@@ -19,7 +19,7 @@ import { exportDataGrid } from 'devextreme/excel_exporter'
 import { Workbook } from 'exceljs'
 import saveAs from 'file-saver'
 
-import { dateFormat, floatFormat, filterOperations } from '@/utils/helpers'
+import { dateFormat, timeFormat, floatFormat, filterOperations } from '@/utils/helpers'
 import store from '@/store'
 import { sendCommand } from '@/commandHandler'
 
@@ -52,8 +52,28 @@ function deleteRow(rowEvent) {
 const calculatePoradie = (rowIndex) =>
   rowIndex + state.dataGridInstance.pageIndex() * state.dataGridInstance.pageSize()
 
+function calculateTimeCellValue(rowData) {
+  return rowData.DatumKonca.toString()
+}
+
+function calculateTimeFilterExpression(filterValue, selectedFilterOperation) {
+  const getTime = (date) => new Date(date).toLocaleTimeString('sk-SK').slice(0, -3)
+
+  // Override implementation for the "between" filter operation
+  if (selectedFilterOperation === 'between' && Array.isArray(filterValue)) {
+    const filterExpression = [
+      [this.dataField, '>', getTime(filterValue[0])],
+      'and',
+      [this.dataField, '<', getTime(filterValue[1])]
+    ]
+    return filterExpression
+  }
+  // Invoke the default implementation for other filter operations
+  return [this.dataField, selectedFilterOperation, getTime(filterValue)]
+}
+
 function exportToXls() {
-  console.log(store.navazovania)
+  console.log(state.dataGridInstance?.getCombinedFilter())
 
   if (state.zaznamyCount > 50000) {
     alert('Nie je možné exportovať viac ako 50 000 záznamov')
@@ -131,7 +151,7 @@ function exportToXls() {
         cell-template="poradieTemplate"
       />
       <DxColumn
-        data-field="CasStartu"
+        data-field="DatumStartu"
         caption="Dátum navažovania"
         data-type="date"
         :min-width="200"
@@ -140,13 +160,15 @@ function exportToXls() {
         :filterOperations="filterOperations"
       />
       <!-- <DxColumn
-        data-field="CasKonca"
-        caption="Čas konca"
+        data-field="DatumKonca"
+        caption="Dátum konca"
         data-type="datetime"
         width="140"
-        :format="dateFormat"
+        :format="timeFormat"
         :allow-editing="false"
         :editorOptions="{ type: 'time' }"
+        :calculate-cell-value="calculateTimeCellValue"
+        :calculate-filter-expression="calculateTimeFilterExpression"
       /> -->
       <DxColumn data-field="ZariadenieId" caption="Zariadenie" :min-width="150">
         <DxLookup :data-source="store.zariadenia" value-expr="Id" display-expr="NazovZariadenia" />

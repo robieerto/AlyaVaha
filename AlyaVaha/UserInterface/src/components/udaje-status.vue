@@ -38,6 +38,16 @@ import store from '@/store'
       <div class="row m-0">
         <div class="card col">
           <div class="row h-100 d-flex align-items-center py-2 pl-3">
+            <p class="col-6">Min. čas dávky (s):</p>
+            <p class="col-6 fw-bold">
+              {{ store.actualData.CasCykluDavky }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="row m-0">
+        <div class="card col">
+          <div class="row h-100 d-flex align-items-center py-2 pl-3">
             <p class="col-6">Celkový výkon:</p>
             <p class="col-6 fw-bold">
               {{ store.actualData.VykonCelkovy }}

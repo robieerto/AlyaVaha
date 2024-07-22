@@ -13,8 +13,8 @@ namespace AlyaVaha
             var navazovanie = new Navazovanie
             {
                 Id = int.Parse(parts[0]),
-                CasStartu = TryParseDateTime(parts[1]),
-                CasKonca = TryParseDateTime(parts[2]),
+                DatumStartu = TryParseDateTime(parts[1]),
+                DatumKonca = TryParseDateTime(parts[2]),
                 NavazeneMnozstvo = TryParseDouble(parts[3]),
                 NavazenyPocetDavok = TryParseInt(parts[4]),
                 PozadovaneMnozstvo = TryParseDouble(parts[5]),

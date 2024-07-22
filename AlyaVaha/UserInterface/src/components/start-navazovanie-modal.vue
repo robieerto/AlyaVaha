@@ -276,7 +276,7 @@ store.isNavazovanieInitSuccess = false
             </div>
             <div class="col-1 ps-0">
               <div class="align-middle">
-                <p class="my-3">sek</p>
+                <p class="my-3">s</p>
               </div>
             </div>
           </div>

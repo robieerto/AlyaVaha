@@ -16,6 +16,7 @@ namespace VahaAPI
 
         public void ReadValues()
         {
+            bool hasData = false;
             PropertyInfo[] properties = typeof(VahaModel).GetProperties();
             foreach (PropertyInfo property in properties)
             {
@@ -66,12 +67,17 @@ namespace VahaAPI
                         {
                             property.SetValue(Vaha, value);
                         }
+                        hasData = true;
                     }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
+            }
+            if (!hasData)
+            {
+                Vaha = null;
             }
         }
 
