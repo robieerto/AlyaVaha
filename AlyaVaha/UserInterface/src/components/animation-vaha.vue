@@ -266,22 +266,23 @@ const setVibratorControl = () => {
 .dolna-klapka-control {
   position: relative;
   width: 200px;
-  top: -10px;
-  left: 155px;
+  top: -16px;
+  left: 157px;
   cursor: pointer;
 }
 
 .horna-klapka-control {
   position: relative;
   width: 200px;
-  top: 0px;
-  left: 155px;
+  top: 10px;
+  left: 157px;
   cursor: pointer;
+  z-index: 100;
 }
 
 .aktualna-vaha {
   position: absolute;
-  top: 110px;
+  top: 112px;
   left: 152px;
   width: 200px;
   font-size: 30px;
