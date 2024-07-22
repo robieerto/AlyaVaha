@@ -60,6 +60,9 @@ const isDolnaKlapkaNedefinovana = computed(
 const isSirenaZapnuta = computed(
   () => store.actualData.StavSireny === VahaAPI.StavSireny.SirenaZapnuta
 )
+const isSirenaZapnutaPrerusovane = computed(
+  () => store.actualData.StavSireny === VahaAPI.StavSireny.SirenaZapnutaPrerusovane
+)
 const isSirenaVypnuta = computed(
   () =>
     store.actualData.StavSireny === VahaAPI.StavSireny.SirenaVypnuta ||
@@ -115,8 +118,9 @@ const classDolnaKlapka = computed(() => ({
 }))
 
 const classSirena = computed(() => ({
-  'is-on': isSirenaZapnuta.value,
-  animate__flash: isSirenaZapnuta.value,
+  'is-on': isSirenaZapnuta.value || isSirenaZapnutaPrerusovane.value,
+  animate__heartBeat: isSirenaZapnuta.value,
+  animate__flash: isSirenaZapnutaPrerusovane.value,
   'is-off': isSirenaVypnuta.value
 }))
 
