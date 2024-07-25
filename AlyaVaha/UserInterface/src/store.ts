@@ -31,6 +31,8 @@ const store = reactive({
   } as VahaAPI.IProgramVahaOutput,
   actualStateTexts: {} as Partial<Record<keyof typeof Messages, string>>,
   navazovania: [] as AlyaVaha.Models.INavazovanie[],
+  navazovaniaData: null,
+  navazovaniaDataExport: null,
   zariadenia: [] as AlyaVaha.Models.IZariadenie[],
   materialy: [] as AlyaVaha.Models.IMaterial[],
   zasobniky: [] as AlyaVaha.Models.IZasobnik[],

@@ -7,7 +7,9 @@ namespace AlyaVaha.Models
     {
         public int Id { get; set; }
         public DateTime? DatumStartu { get; set; }
+        public string? CasStartu { get; set; }
         public DateTime? DatumKonca { get; set; }
+        public string? CasKonca { get; set; }
         public int? ZariadenieId { get; set; }
         public Zariadenie? Zariadenie { get; set; }
         public double? NavazeneMnozstvo { get; set; }

@@ -20,7 +20,8 @@ namespace AlyaVaha.Migrations
                     NazovMaterialu = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DatumVytvorenia = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DatumUpravy = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    HmotnostMaterialu = table.Column<double>(type: "float", nullable: true)
+                    HmotnostMaterialu = table.Column<double>(type: "float", nullable: true),
+                    JeAktivny = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,40 +69,12 @@ namespace AlyaVaha.Migrations
                     DatumVytvorenia = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DatumUpravy = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Skratka = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CestaTam = table.Column<bool>(type: "bit", nullable: true),
-                    CestaSpat = table.Column<bool>(type: "bit", nullable: true)
+                    CestaDoVahy = table.Column<bool>(type: "bit", nullable: true),
+                    CestaZVahy = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Zasobniky", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Cesty",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DatumVytvorenia = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DatumUpravy = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ZariadenieId = table.Column<int>(type: "int", nullable: true),
-                    ZasobnikId = table.Column<int>(type: "int", nullable: true),
-                    DoVahy = table.Column<bool>(type: "bit", nullable: true),
-                    ZVahy = table.Column<bool>(type: "bit", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cesty", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Cesty_Zariadenia_ZariadenieId",
-                        column: x => x.ZariadenieId,
-                        principalTable: "Zariadenia",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Cesty_Zasobniky_ZasobnikId",
-                        column: x => x.ZasobnikId,
-                        principalTable: "Zasobniky",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -111,7 +84,9 @@ namespace AlyaVaha.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DatumStartu = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CasStartu = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DatumKonca = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CasKonca = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ZariadenieId = table.Column<int>(type: "int", nullable: true),
                     NavazeneMnozstvo = table.Column<double>(type: "float", nullable: true),
                     NavazenyPocetDavok = table.Column<int>(type: "int", nullable: true),
@@ -159,16 +134,6 @@ namespace AlyaVaha.Migrations
                 values: new object[] { 1, "192.168.1.10", "Váha 1", 3396 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cesty_ZariadenieId",
-                table: "Cesty",
-                column: "ZariadenieId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cesty_ZasobnikId",
-                table: "Cesty",
-                column: "ZasobnikId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Navazovania_KamId",
                 table: "Navazovania",
                 column: "KamId");
@@ -197,9 +162,6 @@ namespace AlyaVaha.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Cesty");
-
             migrationBuilder.DropTable(
                 name: "Navazovania");
 

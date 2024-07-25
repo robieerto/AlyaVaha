@@ -1,13 +1,16 @@
 ﻿using AlyaVaha.Models;
+using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data.ResponseModel;
 
 namespace AlyaVaha.DAL.Repositories
 {
     public static class NavazovanieRepository
     {
-        public static List<Navazovanie> GetList()
+        public static LoadResult GetList(DataSourceLoadOptionsBase loadOptions)
         {
             var context = new AlyaVahaDbContext();
-            return context.Navazovania.OrderByDescending(x => x.DatumStartu).ToList();
+            var query = context.Navazovania.OrderByDescending(x => x.DatumStartu);
+            return DataSourceLoader.Load(query, loadOptions);
         }
 
         public static void Add(Navazovanie navazovanie)

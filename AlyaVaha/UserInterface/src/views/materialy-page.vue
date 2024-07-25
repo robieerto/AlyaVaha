@@ -10,7 +10,7 @@ import DxDataGrid, {
 import { DxLoadPanel } from 'devextreme-vue/load-panel'
 import { reactive } from 'vue'
 
-import { dateFormat, filterOperations, filterStringOperations } from '@/utils/helpers'
+import { dateTimeFormat, filterOperations, filterStringOperations } from '@/utils/helpers'
 import store from '@/store'
 import { sendCommand } from '@/commandHandler'
 
@@ -20,6 +20,10 @@ const state = reactive({
 
 function onDataGridInitialized(e) {
   state.dataGridInstance = e.component
+}
+
+function initNewRow(rowEvent) {
+  rowEvent.data.JeAktivny = true
 }
 
 function addRow(rowEvent) {
@@ -57,6 +61,7 @@ function deleteRow(rowEvent) {
       :show-row-lines="true"
       :word-wrap-enabled="true"
       @initialized="onDataGridInitialized"
+      @init-new-row="initNewRow"
       @row-inserting="addRow"
       @row-updating="updateRow"
       @row-removing="deleteRow"
@@ -76,7 +81,7 @@ function deleteRow(rowEvent) {
         data-field="DatumVytvorenia"
         caption="Dátum vytvorenia"
         data-type="date"
-        :format="dateFormat"
+        :format="dateTimeFormat"
         :allow-editing="false"
         :filterOperations="filterOperations"
       />
@@ -84,7 +89,7 @@ function deleteRow(rowEvent) {
         data-field="DatumUpravy"
         caption="Dátum úpravy"
         data-type="date"
-        :format="dateFormat"
+        :format="dateTimeFormat"
         :allow-editing="false"
         :filterOperations="filterOperations"
       />
@@ -95,6 +100,7 @@ function deleteRow(rowEvent) {
         alignment="left"
         :filterOperations="filterOperations"
       />
+      <DxColumn data-field="JeAktivny" caption="Aktívny" data-type="boolean" />
       <!-- <template #poradieTemplate="{ data }">{{ calculatePoradie(data.row.rowIndex) }}</template> -->
     </DxDataGrid>
   </div>

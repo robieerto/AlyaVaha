@@ -27,6 +27,9 @@ namespace AlyaVaha
                 // USR2 is not directly mapped in the model provided. Adjust as necessary.
             };
 
+            navazovanie.CasStartu = navazovanie.DatumStartu?.ToString("HH:mm");
+            navazovanie.CasKonca = navazovanie.DatumKonca?.ToString("HH:mm");
+
             return navazovanie;
         }
 

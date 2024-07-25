@@ -12,29 +12,48 @@ import DxDataGrid, {
   DxTotalItem
 } from 'devextreme-vue/data-grid'
 import DxButton from 'devextreme-vue/button'
-import { DxLoadPanel } from 'devextreme-vue/load-panel'
-import { reactive } from 'vue'
-
+import CustomStore from 'devextreme/data/custom_store'
+import { reactive, watch } from 'vue'
 import { exportDataGrid } from 'devextreme/excel_exporter'
 import { Workbook } from 'exceljs'
 import saveAs from 'file-saver'
 
-import { dateFormat, timeFormat, floatFormat, filterOperations } from '@/utils/helpers'
+import { dateFormat, timeFormat, notify, filterOperations } from '@/utils/helpers'
 import store from '@/store'
 import { sendCommand } from '@/commandHandler'
 
 const state = reactive({
-  dataGridInstance: null
+  dataGridInstance: null,
+  dataSource: new CustomStore({
+    key: 'Id',
+    load: function (loadOptions) {
+      if (!store.navazovaniaData) return Promise.resolve({ data: [], totalCount: 0 })
+      return new Promise((resolve, reject) => {
+        try {
+          // Simulate server-side processing
+          if (!loadOptions.isLoadingAll) {
+            resolve(store.navazovaniaData)
+          } else {
+            resolve(store.navazovaniaDataExport)
+          }
+        } catch (error) {
+          reject(error)
+        }
+      })
+    }
+  })
 })
 
-function getNavazovania() {
-  sendCommand('GetNavazovania')
-}
-
-getNavazovania()
+watch(
+  () => store.navazovaniaData,
+  () => {
+    state.dataGridInstance.refresh()
+  }
+)
 
 function onDataGridInitialized(e) {
   state.dataGridInstance = e.component
+  getActualData(e)
 }
 
 function addRow(rowEvent) {
@@ -53,30 +72,73 @@ const calculatePoradie = (rowIndex) =>
   rowIndex + state.dataGridInstance.pageIndex() * state.dataGridInstance.pageSize()
 
 function calculateTimeCellValue(rowData) {
-  return rowData.DatumKonca.toString()
+  return rowData.CasStartu.toString()
 }
 
 function calculateTimeFilterExpression(filterValue, selectedFilterOperation) {
-  const getTime = (date) => new Date(date).toLocaleTimeString('sk-SK').slice(0, -3)
+  const getTime = (date) =>
+    date
+      ? new Intl.DateTimeFormat('en-US', {
+          hour: 'numeric',
+          minute: 'numeric',
+          hour12: false
+        }).format(new Date(date))
+      : null
 
   // Override implementation for the "between" filter operation
   if (selectedFilterOperation === 'between' && Array.isArray(filterValue)) {
+    console.log(filterValue)
     const filterExpression = [
-      [this.dataField, '>', getTime(filterValue[0])],
+      [this.dataField, '>=', getTime(filterValue[0])],
       'and',
-      [this.dataField, '<', getTime(filterValue[1])]
+      [this.dataField, '<=', getTime(filterValue[1])]
     ]
+
+    console.log(filterExpression)
     return filterExpression
   }
   // Invoke the default implementation for other filter operations
   return [this.dataField, selectedFilterOperation, getTime(filterValue)]
 }
 
-function exportToXls() {
-  console.log(state.dataGridInstance?.getCombinedFilter())
+function getNavazovania(dataSourceLoadOptions) {
+  sendCommand('GetNavazovania', dataSourceLoadOptions)
+}
 
-  if (state.zaznamyCount > 50000) {
-    alert('Nie je možné exportovať viac ako 50 000 záznamov')
+function getActualData(e, allData = false) {
+  const component = e.component
+  const dataSourceLoadOptions = {}
+  if (!allData) {
+    dataSourceLoadOptions.Skip = component.pageIndex() * component.pageSize()
+    dataSourceLoadOptions.Take = component.pageSize()
+  }
+  dataSourceLoadOptions.Filter = component.getCombinedFilter()
+  dataSourceLoadOptions.Sort = []
+  for (let i = 0; i < component.columnCount(); i++) {
+    dataSourceLoadOptions.Sort.push({
+      selector: component.columnOption(i).dataField,
+      desc: component.columnOption(i).sortOrder === 'desc'
+    })
+  }
+  dataSourceLoadOptions.TotalSummary = [
+    { Selector: 'DatumStartu', SummaryType: 'count' },
+    { Selector: 'NavazeneMnozstvo', SummaryType: 'sum' },
+    { Selector: 'NavazenyPocetDavok', SummaryType: 'sum' }
+  ]
+  dataSourceLoadOptions.RequireTotalCount = true
+  getNavazovania(dataSourceLoadOptions)
+}
+
+function onOptionChanged(e) {
+  if (e.name && (e.name.startsWith('focused') || e.name === 'dataSource')) return
+  var allData = e.name === 'loadPanel'
+  getActualData(e, allData)
+}
+
+function exportToXls() {
+  console.log(store.navazovaniaData.totalCount)
+  if (store.navazovaniaData.totalCount > 4) {
+    notify('Nie je možné exportovať viac ako 50 000 záznamov', 'error')
     return
   }
   const workbook = new Workbook()
@@ -94,7 +156,7 @@ function exportToXls() {
     }
   }).then(function () {
     workbook.xlsx.writeBuffer().then(function (buffer) {
-      saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'BigBagData.xlsx')
+      saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'AlyaVahaData.xlsx')
     })
   })
 }
@@ -105,7 +167,12 @@ function exportToXls() {
     <div class="d-flex justify-content-between">
       <div class="d-flex justify-content-start">
         <h2 class="content-block">Prehľad navažovaní</h2>
-        <DxButton icon="refresh" class="mt-3" @click="getNavazovania"> </DxButton>
+        <DxButton
+          icon="refresh"
+          class="mt-3"
+          @click="() => getActualData({ component: state.dataGridInstance })"
+        >
+        </DxButton>
       </div>
       <div>
         <button type="button" class="btn btn-primary h-50 m-3 mr-0" @click="exportToXls">
@@ -114,11 +181,11 @@ function exportToXls() {
         <!-- <button type="button" class="btn btn-secondary h-50 m-3 ml-0" @click="exportToPdf">Exportovať do PDF</button> -->
       </div>
     </div>
-    <DxLoadPanel v-model:visible="store.navazovaniaLoading" :position="{ of: '#data-grid' }" />
+    <!-- <DxLoadPanel v-model:visible="store.navazovaniaLoading" :position="{ of: '#data-grid' }" /> -->
     <DxDataGrid
       id="data-grid"
       class="dx-card wide-card"
-      :data-source="store.navazovania"
+      :data-source="state.dataSource"
       :key-expr="'Id'"
       :width="'100%'"
       :show-borders="false"
@@ -129,19 +196,21 @@ function exportToXls() {
       :show-column-lines="true"
       :show-row-lines="true"
       :word-wrap-enabled="true"
+      :remote-operations="true"
       @initialized="onDataGridInitialized"
+      @option-changed="onOptionChanged"
       @row-inserting="addRow"
       @row-updating="updateRow"
       @row-removing="deleteRow"
     >
       <DxPaging :page-size="10" />
-      <DxPager :show-page-size-selector="true" :show-info="true" />
+      <DxPager :show-page-size-selector="false" :show-info="true" />
       <DxFilterRow :visible="true" />
       <DxEditing :allow-updating="false" :allow-deleting="true" :allow-adding="false" mode="row" />
       <DxExport :enabled="false"></DxExport>
       <!-- <dx-column caption="Riadok" :allow-search="false" :allow-sorting="false" :alignment="'right'" cell-template="poradieTemplate" /> -->
       <DxColumn data-field="Id" caption="Id" width="100" :visible="false" />
-      <DxColumn
+      <!-- <DxColumn
         caption="Riadok"
         :visible="false"
         :allow-search="false"
@@ -149,19 +218,19 @@ function exportToXls() {
         :allow-exporting="true"
         :alignment="'right'"
         cell-template="poradieTemplate"
-      />
+      /> -->
       <DxColumn
         data-field="DatumStartu"
         caption="Dátum navažovania"
         data-type="date"
-        :min-width="200"
+        :min-width="170"
         :format="dateFormat"
         :allow-editing="false"
         :filterOperations="filterOperations"
       />
-      <!-- <DxColumn
-        data-field="DatumKonca"
-        caption="Dátum konca"
+      <DxColumn
+        data-field="CasStartu"
+        caption="Čas navažovania"
         data-type="datetime"
         width="140"
         :format="timeFormat"
@@ -169,22 +238,20 @@ function exportToXls() {
         :editorOptions="{ type: 'time' }"
         :calculate-cell-value="calculateTimeCellValue"
         :calculate-filter-expression="calculateTimeFilterExpression"
-      /> -->
-      <DxColumn data-field="ZariadenieId" caption="Zariadenie" :min-width="150">
-        <DxLookup :data-source="store.zariadenia" value-expr="Id" display-expr="NazovZariadenia" />
-      </DxColumn>
+        :filterOperations="filterOperations"
+      />
       <DxColumn
         data-field="NavazeneMnozstvo"
         caption="Navážené množstvo"
         data-type="number"
-        :min-width="100"
+        :min-width="180"
         :filterOperations="filterOperations"
       />
       <DxColumn
         data-field="NavazenyPocetDavok"
         caption="Navážený počet dávok"
         data-type="number"
-        :min-width="100"
+        :min-width="180"
         :filterOperations="filterOperations"
       />
       <DxColumn
@@ -208,6 +275,9 @@ function exportToXls() {
         :min-width="100"
         :filterOperations="filterOperations"
       />
+      <DxColumn data-field="ZariadenieId" caption="Zariadenie" :min-width="150">
+        <DxLookup :data-source="store.zariadenia" value-expr="Id" display-expr="NazovZariadenia" />
+      </DxColumn>
       <DxColumn data-field="OdkialId" caption="Zásobník odkiaľ" :min-width="180">
         <DxLookup :data-source="store.zasobniky" value-expr="Id" display-expr="NazovZasobnika" />
       </DxColumn>
@@ -215,8 +285,9 @@ function exportToXls() {
         <DxLookup :data-source="store.zasobniky" value-expr="Id" display-expr="NazovZasobnika" />
       </DxColumn>
       <DxSummary>
-        <DxTotalItem column="Riadok" summary-type="count" />
-        <DxTotalItem column="NavazeneMnozstvo" summary-type="sum" :value-format="floatFormat" />
+        <DxTotalItem column="DatumStartu" summary-type="count" :display-format="'Spolu: {0}'" />
+        <DxTotalItem column="NavazeneMnozstvo" summary-type="sum" :display-format="'{0}'" />
+        <DxTotalItem column="NavazenyPocetDavok" summary-type="sum" :display-format="'{0}'" />
       </DxSummary>
       <template #poradieTemplate="{ data }">{{ calculatePoradie(data.row.rowIndex) }}</template>
     </DxDataGrid>

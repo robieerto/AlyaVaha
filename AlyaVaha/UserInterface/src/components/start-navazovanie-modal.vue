@@ -12,6 +12,7 @@ import {
 import store from '@/store'
 import { sendCommand } from '@/commandHandler'
 import * as VahaAPI from '@/types/vahaTypes'
+import { get } from 'http'
 
 const radioTypNavazovania = [
   { text: 'Nedefinované', value: 'nedefinovane' },
@@ -38,6 +39,18 @@ const defaultFormData = {
 
 const popupRef = ref(null)
 
+const getZasobnikyDoVahy = () => {
+  return store.zasobniky.filter((item) => item.CestaDoVahy === true)
+}
+
+const getZasobnikyZVahy = () => {
+  return store.zasobniky.filter((item) => item.CestaZVahy === true)
+}
+
+const getMaterialy = () => {
+  return store.materialy.filter((item) => item.JeAktivny === true)
+}
+
 const initSelectedTypNavazovania = () => {
   if (defaultFormData.PozadovanaCelkovaVaha! > 0) {
     return radioTypNavazovania[1].value
@@ -63,10 +76,28 @@ const initEnableSirena = () =>
 
 const state = reactive({
   formData: defaultFormData,
+  zasobnikyDoVahy: getZasobnikyDoVahy(),
+  zasobnikyZVahy: getZasobnikyZVahy(),
+  materialy: getMaterialy(),
   selectedTypNavazovania: initSelectedTypNavazovania(),
   selectedSpustenieSireny: initSelectedSpustenieSireny(),
   enableSirena: initEnableSirena()
 })
+
+watch(
+  () => store.zasobniky,
+  () => {
+    state.zasobnikyDoVahy = getZasobnikyDoVahy()
+    state.zasobnikyZVahy = getZasobnikyZVahy()
+  }
+)
+
+watch(
+  () => store.materialy,
+  () => {
+    state.materialy = getMaterialy()
+  }
+)
 
 watch(
   () => store.isNavazovanieInitSuccess,
@@ -195,7 +226,7 @@ store.isNavazovanieInitSuccess = false
             </div>
             <div class="col-6 ml-2">
               <DxSelectBox
-                :data-source="store.materialy"
+                :data-source="state.materialy"
                 v-model:value="state.formData.IdCisloMaterialu"
                 value-expr="Id"
                 display-expr="NazovMaterialu"
@@ -211,7 +242,7 @@ store.isNavazovanieInitSuccess = false
             </div>
             <div class="col-6 ml-2">
               <DxSelectBox
-                :data-source="store.zasobniky"
+                :data-source="state.zasobnikyDoVahy"
                 v-model:value="state.formData.IdOdbernehoMiesta"
                 value-expr="Id"
                 display-expr="NazovZasobnika"
@@ -227,7 +258,7 @@ store.isNavazovanieInitSuccess = false
             </div>
             <div class="col-6 ml-2">
               <DxSelectBox
-                :data-source="store.zasobniky"
+                :data-source="state.zasobnikyZVahy"
                 v-model:value="state.formData.IdSmerovaciehoMiesta"
                 value-expr="Id"
                 display-expr="NazovZasobnika"

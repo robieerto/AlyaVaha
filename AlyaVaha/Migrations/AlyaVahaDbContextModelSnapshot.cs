@@ -22,41 +22,6 @@ namespace AlyaVaha.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AlyaVaha.Models.Cesta", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("DatumUpravy")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DatumVytvorenia")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool?>("DoVahy")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("ZVahy")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("ZariadenieId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ZasobnikId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ZariadenieId");
-
-                    b.HasIndex("ZasobnikId");
-
-                    b.ToTable("Cesty");
-                });
-
             modelBuilder.Entity("AlyaVaha.Models.Material", b =>
                 {
                     b.Property<int>("Id")
@@ -74,6 +39,9 @@ namespace AlyaVaha.Migrations
                     b.Property<double?>("HmotnostMaterialu")
                         .HasColumnType("float");
 
+                    b.Property<bool?>("JeAktivny")
+                        .HasColumnType("bit");
+
                     b.Property<string>("NazovMaterialu")
                         .HasColumnType("nvarchar(max)");
 
@@ -89,6 +57,12 @@ namespace AlyaVaha.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CasKonca")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CasStartu")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DatumKonca")
                         .HasColumnType("datetime2");
@@ -205,10 +179,10 @@ namespace AlyaVaha.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool?>("CestaSpat")
+                    b.Property<bool?>("CestaDoVahy")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("CestaTam")
+                    b.Property<bool?>("CestaZVahy")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("DatumUpravy")
@@ -226,21 +200,6 @@ namespace AlyaVaha.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Zasobniky");
-                });
-
-            modelBuilder.Entity("AlyaVaha.Models.Cesta", b =>
-                {
-                    b.HasOne("AlyaVaha.Models.Zariadenie", "Zariadenie")
-                        .WithMany()
-                        .HasForeignKey("ZariadenieId");
-
-                    b.HasOne("AlyaVaha.Models.Zasobnik", "Zasobnik")
-                        .WithMany()
-                        .HasForeignKey("ZasobnikId");
-
-                    b.Navigation("Zariadenie");
-
-                    b.Navigation("Zasobnik");
                 });
 
             modelBuilder.Entity("AlyaVaha.Models.Navazovanie", b =>

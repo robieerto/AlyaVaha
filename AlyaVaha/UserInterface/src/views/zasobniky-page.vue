@@ -10,7 +10,7 @@ import DxDataGrid, {
 import { DxLoadPanel } from 'devextreme-vue/load-panel'
 import { reactive } from 'vue'
 
-import { dateFormat, filterOperations, filterStringOperations } from '@/utils/helpers'
+import { dateTimeFormat, filterOperations, filterStringOperations } from '@/utils/helpers'
 import store from '@/store'
 import { sendCommand } from '@/commandHandler'
 
@@ -22,12 +22,16 @@ function onDataGridInitialized(e) {
   state.dataGridInstance = e.component
 }
 
+function initNewRow(rowEvent) {
+  rowEvent.data.CestaDoVahy = true
+  rowEvent.data.CestaZVahy = true
+}
+
 function addRow(rowEvent) {
   sendCommand('AddZasobnik', rowEvent.data)
 }
 
 function updateRow(rowEvent) {
-  console.log(rowEvent)
   sendCommand('UpdateZasobnik', { ...rowEvent.oldData, ...rowEvent.newData })
 }
 
@@ -58,6 +62,7 @@ function deleteRow(rowEvent) {
       :show-row-lines="true"
       :word-wrap-enabled="true"
       @initialized="onDataGridInitialized"
+      @init-new-row="initNewRow"
       @row-inserting="addRow"
       @row-updating="updateRow"
       @row-removing="deleteRow"
@@ -77,7 +82,7 @@ function deleteRow(rowEvent) {
         data-field="DatumVytvorenia"
         caption="Dátum vytvorenia"
         data-type="date"
-        :format="dateFormat"
+        :format="dateTimeFormat"
         :allow-editing="false"
         :filterOperations="filterOperations"
       />
@@ -85,10 +90,12 @@ function deleteRow(rowEvent) {
         data-field="DatumUpravy"
         caption="Dátum úpravy"
         data-type="date"
-        :format="dateFormat"
+        :format="dateTimeFormat"
         :allow-editing="false"
         :filterOperations="filterOperations"
       />
+      <DxColumn data-field="CestaDoVahy" data-type="boolean" caption="Cesta do váhy" :width="160" />
+      <DxColumn data-field="CestaZVahy" data-type="boolean" caption="Cesta z váhy" :width="160" />
       <DxColumn data-field="Skratka" caption="Skratka" :filterOperations="filterStringOperations" />
       <!-- <template #poradieTemplate="{ data }">{{ calculatePoradie(data.row.rowIndex) }}</template> -->
     </DxDataGrid>

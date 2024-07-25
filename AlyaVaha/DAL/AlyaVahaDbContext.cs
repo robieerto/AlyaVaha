@@ -8,7 +8,6 @@ namespace AlyaVaha.DAL
         public DbSet<Models.Uzivatel> Uzivatelia { get; set; }
         public DbSet<Models.Material> Materialy { get; set; }
         public DbSet<Models.Zasobnik> Zasobniky { get; set; }
-        public DbSet<Models.Cesta> Cesty { get; set; }
         public DbSet<Models.Navazovanie> Navazovania { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

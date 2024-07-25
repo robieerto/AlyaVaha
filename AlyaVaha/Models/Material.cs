@@ -10,5 +10,6 @@ namespace AlyaVaha.Models
         public DateTime? DatumVytvorenia { get; set; }
         public DateTime? DatumUpravy { get; set; }
         public double? HmotnostMaterialu { get; set; }
+        public bool? JeAktivny { get; set; }
     }
 }

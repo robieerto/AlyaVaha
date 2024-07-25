@@ -73,7 +73,12 @@ function initCommandHandler() {
               break
             }
             case 'GetNavazovania': {
-              store.navazovania = JSON.parse(response.Value!) as AlyaVaha.Models.INavazovanie[]
+              const responseValue = JSON.parse(response.Value!)
+              if (responseValue.groupCount == -1) {
+                store.navazovaniaData = responseValue
+              } else {
+                store.navazovaniaDataExport = responseValue
+              }
               store.navazovaniaLoading = false
               break
             }
@@ -121,7 +126,6 @@ async function getAllData() {
   sendCommand('GetZariadenia')
   sendCommand('GetMaterialy')
   sendCommand('GetZasobniky')
-  sendCommand('GetNavazovania')
 }
 
 async function setActualInputs() {

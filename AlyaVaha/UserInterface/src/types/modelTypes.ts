@@ -10,18 +10,6 @@ module AlyaVaha {
 	}
 }
 module AlyaVaha.Models {
-	export interface ICesta
-	{
-		Id: number;
-		DatumVytvorenia?: any;
-		DatumUpravy?: any;
-		ZariadenieId?: number;
-		Zariadenie?: AlyaVaha.Models.IZariadenie;
-		ZasobnikId?: number;
-		Zasobnik?: AlyaVaha.Models.IZasobnik;
-		DoVahy?: boolean;
-		ZVahy?: boolean;
-	}
 	export interface IMaterial
 	{
 		Id: number;
@@ -29,12 +17,15 @@ module AlyaVaha.Models {
 		DatumVytvorenia?: any;
 		DatumUpravy?: any;
 		HmotnostMaterialu?: number;
+		JeAktivny?: boolean;
 	}
 	export interface INavazovanie
 	{
 		Id: number;
 		DatumStartu?: any;
+		CasStartu?: string;
 		DatumKonca?: any;
+		CasKonca?: string;
 		ZariadenieId?: number;
 		Zariadenie?: AlyaVaha.Models.IZariadenie;
 		NavazeneMnozstvo?: number;
@@ -73,7 +64,7 @@ module AlyaVaha.Models {
 		DatumVytvorenia?: any;
 		DatumUpravy?: any;
 		Skratka?: string;
-		CestaTam?: boolean;
-		CestaSpat?: boolean;
+		CestaDoVahy?: boolean;
+		CestaZVahy?: boolean;
 	}
 }

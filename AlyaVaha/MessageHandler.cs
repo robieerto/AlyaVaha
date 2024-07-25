@@ -1,5 +1,6 @@
 ﻿using AlyaVaha.DAL.Repositories;
 using AlyaVaha.Models;
+using DevExtreme.AspNet.Data;
 using Photino.NET;
 using System.Text.Json;
 
@@ -39,7 +40,13 @@ namespace AlyaVaha
                         DataCommunicator.CommandQueue.Enqueue(windowCommand);
                         break;
                     case "GetNavazovania":
-                        responseValue = NavazovanieRepository.GetList();
+                        var loadOptions = JsonSerializer.Deserialize<DataSourceLoadOptionsBase>(windowCommand.Value!);
+                        responseValue = NavazovanieRepository.GetList(loadOptions!);
+                        if (loadOptions != null && loadOptions.Take == 0)
+                        {
+                            var propertyInfo = responseValue.GetType().GetProperty("groupCount");
+                            propertyInfo?.SetValue(responseValue, 0);
+                        }
                         break;
                     case "GetZariadenia":
                         responseValue = ZariadenieRepository.GetList();
@@ -49,9 +56,6 @@ namespace AlyaVaha
                         break;
                     case "GetZasobniky":
                         responseValue = ZasobnikRepository.GetList();
-                        break;
-                    case "GetCesty":
-                        responseValue = CestaRepository.GetList();
                         break;
                     case "AddMaterial":
                         if (windowCommand.Value != null)
@@ -166,10 +170,17 @@ namespace AlyaVaha
                 responseValue = ex.Message;
             }
 
-            if (windowCommand != null && responseValue != null)
+            try
             {
-                WindowCommand response = new WindowCommand(windowCommand.Command, JsonSerializer.Serialize(responseValue));
-                window?.SendWebMessage(JsonSerializer.Serialize(response));
+                if (windowCommand != null && responseValue != null)
+                {
+                    WindowCommand response = new WindowCommand(windowCommand.Command, JsonSerializer.Serialize(responseValue));
+                    window?.SendWebMessage(JsonSerializer.Serialize(response));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
     }

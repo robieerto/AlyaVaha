@@ -1,12 +1,13 @@
 import DxNotify from 'devextreme/ui/notify'
 
 const floatFormat = '#,##0.00'
-const dateFormat = 'd.M.yyyy H:mm'
+const dateTimeFormat = 'd.M.yyyy H:mm'
+const dateFormat = 'd.M.yyyy'
 const timeFormat = 'H:mm'
 
 const actualDate = () => new Date(new Date().setUTCHours(0, 0, 0, 0))
 
-const filterOperations = ['=', 'between', '<', '>', '<=', '>=']
+const filterOperations = ['=', 'between', '>=', '<=']
 
 const filterStringOperations = ['startswith', 'contains', '=']
 
@@ -62,6 +63,7 @@ export {
   filterOperations,
   filterStringOperations,
   floatFormat,
+  dateTimeFormat,
   dateFormat,
   timeFormat,
   toFloatNumber,
