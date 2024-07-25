@@ -9,7 +9,8 @@ import DxDataGrid, {
   DxLookup,
   DxExport,
   DxSummary,
-  DxTotalItem
+  DxTotalItem,
+  DxHeaderFilter
 } from 'devextreme-vue/data-grid'
 import DxButton from 'devextreme-vue/button'
 import CustomStore from 'devextreme/data/custom_store'
@@ -27,8 +28,40 @@ const state = reactive({
   dataSource: new CustomStore({
     key: 'Id',
     load: function (loadOptions) {
-      if (!store.navazovaniaData) return Promise.resolve({ data: [], totalCount: 0 })
       return new Promise((resolve, reject) => {
+        if (loadOptions.group?.length) {
+          switch (loadOptions.group[0].selector) {
+            case 'ZariadenieId':
+              resolve({
+                data: store.zariadenia.map((e) => ({ key: e.Id }))
+              })
+              break
+            case 'MaterialId':
+              resolve({
+                data: store.materialy.map((e) => ({ key: e.Id }))
+              })
+              break
+            case 'OdkialId':
+              resolve({
+                data: store.zasobniky
+                  .filter((item) => item.CestaDoVahy === true)
+                  .map((e) => ({ key: e.Id }))
+              })
+              break
+            case 'KamId':
+              resolve({
+                data: store.zasobniky
+                  .filter((item) => item.CestaZVahy === true)
+                  .map((e) => ({ key: e.Id }))
+              })
+              break
+            default:
+              resolve({ data: [] })
+          }
+        }
+        if (!store.navazovaniaData) {
+          return resolve({ data: [], totalCount: 0 })
+        }
         try {
           // Simulate server-side processing
           if (!loadOptions.isLoadingAll) {
@@ -40,6 +73,9 @@ const state = reactive({
           reject(error)
         }
       })
+    },
+    remove: function (key) {
+      return sendCommand('DeleteNavazovanie', key)
     }
   })
 })
@@ -54,18 +90,6 @@ watch(
 function onDataGridInitialized(e) {
   state.dataGridInstance = e.component
   getActualData(e)
-}
-
-function addRow(rowEvent) {
-  sendCommand('AddNavazovanie', rowEvent.data)
-}
-
-function updateRow(rowEvent) {
-  sendCommand('UpdateNavazovanie', { ...rowEvent.oldData, ...rowEvent.newData })
-}
-
-function deleteRow(rowEvent) {
-  sendCommand('DeleteNavazovanie', rowEvent.data.Id)
 }
 
 const calculatePoradie = (rowIndex) =>
@@ -115,10 +139,12 @@ function getActualData(e, allData = false) {
   dataSourceLoadOptions.Filter = component.getCombinedFilter()
   dataSourceLoadOptions.Sort = []
   for (let i = 0; i < component.columnCount(); i++) {
-    dataSourceLoadOptions.Sort.push({
-      selector: component.columnOption(i).dataField,
-      desc: component.columnOption(i).sortOrder === 'desc'
-    })
+    if (component.columnOption(i).sortOrder === 'asc') {
+      dataSourceLoadOptions.Sort.push({
+        Selector: component.columnOption(i).dataField,
+        Desc: false
+      })
+    }
   }
   dataSourceLoadOptions.TotalSummary = [
     { Selector: 'DatumStartu', SummaryType: 'count' },
@@ -199,9 +225,6 @@ function exportToXls() {
       :remote-operations="true"
       @initialized="onDataGridInitialized"
       @option-changed="onOptionChanged"
-      @row-inserting="addRow"
-      @row-updating="updateRow"
-      @row-removing="deleteRow"
     >
       <DxPaging :page-size="10" />
       <DxPager :show-page-size-selector="false" :show-info="true" />
@@ -240,6 +263,10 @@ function exportToXls() {
         :calculate-filter-expression="calculateTimeFilterExpression"
         :filterOperations="filterOperations"
       />
+      <DxColumn data-field="ZariadenieId" caption="Zariadenie" :min-width="150">
+        <DxHeaderFilter :data-source="store.zariadenia" />
+        <DxLookup :data-source="store.zariadenia" value-expr="Id" display-expr="NazovZariadenia" />
+      </DxColumn>
       <DxColumn
         data-field="NavazeneMnozstvo"
         caption="Navážené množstvo"
@@ -275,8 +302,8 @@ function exportToXls() {
         :min-width="100"
         :filterOperations="filterOperations"
       />
-      <DxColumn data-field="ZariadenieId" caption="Zariadenie" :min-width="150">
-        <DxLookup :data-source="store.zariadenia" value-expr="Id" display-expr="NazovZariadenia" />
+      <DxColumn data-field="MaterialId" caption="Materiál" :min-width="150">
+        <DxLookup :data-source="store.materialy" value-expr="Id" display-expr="NazovMaterialu" />
       </DxColumn>
       <DxColumn data-field="OdkialId" caption="Zásobník odkiaľ" :min-width="180">
         <DxLookup :data-source="store.zasobniky" value-expr="Id" display-expr="NazovZasobnika" />

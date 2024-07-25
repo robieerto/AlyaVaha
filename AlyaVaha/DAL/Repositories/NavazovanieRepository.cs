@@ -8,6 +8,15 @@ namespace AlyaVaha.DAL.Repositories
     {
         public static LoadResult GetList(DataSourceLoadOptionsBase loadOptions)
         {
+            if (loadOptions.Sort == null || loadOptions.Sort.Length < 1)
+            {
+                var sortinfo = new SortingInfo[]
+                {
+                    new SortingInfo() {Desc = true, Selector = "DatumStartu"},
+                };
+                loadOptions.Sort = sortinfo;
+            }
+
             var context = new AlyaVahaDbContext();
             var query = context.Navazovania.OrderByDescending(x => x.DatumStartu);
             return DataSourceLoader.Load(query, loadOptions);
