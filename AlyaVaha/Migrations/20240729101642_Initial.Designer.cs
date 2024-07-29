@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlyaVaha.Migrations
 {
     [DbContext(typeof(AlyaVahaDbContext))]
-    [Migration("20240725062631_Initial")]
+    [Migration("20240729101642_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -51,6 +51,26 @@ namespace AlyaVaha.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Materialy");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DatumUpravy = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5401),
+                            DatumVytvorenia = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5220),
+                            HmotnostMaterialu = 100.0,
+                            JeAktivny = true,
+                            NazovMaterialu = "Materiál 1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DatumUpravy = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5430),
+                            DatumVytvorenia = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5429),
+                            HmotnostMaterialu = 200.0,
+                            JeAktivny = true,
+                            NazovMaterialu = "Materiál 2"
+                        });
                 });
 
             modelBuilder.Entity("AlyaVaha.Models.Navazovanie", b =>
@@ -154,8 +174,17 @@ namespace AlyaVaha.Migrations
                     b.Property<string>("IpAdresa")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("NavazeneMnozstvo")
+                        .HasColumnType("float");
+
+                    b.Property<int>("NavazenyPocetDavok")
+                        .HasColumnType("int");
+
                     b.Property<string>("NazovZariadenia")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PocetNavazeni")
+                        .HasColumnType("int");
 
                     b.Property<int?>("Port")
                         .HasColumnType("int");
@@ -169,7 +198,10 @@ namespace AlyaVaha.Migrations
                         {
                             Id = 1,
                             IpAdresa = "192.168.1.10",
+                            NavazeneMnozstvo = 0.0,
+                            NavazenyPocetDavok = 0,
                             NazovZariadenia = "Váha 1",
+                            PocetNavazeni = 0,
                             Port = 3396
                         });
                 });
@@ -203,6 +235,38 @@ namespace AlyaVaha.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Zasobniky");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CestaDoVahy = true,
+                            CestaZVahy = true,
+                            DatumUpravy = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5474),
+                            DatumVytvorenia = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5461),
+                            NazovZasobnika = "Zásobník 1",
+                            Skratka = "Z1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CestaDoVahy = true,
+                            CestaZVahy = true,
+                            DatumUpravy = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5499),
+                            DatumVytvorenia = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5498),
+                            NazovZasobnika = "Zásobník 2",
+                            Skratka = "Z2"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CestaDoVahy = true,
+                            CestaZVahy = true,
+                            DatumUpravy = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5502),
+                            DatumVytvorenia = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5501),
+                            NazovZasobnika = "Zásobník 3",
+                            Skratka = "Z3"
+                        });
                 });
 
             modelBuilder.Entity("AlyaVaha.Models.Navazovanie", b =>

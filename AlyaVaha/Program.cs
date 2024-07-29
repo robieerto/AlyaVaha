@@ -16,6 +16,10 @@ class Program
     [STAThread]
     static void Main(string[] args)
     {
+        //Console.WriteLine("Applying seed...");
+        //DbSeed.Seed();
+        //Console.WriteLine("Seed applied");
+
         PhotinoServer
             .CreateStaticFileServer(args, out string baseUrl)
             .RunAsync();

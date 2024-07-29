@@ -4,9 +4,15 @@ import store from '@/store'
 import * as VahaAPI from '@/types/vahaTypes'
 import { Messages } from './messages'
 
-let timeoutId = setTimeout(() => {
-  store.connected = false
-}, 3000)
+let timeoutId = setTimeout(() => {}, 0)
+
+const afterTimeout = () => {
+  if (!store.navazovaniaLoading && !store.statistikyLoading) {
+    store.connected = false
+  } else {
+    timeoutId = setTimeout(afterTimeout, 3000)
+  }
+}
 
 function initCommandHandler() {
   try {
@@ -19,9 +25,7 @@ function initCommandHandler() {
               store.connected = true
               store.wasConnected = true
               clearTimeout(timeoutId)
-              timeoutId = setTimeout(() => {
-                store.connected = false
-              }, 3000)
+              timeoutId = setTimeout(afterTimeout, 3000)
 
               store.actualData = JSON.parse(response.Value!) as VahaAPI.IVahaModel
               setActualInputs()
@@ -64,22 +68,34 @@ function initCommandHandler() {
             }
             case 'GetMaterialy': {
               store.materialy = JSON.parse(response.Value!) as AlyaVaha.Models.IMaterial[]
+              store.aktivneMaterialy = store.materialy.filter((m) => m.JeAktivny)
               store.materialyLoading = false
               break
             }
             case 'GetZasobniky': {
               store.zasobniky = JSON.parse(response.Value!) as AlyaVaha.Models.IZasobnik[]
+              store.zasobnikyDoVahy = store.zasobniky.filter((z) => z.CestaDoVahy)
+              store.zasobnikyZVahy = store.zasobniky.filter((z) => z.CestaZVahy)
               store.zasobnikyLoading = false
               break
             }
             case 'GetNavazovania': {
               const responseValue = JSON.parse(response.Value!)
-              if (responseValue.groupCount == -1) {
-                store.navazovaniaData = responseValue
-              } else {
-                store.navazovaniaDataExport = responseValue
+              store.navazovaniaData = responseValue
+              break
+            }
+            case 'GetExportNavazovania': {
+              const responseValue = JSON.parse(response.Value!)
+              store.navazovaniaDataExport = responseValue
+              break
+            }
+            case 'GetStatistiky': {
+              const statistikyResponse = JSON.parse(response.Value!)
+              store.statistiky = statistikyResponse.summary
+              if (store.statistiky) {
+                store.statistiky.unshift(statistikyResponse.totalCount)
               }
-              store.navazovaniaLoading = false
+              store.statistikyLoading = false
               break
             }
             default: {

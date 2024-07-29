@@ -114,6 +114,7 @@ namespace AlyaVaha
                                 vazenie.Id = 0;
                                 vazenie.ZariadenieId = 1;
                                 NavazovanieRepository.Add(vazenie);
+                                ZariadenieRepository.UpdateStatistiky(1, vazenie.NavazeneMnozstvo, vazenie.NavazenyPocetDavok);
                                 vahaAPI?.SetTabulkaVazeniRemove(externalId);
                             }
                             catch (Exception ex)

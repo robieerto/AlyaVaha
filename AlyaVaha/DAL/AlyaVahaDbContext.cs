@@ -22,7 +22,22 @@ namespace AlyaVaha.DAL
                 new Models.Zariadenie { Id = 1, NazovZariadenia = "Váha 1", IpAdresa = "192.168.1.10", Port = 3396 }
             };
 
+            var materialy = new List<Models.Material>
+            {
+                new Models.Material { Id = 1, NazovMaterialu = "Materiál 1", DatumVytvorenia = DateTime.Now, DatumUpravy = DateTime.Now, HmotnostMaterialu = 100, JeAktivny = true },
+                new Models.Material { Id = 2, NazovMaterialu = "Materiál 2", DatumVytvorenia = DateTime.Now, DatumUpravy = DateTime.Now, HmotnostMaterialu = 200, JeAktivny = true },
+            };
+
+            var zasobniky = new List<Models.Zasobnik>
+            {
+                new Models.Zasobnik { Id = 1, NazovZasobnika = "Zásobník 1", Skratka = "Z1", DatumVytvorenia = DateTime.Now, DatumUpravy = DateTime.Now, CestaDoVahy = true, CestaZVahy = true},
+                new Models.Zasobnik { Id = 2, NazovZasobnika = "Zásobník 2", Skratka = "Z2", DatumVytvorenia = DateTime.Now, DatumUpravy = DateTime.Now, CestaDoVahy = true, CestaZVahy = true},
+                new Models.Zasobnik { Id = 3, NazovZasobnika = "Zásobník 3", Skratka = "Z3", DatumVytvorenia = DateTime.Now, DatumUpravy = DateTime.Now, CestaDoVahy = true, CestaZVahy = true},
+            };
+
             modelBuilder.Entity<Models.Zariadenie>().HasData(zariadenia);
+            modelBuilder.Entity<Models.Material>().HasData(materialy);
+            modelBuilder.Entity<Models.Zasobnik>().HasData(zasobniky);
 
             base.OnModelCreating(modelBuilder);
         }

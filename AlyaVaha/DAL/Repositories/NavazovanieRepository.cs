@@ -12,13 +12,13 @@ namespace AlyaVaha.DAL.Repositories
             {
                 var sortinfo = new SortingInfo[]
                 {
-                    new SortingInfo() {Desc = true, Selector = "DatumStartu"},
+                    new SortingInfo() {Desc = true, Selector = "Id"},
                 };
                 loadOptions.Sort = sortinfo;
             }
 
             var context = new AlyaVahaDbContext();
-            var query = context.Navazovania.OrderByDescending(x => x.DatumStartu);
+            var query = context.Navazovania;
             return DataSourceLoader.Load(query, loadOptions);
         }
 

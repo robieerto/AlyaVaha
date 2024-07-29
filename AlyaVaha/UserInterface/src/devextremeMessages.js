@@ -1,7 +1,7 @@
-import { loadMessages, locale } from 'devextreme/localization';
+import { loadMessages, locale } from 'devextreme/localization'
 
 export function localizeMessages(lang) {
-  locale(lang);
+  locale(lang)
 }
 
 export const dxMessages = {
@@ -90,10 +90,11 @@ export const dxMessages = {
     'dxDataGrid-editingUndeleteRow': 'Obnovi\u0165',
     'dxDataGrid-editingConfirmDeleteMessage': 'Naozaj chcete zmaza\u0165 tento z\xe1znam?',
     'dxDataGrid-validationCancelChanges': 'Zru\u0161i\u0165 zmeny',
-    'dxDataGrid-groupPanelEmptyText': 'Presu\u0148te hlavi\u010Dku st\u013Apca tu pre zl\u00FA\u010Denie',
+    'dxDataGrid-groupPanelEmptyText':
+      'Presu\u0148te hlavi\u010Dku st\u013Apca tu pre zl\u00FA\u010Denie',
     'dxDataGrid-noDataText': '\u017Diadne d\u00E1ta',
     'dxDataGrid-searchPanelPlaceholder': 'H\u013Eadanie...',
-    'dxDataGrid-filterRowShowAllText': '(V\u0161etko)',
+    'dxDataGrid-filterRowShowAllText': '(V\u0161etky)',
     'dxDataGrid-filterRowResetOperationText': 'Reset',
     'dxDataGrid-filterRowOperationEquals': 'Rovn\xe1 sa',
     'dxDataGrid-filterRowOperationNotEquals': 'Nerovn\xe1 sa',
@@ -213,8 +214,10 @@ export const dxMessages = {
     'dxScheduler-recurrenceRepeatOnDate': 'na den',
     'dxScheduler-recurrenceRepeatCount': 'v\xfdskyt\u016f',
     'dxScheduler-allDay': 'Cel\xfd den',
-    'dxScheduler-confirmRecurrenceEditMessage': 'Chcete upravit pouze tuto sch\u016fzku nebo celou s\xe9rii?',
-    'dxScheduler-confirmRecurrenceDeleteMessage': 'Chcete smazat pouze tuto sch\u016fzku nebo celou s\xe9rii?',
+    'dxScheduler-confirmRecurrenceEditMessage':
+      'Chcete upravit pouze tuto sch\u016fzku nebo celou s\xe9rii?',
+    'dxScheduler-confirmRecurrenceDeleteMessage':
+      'Chcete smazat pouze tuto sch\u016fzku nebo celou s\xe9rii?',
     'dxScheduler-confirmRecurrenceEditSeries': 'Upravit s\xe9rii',
     'dxScheduler-confirmRecurrenceDeleteSeries': 'Smazat s\xe9rii',
     'dxScheduler-confirmRecurrenceEditOccurrence': 'Upravit sch\u016fzku',
@@ -448,8 +451,8 @@ export const dxMessages = {
     'dxGantt-deleteSelectedTask': 'TODO',
     'dxGantt-zoomIn': 'TODO',
     'dxGantt-zoomOut': 'TODO',
-    'dxGantt-fullScreen': 'TODO',
-  },
-};
+    'dxGantt-fullScreen': 'TODO'
+  }
+}
 
-loadMessages(dxMessages);
+loadMessages(dxMessages)

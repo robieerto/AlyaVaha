@@ -5,6 +5,7 @@ import Home from './views/home-page.vue'
 import Materialy from './views/materialy-page.vue'
 import Zasobniky from './views/zasobniky-page.vue'
 import Navazovania from './views/navazovania-page.vue'
+import Statistiky from './views/statistiky-page.vue'
 import Profile from './views/profile-page.vue'
 import Tasks from './views/tasks-page.vue'
 import Settings from './views/nastavenia-page.vue'
@@ -35,6 +36,15 @@ const router = new createRouter({
         layout: defaultLayout
       },
       component: Navazovania
+    },
+    {
+      path: '/statistiky',
+      name: 'statistiky',
+      meta: {
+        requiresAuth: true,
+        layout: defaultLayout
+      },
+      component: Statistiky
     },
     {
       path: '/materialy',

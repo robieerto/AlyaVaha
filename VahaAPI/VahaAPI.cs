@@ -131,17 +131,24 @@ namespace VahaAPI
 
         public bool SetActualDateAndTime()
         {
-            string output = udpCommunicator.SendAndReceive("!TM=" + DateTime.Now.ToString("HH.mm.ss"));
-            string[] delimitted = output.Split('=');
-            string receivedValue = delimitted[1].Replace(" ", "");
-            if (receivedValue == "OK")
+            try
             {
-                output = udpCommunicator.SendAndReceive("!DT=" + DateTime.Now.ToString("dd.MM.yyyy"));
-                delimitted = output.Split('=');
-                receivedValue = delimitted[1].Replace(" ", "");
-                return receivedValue == "OK";
+                string output = udpCommunicator.SendAndReceive("!TM=" + DateTime.Now.ToString("HH.mm.ss"));
+                string[] delimitted = output.Split('=');
+                string receivedValue = delimitted[1].Replace(" ", "");
+                if (receivedValue == "OK")
+                {
+                    output = udpCommunicator.SendAndReceive("!DT=" + DateTime.Now.ToString("dd.MM.yyyy"));
+                    delimitted = output.Split('=');
+                    receivedValue = delimitted[1].Replace(" ", "");
+                    return receivedValue == "OK";
+                }
+                else return false;
             }
-            else return false;
+            catch
+            {
+                return false;
+            }
         }
     }
 }

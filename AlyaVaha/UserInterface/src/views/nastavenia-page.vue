@@ -13,17 +13,17 @@ const state = reactive({
   isIpAddressValid: true
 })
 
-const ipAddressValid = computed(() =>
-  /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/.test(
-    state.ipAddress
-  )
-)
-
 watchEffect(() => {
   state.deviceName = store.zariadenia?.[0]?.NazovZariadenia ?? ''
   state.ipAddress = store.zariadenia?.[0]?.IpAdresa ?? ''
   state.port = store.zariadenia?.[0]?.Port ?? 0
 })
+
+const ipAddressValid = computed(() =>
+  /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/.test(
+    state.ipAddress
+  )
+)
 
 async function updateSettings() {
   if (!ipAddressValid.value) {
@@ -36,6 +36,8 @@ async function updateSettings() {
     Port: state.port
   })
 }
+
+sendCommand('GetZariadenia')
 </script>
 
 <template>
@@ -86,10 +88,6 @@ async function updateSettings() {
         <!-- <div class="col-4 ml-2">
           <p class="my-3">Nové nastavenia sa prejavia až po reštartovaní programu</p>
         </div> -->
-      </div>
-
-      <div class="row justify-content-start">
-        <div class="col-auto"></div>
       </div>
     </div>
   </div>

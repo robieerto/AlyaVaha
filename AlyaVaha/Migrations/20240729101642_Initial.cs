@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace AlyaVaha.Migrations
 {
     /// <inheritdoc />
@@ -52,7 +54,10 @@ namespace AlyaVaha.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NazovZariadenia = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IpAdresa = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Port = table.Column<int>(type: "int", nullable: true)
+                    Port = table.Column<int>(type: "int", nullable: true),
+                    PocetNavazeni = table.Column<int>(type: "int", nullable: false),
+                    NavazeneMnozstvo = table.Column<double>(type: "float", nullable: false),
+                    NavazenyPocetDavok = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -129,9 +134,28 @@ namespace AlyaVaha.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Materialy",
+                columns: new[] { "Id", "DatumUpravy", "DatumVytvorenia", "HmotnostMaterialu", "JeAktivny", "NazovMaterialu" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5401), new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5220), 100.0, true, "Materiál 1" },
+                    { 2, new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5430), new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5429), 200.0, true, "Materiál 2" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Zariadenia",
-                columns: new[] { "Id", "IpAdresa", "NazovZariadenia", "Port" },
-                values: new object[] { 1, "192.168.1.10", "Váha 1", 3396 });
+                columns: new[] { "Id", "IpAdresa", "NavazeneMnozstvo", "NavazenyPocetDavok", "NazovZariadenia", "PocetNavazeni", "Port" },
+                values: new object[] { 1, "192.168.1.10", 0.0, 0, "Váha 1", 0, 3396 });
+
+            migrationBuilder.InsertData(
+                table: "Zasobniky",
+                columns: new[] { "Id", "CestaDoVahy", "CestaZVahy", "DatumUpravy", "DatumVytvorenia", "NazovZasobnika", "Skratka" },
+                values: new object[,]
+                {
+                    { 1, true, true, new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5474), new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5461), "Zásobník 1", "Z1" },
+                    { 2, true, true, new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5499), new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5498), "Zásobník 2", "Z2" },
+                    { 3, true, true, new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5502), new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5501), "Zásobník 3", "Z3" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Navazovania_KamId",

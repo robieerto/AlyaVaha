@@ -40,7 +40,13 @@ namespace AlyaVaha
                         DataCommunicator.CommandQueue.Enqueue(windowCommand);
                         break;
                     case "GetNavazovania":
-                        var loadOptions = JsonSerializer.Deserialize<DataSourceLoadOptionsBase>(windowCommand.Value!);
+                    case "GetExportNavazovania":
+                    case "GetStatistiky":
+                        var jsonOptions = new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        };
+                        var loadOptions = JsonSerializer.Deserialize<DataSourceLoadOptionsBase>(windowCommand.Value!, jsonOptions);
                         responseValue = NavazovanieRepository.GetList(loadOptions!);
                         if (loadOptions != null && loadOptions.Take == 0)
                         {

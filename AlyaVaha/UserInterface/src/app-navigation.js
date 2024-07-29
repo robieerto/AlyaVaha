@@ -10,6 +10,11 @@ export default [
     icon: 'ordersbox'
   },
   {
+    text: 'Štatistiky',
+    path: '/statistiky',
+    icon: 'chart'
+  },
+  {
     text: 'Evidencia',
     icon: 'folder',
     items: [

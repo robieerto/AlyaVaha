@@ -56,6 +56,9 @@ module AlyaVaha.Models {
 		NazovZariadenia?: string;
 		IpAdresa?: string;
 		Port?: number;
+		PocetNavazeni: number;
+		NavazeneMnozstvo: number;
+		NavazenyPocetDavok: number;
 	}
 	export interface IZasobnik
 	{

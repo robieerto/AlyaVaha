@@ -35,10 +35,15 @@ const store = reactive({
   navazovaniaDataExport: null,
   zariadenia: [] as AlyaVaha.Models.IZariadenie[],
   materialy: [] as AlyaVaha.Models.IMaterial[],
+  aktivneMaterialy: [] as AlyaVaha.Models.IMaterial[],
   zasobniky: [] as AlyaVaha.Models.IZasobnik[],
+  zasobnikyDoVahy: [] as AlyaVaha.Models.IZasobnik[],
+  zasobnikyZVahy: [] as AlyaVaha.Models.IZasobnik[],
+  statistiky: [] as Number[],
   navazovaniaLoading: true,
   materialyLoading: true,
   zasobnikyLoading: true,
+  statistikyLoading: false,
   isStartNavazovanieModalOpened: false,
   isNavazovanieInitSuccess: false
 })

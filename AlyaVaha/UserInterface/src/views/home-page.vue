@@ -10,7 +10,6 @@ import StavyStatus from '../components/stavy-status.vue'
 import HlavneUdajeStatus from '../components/hlavne-udaje-status.vue'
 import UdajeStatus from '../components/udaje-status.vue'
 import DataStatus from '../components/data-status.vue'
-import PovelyControl from '../components/povely-control.vue'
 import AnimationVaha from '../components/animation-vaha.vue'
 
 import store from '@/store'
