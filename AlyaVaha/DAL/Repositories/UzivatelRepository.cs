@@ -16,28 +16,57 @@ namespace AlyaVaha.DAL.Repositories
             return context.Uzivatelia.FirstOrDefault(u => u.Login == login);
         }
 
-        public static void Add(Uzivatel uzivatel)
+        public static OperationResult Add(Uzivatel uzivatel)
         {
-            using var context = new AlyaVahaDbContext();
-            context.Uzivatelia.Add(uzivatel);
-            context.SaveChanges();
-        }
-
-        public static void Update(Uzivatel uzivatel)
-        {
-            using var context = new AlyaVahaDbContext();
-            context.Uzivatelia.Update(uzivatel);
-            context.SaveChanges();
-        }
-
-        public static void Delete(int id)
-        {
-            using var context = new AlyaVahaDbContext();
-            var uzivatel = context.Uzivatelia.FirstOrDefault(x => x.Id == id);
-            if (uzivatel != null)
+            try
             {
+                using var context = new AlyaVahaDbContext();
+                context.Uzivatelia.Add(uzivatel);
+                context.SaveChanges();
+                return new OperationResult("Užívateľ bol pridaný", true);
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(ex.Message, false);
+            }
+        }
+
+        public static OperationResult Update(Uzivatel uzivatel)
+        {
+            try
+            {
+                using var context = new AlyaVahaDbContext();
+                context.Uzivatelia.Update(uzivatel);
+                context.SaveChanges();
+                return new OperationResult("Užívateľ bol upravený", true);
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(ex.Message, false);
+            }
+        }
+
+        public static OperationResult Delete(int id)
+        {
+            try
+            {
+                using var context = new AlyaVahaDbContext();
+                var uzivatel = context.Uzivatelia.FirstOrDefault(x => x.Id == id);
+                if (uzivatel == null)
+                {
+                    return new OperationResult("Užívateľ neexistuje", false);
+                }
+                if (context.Navazovania.Any(x => x.UzivatelId == id))
+                {
+                    return new OperationResult("Užívateľ je použitý", false);
+                }
                 context.Uzivatelia.Remove(uzivatel);
                 context.SaveChanges();
+                return new OperationResult("Užívateľ bol zmazaný", true);
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(ex.Message, false);
             }
         }
     }

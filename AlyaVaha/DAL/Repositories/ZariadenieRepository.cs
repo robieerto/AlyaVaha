@@ -17,17 +17,26 @@ namespace AlyaVaha.DAL.Repositories
             context.SaveChanges();
         }
 
-        public static void Update(Zariadenie zariadenie)
+        public static OperationResult Update(Zariadenie zariadenie)
         {
-            var context = new AlyaVahaDbContext();
-            var updatedZariadenie = context.Zariadenia.FirstOrDefault(x => x.Id == zariadenie.Id);
-            if (updatedZariadenie != null)
+            try
             {
+                var context = new AlyaVahaDbContext();
+                var updatedZariadenie = context.Zariadenia.FirstOrDefault(x => x.Id == zariadenie.Id);
+                if (updatedZariadenie == null)
+                {
+                    return new OperationResult("Zariadenie neexistuje", false);
+                }
                 updatedZariadenie.NazovZariadenia = zariadenie.NazovZariadenia;
                 updatedZariadenie.IpAdresa = zariadenie.IpAdresa;
                 updatedZariadenie.Port = zariadenie.Port;
                 context.Zariadenia.Update(updatedZariadenie);
                 context.SaveChanges();
+                return new OperationResult("Zariadenie bolo upravené", true);
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(ex.Message, false);
             }
         }
 
@@ -51,14 +60,27 @@ namespace AlyaVaha.DAL.Repositories
             }
         }
 
-        public static void Delete(int id)
+        public static OperationResult Delete(int id)
         {
-            var context = new AlyaVahaDbContext();
-            var zariadenie = context.Zariadenia.FirstOrDefault(x => x.Id == id);
-            if (zariadenie != null)
+            try
             {
+                var context = new AlyaVahaDbContext();
+                var zariadenie = context.Zariadenia.FirstOrDefault(x => x.Id == id);
+                if (zariadenie == null)
+                {
+                    return new OperationResult("Zariadenie neexistuje", false);
+                }
+                if (context.Navazovania.Any(x => x.ZariadenieId == id))
+                {
+                    return new OperationResult("Zariadenie je použité", false);
+                }
                 context.Zariadenia.Remove(zariadenie);
                 context.SaveChanges();
+                return new OperationResult("Zariadenie bolo vymazané", true);
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(ex.Message, false);
             }
         }
     }

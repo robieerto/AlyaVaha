@@ -64,109 +64,85 @@ namespace AlyaVaha
                         responseValue = ZasobnikRepository.GetList();
                         break;
                     case "AddMaterial":
+                        responseValue = new OperationResult("Materiál nebol pridaný", false);
                         if (windowCommand.Value != null)
                         {
                             var material = JsonSerializer.Deserialize<Material>(windowCommand.Value);
                             if (material != null)
                             {
-                                MaterialRepository.Add(material);
+                                responseValue = MaterialRepository.Add(material);
                             }
                         }
-                        responseValue = "Materiál bol pridaný";
                         break;
                     case "UpdateMaterial":
+                        responseValue = new OperationResult("Materiál nebol upravený", false);
                         if (windowCommand.Value != null)
                         {
                             var material = JsonSerializer.Deserialize<Material>(windowCommand.Value);
                             if (material != null)
                             {
-                                MaterialRepository.Update(material);
+                                responseValue = MaterialRepository.Update(material);
                             }
                         }
-                        responseValue = "Materiál bol upravený";
                         break;
                     case "DeleteMaterial":
+                        responseValue = new OperationResult("Materiál nebol zmazaný", false);
                         if (windowCommand.Value != null)
                         {
                             int id = JsonSerializer.Deserialize<int>(windowCommand.Value);
-                            MaterialRepository.Delete(id);
+                            responseValue = MaterialRepository.Delete(id);
                         }
-                        responseValue = "Materiál bol zmazaný";
                         break;
                     case "AddZasobnik":
+                        responseValue = new OperationResult("Zásobník nebol pridaný", false);
                         if (windowCommand.Value != null)
                         {
                             var zasobnik = JsonSerializer.Deserialize<Zasobnik>(windowCommand.Value);
                             if (zasobnik != null)
                             {
-                                ZasobnikRepository.Add(zasobnik);
+                                responseValue = ZasobnikRepository.Add(zasobnik);
                             }
                         }
-                        responseValue = "Zásobník bol pridaný";
                         break;
                     case "UpdateZasobnik":
+                        responseValue = new OperationResult("Zásobník nebol upravený", false);
                         if (windowCommand.Value != null)
                         {
                             var zasobnik = JsonSerializer.Deserialize<Zasobnik>(windowCommand.Value);
                             if (zasobnik != null)
                             {
-                                ZasobnikRepository.Update(zasobnik);
+                                responseValue = ZasobnikRepository.Update(zasobnik);
                             }
                         }
-                        responseValue = "Zásobník bol upravený";
                         break;
                     case "DeleteZasobnik":
+                        responseValue = new OperationResult("Zásobník nebol zmazaný", false);
                         if (windowCommand.Value != null)
                         {
                             int id = JsonSerializer.Deserialize<int>(windowCommand.Value);
-                            ZasobnikRepository.Delete(id);
+                            responseValue = ZasobnikRepository.Delete(id);
                         }
-                        responseValue = "Zásobník bol zmazaný";
-                        break;
-                    case "AddNavazovanie":
-                        if (windowCommand.Value != null)
-                        {
-                            var navazovanie = JsonSerializer.Deserialize<Navazovanie>(windowCommand.Value);
-                            if (navazovanie != null)
-                            {
-                                NavazovanieRepository.Add(navazovanie);
-                            }
-                        }
-                        responseValue = "Navažovanie bolo pridané";
-                        break;
-                    case "UpdateNavazovanie":
-                        if (windowCommand.Value != null)
-                        {
-                            var navazovanie = JsonSerializer.Deserialize<Navazovanie>(windowCommand.Value);
-                            if (navazovanie != null)
-                            {
-                                NavazovanieRepository.Update(navazovanie);
-                            }
-                        }
-                        responseValue = "Navažovanie bolo upravené";
                         break;
                     case "DeleteNavazovanie":
+                        responseValue = new OperationResult("Navažovanie nebolo zmazané", false);
                         if (windowCommand.Value != null)
                         {
                             int id = JsonSerializer.Deserialize<int>(windowCommand.Value);
-                            NavazovanieRepository.Delete(id);
+                            responseValue = NavazovanieRepository.Delete(id);
                         }
-                        responseValue = "Navažovanie bolo zmazané";
                         break;
-
                     case "UpdateZariadenie":
+                        responseValue = new OperationResult("Zariadenie nebolo upravené", false);
                         if (windowCommand.Value != null)
                         {
                             var zariadenie = JsonSerializer.Deserialize<Zariadenie>(windowCommand.Value);
                             if (zariadenie != null)
                             {
-                                ZariadenieRepository.Update(zariadenie);
+                                responseValue = ZariadenieRepository.Update(zariadenie);
+                                DataCommunicator.InitVahaCommunicator();
                             }
                         }
-                        responseValue = "Nastavenia zariadenia boli upravené";
-                        DataCommunicator.InitVahaCommunicator();
                         break;
-
                     default:
                         break;
                 }

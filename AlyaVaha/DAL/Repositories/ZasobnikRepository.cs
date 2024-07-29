@@ -10,31 +10,60 @@ namespace AlyaVaha.DAL.Repositories
             return context.Zasobniky.OrderByDescending(x => x.DatumUpravy).ToList();
         }
 
-        public static void Add(Zasobnik zasobnik)
+        public static OperationResult Add(Zasobnik zasobnik)
         {
-            var context = new AlyaVahaDbContext();
-            zasobnik.DatumVytvorenia = DateTime.Now;
-            zasobnik.DatumUpravy = DateTime.Now;
-            context.Zasobniky.Add(zasobnik);
-            context.SaveChanges();
-        }
-
-        public static void Update(Zasobnik zasobnik)
-        {
-            var context = new AlyaVahaDbContext();
-            zasobnik.DatumUpravy = DateTime.Now;
-            context.Zasobniky.Update(zasobnik);
-            context.SaveChanges();
-        }
-
-        public static void Delete(int id)
-        {
-            var context = new AlyaVahaDbContext();
-            var zasobnik = context.Zasobniky.FirstOrDefault(x => x.Id == id);
-            if (zasobnik != null)
+            try
             {
+                var context = new AlyaVahaDbContext();
+                zasobnik.DatumVytvorenia = DateTime.Now;
+                zasobnik.DatumUpravy = DateTime.Now;
+                context.Zasobniky.Add(zasobnik);
+                context.SaveChanges();
+                return new OperationResult("Zásobník bol pridaný", true);
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(ex.Message, false);
+            }
+        }
+
+        public static OperationResult Update(Zasobnik zasobnik)
+        {
+            try
+            {
+                var context = new AlyaVahaDbContext();
+                zasobnik.DatumUpravy = DateTime.Now;
+                context.Zasobniky.Update(zasobnik);
+                context.SaveChanges();
+                return new OperationResult("Zásobník bol upravený", true);
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(ex.Message, false);
+            }
+        }
+
+        public static OperationResult Delete(int id)
+        {
+            try
+            {
+                var context = new AlyaVahaDbContext();
+                var zasobnik = context.Zasobniky.FirstOrDefault(x => x.Id == id);
+                if (zasobnik == null)
+                {
+                    return new OperationResult("Zásobník neexistuje", false);
+                }
+                if (context.Navazovania.Any(x => x.OdkialId == id || x.KamId == id))
+                {
+                    return new OperationResult("Zásobník je použitý", false);
+                }
                 context.Zasobniky.Remove(zasobnik);
                 context.SaveChanges();
+                return new OperationResult("Zásobník bol zmazaný", true);
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(ex.Message, false);
             }
         }
     }

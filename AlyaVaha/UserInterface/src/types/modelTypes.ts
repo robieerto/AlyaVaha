@@ -3,6 +3,11 @@
 //     the code is regenerated.
 
 module AlyaVaha {
+	export interface IOperationResult
+	{
+		Message: string;
+		Success: boolean;
+	}
 	export interface IWindowCommand
 	{
 		Command: string;

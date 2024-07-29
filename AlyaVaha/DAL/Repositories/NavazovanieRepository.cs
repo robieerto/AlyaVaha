@@ -41,21 +41,38 @@ namespace AlyaVaha.DAL.Repositories
             }
         }
 
-        public static void Update(Navazovanie navazovanie)
+        public static OperationResult Update(Navazovanie navazovanie)
         {
-            var context = new AlyaVahaDbContext();
-            context.Navazovania.Update(navazovanie);
-            context.SaveChanges();
+            try
+            {
+                var context = new AlyaVahaDbContext();
+                context.Navazovania.Update(navazovanie);
+                context.SaveChanges();
+                return new OperationResult("Navažovanie bolo upravené", true);
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(ex.Message, false);
+            }
         }
 
-        public static void Delete(int id)
+        public static OperationResult Delete(int id)
         {
-            var context = new AlyaVahaDbContext();
-            var navazovanie = context.Navazovania.FirstOrDefault(x => x.Id == id);
-            if (navazovanie != null)
+            try
             {
+                var context = new AlyaVahaDbContext();
+                var navazovanie = context.Navazovania.FirstOrDefault(x => x.Id == id);
+                if (navazovanie == null)
+                {
+                    return new OperationResult("Navažovanie neexistuje", false);
+                }
                 context.Navazovania.Remove(navazovanie);
                 context.SaveChanges();
+                return new OperationResult("Navažovanie bolo vymazané", true);
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(ex.Message, false);
             }
         }
     }

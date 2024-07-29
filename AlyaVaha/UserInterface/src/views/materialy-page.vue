@@ -8,7 +8,7 @@ import DxDataGrid, {
   DxEditing
 } from 'devextreme-vue/data-grid'
 import { DxLoadPanel } from 'devextreme-vue/load-panel'
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 
 import { dateTimeFormat, filterOperations, filterStringOperations } from '@/utils/helpers'
 import store from '@/store'
@@ -17,6 +17,13 @@ import { sendCommand } from '@/commandHandler'
 const state = reactive({
   dataGridInstance: null
 })
+
+watch(
+  () => store.materialy,
+  () => {
+    state.dataGridInstance.refresh()
+  }
+)
 
 function onDataGridInitialized(e) {
   state.dataGridInstance = e.component

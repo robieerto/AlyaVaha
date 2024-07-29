@@ -1,4 +1,4 @@
-import { notify, shortNotify } from '@/utils/helpers'
+import { notify } from '@/utils/helpers'
 
 import store from '@/store'
 import * as VahaAPI from '@/types/vahaTypes'
@@ -55,9 +55,7 @@ function initCommandHandler() {
             }
             case 'SetZeroing': {
               const responseValue = JSON.parse(response.Value!) as boolean
-              if (responseValue) {
-                // shortNotify('Nulovanie prebehlo úspešne', 'success')
-              } else {
+              if (!responseValue) {
                 notify('Nulovanie sa nepodarilo', 'error')
               }
               break
@@ -104,16 +102,31 @@ function initCommandHandler() {
                 response.Command.startsWith('Update') ||
                 response.Command.startsWith('Delete')
               ) {
-                shortNotify(JSON.parse(response.Value!), 'info')
-                if (response.Command == 'UpdateZariadenie') {
-                  sendCommand('GetZariadenia')
-                }
+                const operationResult = JSON.parse(response.Value!) as AlyaVaha.IOperationResult
+                const message = operationResult.Message
+                const success = operationResult.Success
+                notify(message, success ? 'info' : 'error')
               }
-              if (response.Command == 'AddMaterial' || response.Command == 'UpdateMaterial') {
+              if (
+                response.Command == 'AddMaterial' ||
+                response.Command == 'UpdateMaterial' ||
+                response.Command == 'DeleteMaterial'
+              ) {
                 sendCommand('GetMaterialy')
               }
-              if (response.Command == 'AddZasobnik' || response.Command == 'UpdateZasobnik') {
+              if (
+                response.Command == 'AddZasobnik' ||
+                response.Command == 'UpdateZasobnik' ||
+                response.Command == 'DeleteZasobnik'
+              ) {
                 sendCommand('GetZasobniky')
+              }
+              if (
+                response.Command == 'AddZariadenie' ||
+                response.Command == 'UpdateZariadenie' ||
+                response.Command == 'DeleteZariadenie'
+              ) {
+                sendCommand('GetZariadenia')
               }
               break
             }
