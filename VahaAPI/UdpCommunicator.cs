@@ -45,25 +45,19 @@ namespace VahaAPI
         public string SendAndReceive(string message, bool isControl = false)
         {
             string output = "";
-            bool repeat = true;
-            while (repeat)
+            try
             {
-                repeat = false;
-                try
-                {
-                    Send(message);
-                    var scheduledReconnect = isControl ? scheduleLightReconnect() : scheduleReconnect();
-                    output = Receive();
-                    scheduledReconnect.Cancel();
+                Send(message);
+                var scheduledReconnect = isControl ? scheduleLightReconnect() : scheduleReconnect();
+                output = Receive();
+                scheduledReconnect.Cancel();
 
-                }
-                catch (Exception ex)
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetType() != typeof(SocketException))
                 {
                     Console.WriteLine(ex.Message);
-                    if (ex.GetType() == typeof(SocketException))
-                    {
-                        //repeat = true;
-                    }
                 }
             }
 

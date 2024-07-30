@@ -96,12 +96,11 @@ const state = reactive({
     remove: function (key) {
       return sendCommand('DeleteNavazovanie', key)
     }
-  }),
-  isDateTime: false
+  })
 })
 
 watch(
-  () => state.isDateTime,
+  () => store.isDateTime,
   () => {
     state.dataGridInstance.repaint()
   }
@@ -195,7 +194,7 @@ async function exportToXls() {
           "
         >
         </DxButton>
-        <DxCheckBox text="Dátum a čas v 1 stĺpci" class="ml-5" v-model:value="state.isDateTime" />
+        <DxCheckBox text="Dátum a čas v 1 stĺpci" class="ml-5" v-model:value="store.isDateTime" />
       </div>
       <div>
         <button
@@ -247,9 +246,9 @@ async function exportToXls() {
       <DxColumn
         data-field="DatumStartu"
         caption="Dátum navažovania"
-        :data-type="state.isDateTime ? 'datetime' : 'date'"
+        :data-type="store.isDateTime ? 'datetime' : 'date'"
         :min-width="170"
-        :format="state.isDateTime ? dateTimeFormat : dateFormat"
+        :format="store.isDateTime ? dateTimeFormat : dateFormat"
         :allow-editing="false"
         :filterOperations="filterOperations"
       />
@@ -258,7 +257,7 @@ async function exportToXls() {
         caption="Čas navažovania"
         data-type="datetime"
         width="140"
-        :visible="!state.isDateTime"
+        :visible="!store.isDateTime"
         :format="timeFormat"
         :allow-editing="false"
         :editorOptions="{ type: 'time' }"

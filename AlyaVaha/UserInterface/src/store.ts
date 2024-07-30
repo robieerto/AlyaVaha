@@ -40,12 +40,13 @@ const store = reactive({
   zasobnikyDoVahy: [] as AlyaVaha.Models.IZasobnik[],
   zasobnikyZVahy: [] as AlyaVaha.Models.IZasobnik[],
   statistiky: [] as Number[],
-  navazovaniaLoading: true,
+  navazovaniaLoading: false,
   materialyLoading: true,
   zasobnikyLoading: true,
   statistikyLoading: false,
   isStartNavazovanieModalOpened: false,
-  isNavazovanieInitSuccess: false
+  isNavazovanieInitSuccess: false,
+  isDateTime: false
 })
 
 export default store

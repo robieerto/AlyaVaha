@@ -16,6 +16,10 @@ namespace VahaAPI
 
         public void ReadValues()
         {
+            if (Vaha == null)
+            {
+                Vaha = new VahaModel();
+            }
             bool hasData = false;
             PropertyInfo[] properties = typeof(VahaModel).GetProperties();
             foreach (PropertyInfo property in properties)
