@@ -21,3 +21,8 @@
 .dx-button.dx-button-warning {
   background-color: #ffc107;
 }
+
+.dx-checkbox-text {
+  margin-left: 0.4rem;
+  cursor: pointer;
+}

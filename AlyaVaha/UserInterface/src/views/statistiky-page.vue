@@ -36,6 +36,7 @@ const state = reactive({
   zasobnikyDoVahy: getZasobnikyDoVahy(),
   zasobnikyZVahy: getZasobnikyZVahy(),
   zariadenie: 0,
+  isActualData: true,
   filterOptions: {
     datumOd: null,
     datumDo: null,
@@ -88,7 +89,17 @@ watch(
     state.pocetNavazeni = store.statistiky?.[0]
     state.navazeneMnozstvo = store.statistiky?.[1]
     state.navazenyPocetDavok = store.statistiky?.[2]
+    store.statistikyLoading = false
+    state.isActualData = true
   }
+)
+
+watch(
+  () => [state.filterOptions, state.zariadenie],
+  () => {
+    state.isActualData = false
+  },
+  { deep: true }
 )
 
 // function getCobminedFilter, which builds a filter object based on the state.filterOptions
@@ -139,6 +150,7 @@ function getStatistics() {
         state.navazenyPocetDavok = selectedZariadenie.NavazenyPocetDavok
       }
     }
+    state.isActualData = true
   } else {
     store.statistikyLoading = true
     const dataSourceLoadOptions = {}
@@ -178,11 +190,28 @@ function filterToStr() {
 }
 
 function exportToPdf() {
-  try {
-    filterToStr()
-    html2pdfRef.value.generatePdf()
-  } catch (e) {
-    console.log(e)
+  const generatePdf = () => {
+    try {
+      filterToStr()
+      html2pdfRef.value.generatePdf()
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  if (state.isActualData) {
+    generatePdf()
+  } else {
+    const stop = watch(
+      () => state.isActualData,
+      () => {
+        if (!store.statistikyLoading) {
+          generatePdf()
+          stop()
+        }
+      }
+    )
+    getStatistics()
   }
 }
 </script>

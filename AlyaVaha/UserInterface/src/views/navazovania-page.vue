@@ -14,13 +14,14 @@ import DxDataGrid, {
   DxSorting
 } from 'devextreme-vue/data-grid'
 import DxButton from 'devextreme-vue/button'
+import { DxCheckBox } from 'devextreme-vue/check-box'
 import CustomStore from 'devextreme/data/custom_store'
 import { reactive, watch } from 'vue'
 import { exportDataGrid } from 'devextreme/excel_exporter'
 import { Workbook } from 'exceljs'
 import saveAs from 'file-saver'
 
-import { dateFormat, timeFormat, notify, filterOperations } from '@/utils/helpers'
+import { dateFormat, timeFormat, dateTimeFormat, notify, filterOperations } from '@/utils/helpers'
 import store from '@/store'
 import { sendCommand } from '@/commandHandler'
 
@@ -95,8 +96,16 @@ const state = reactive({
     remove: function (key) {
       return sendCommand('DeleteNavazovanie', key)
     }
-  })
+  }),
+  isDateTime: false
 })
+
+watch(
+  () => state.isDateTime,
+  () => {
+    state.dataGridInstance.repaint()
+  }
+)
 
 function onDataGridInitialized(e) {
   state.dataGridInstance = e.component
@@ -177,7 +186,7 @@ async function exportToXls() {
         <h2 class="content-block">Prehľad navažovaní</h2>
         <DxButton
           icon="refresh"
-          class="mt-3"
+          class="mt-3 mr-5"
           @click="
             () => {
               store.navazovaniaLoading = true
@@ -186,6 +195,7 @@ async function exportToXls() {
           "
         >
         </DxButton>
+        <DxCheckBox text="Dátum a čas v 1 stĺpci" class="ml-5" v-model:value="state.isDateTime" />
       </div>
       <div>
         <button
@@ -237,9 +247,9 @@ async function exportToXls() {
       <DxColumn
         data-field="DatumStartu"
         caption="Dátum navažovania"
-        data-type="date"
+        :data-type="state.isDateTime ? 'datetime' : 'date'"
         :min-width="170"
-        :format="dateFormat"
+        :format="state.isDateTime ? dateTimeFormat : dateFormat"
         :allow-editing="false"
         :filterOperations="filterOperations"
       />
@@ -248,6 +258,7 @@ async function exportToXls() {
         caption="Čas navažovania"
         data-type="datetime"
         width="140"
+        :visible="!state.isDateTime"
         :format="timeFormat"
         :allow-editing="false"
         :editorOptions="{ type: 'time' }"

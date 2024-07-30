@@ -93,7 +93,6 @@ function initCommandHandler() {
               if (store.statistiky) {
                 store.statistiky.unshift(statistikyResponse.totalCount)
               }
-              store.statistikyLoading = false
               break
             }
             default: {
