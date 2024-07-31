@@ -53,8 +53,8 @@ namespace AlyaVaha.Migrations
                         new
                         {
                             Id = 1,
-                            DatumUpravy = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5401),
-                            DatumVytvorenia = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5220),
+                            DatumUpravy = new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9949),
+                            DatumVytvorenia = new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9874),
                             HmotnostMaterialu = 100.0,
                             JeAktivny = true,
                             NazovMaterialu = "Materiál 1"
@@ -62,8 +62,8 @@ namespace AlyaVaha.Migrations
                         new
                         {
                             Id = 2,
-                            DatumUpravy = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5430),
-                            DatumVytvorenia = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5429),
+                            DatumUpravy = new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9957),
+                            DatumVytvorenia = new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9956),
                             HmotnostMaterialu = 200.0,
                             JeAktivny = true,
                             NazovMaterialu = "Materiál 2"
@@ -158,6 +158,22 @@ namespace AlyaVaha.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Uzivatelia");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Heslo = "alya123456",
+                            JeAdmin = true,
+                            Login = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Heslo = "obsluha123",
+                            JeAdmin = false,
+                            Login = "obsluha"
+                        });
                 });
 
             modelBuilder.Entity("AlyaVaha.Models.Zariadenie", b =>
@@ -239,8 +255,8 @@ namespace AlyaVaha.Migrations
                             Id = 1,
                             CestaDoVahy = true,
                             CestaZVahy = true,
-                            DatumUpravy = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5474),
-                            DatumVytvorenia = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5461),
+                            DatumUpravy = new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9965),
+                            DatumVytvorenia = new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9963),
                             NazovZasobnika = "Zásobník 1",
                             Skratka = "Z1"
                         },
@@ -249,8 +265,8 @@ namespace AlyaVaha.Migrations
                             Id = 2,
                             CestaDoVahy = true,
                             CestaZVahy = true,
-                            DatumUpravy = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5499),
-                            DatumVytvorenia = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5498),
+                            DatumUpravy = new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9971),
+                            DatumVytvorenia = new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9970),
                             NazovZasobnika = "Zásobník 2",
                             Skratka = "Z2"
                         },
@@ -259,8 +275,8 @@ namespace AlyaVaha.Migrations
                             Id = 3,
                             CestaDoVahy = true,
                             CestaZVahy = true,
-                            DatumUpravy = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5502),
-                            DatumVytvorenia = new DateTime(2024, 7, 29, 12, 16, 42, 161, DateTimeKind.Local).AddTicks(5501),
+                            DatumUpravy = new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9974),
+                            DatumVytvorenia = new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9973),
                             NazovZasobnika = "Zásobník 3",
                             Skratka = "Z3"
                         });

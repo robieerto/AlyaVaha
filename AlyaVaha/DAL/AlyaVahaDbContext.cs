@@ -17,6 +17,12 @@ namespace AlyaVaha.DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            var uzivatelia = new List<Models.Uzivatel>
+            {
+                new Models.Uzivatel { Id = 1, Login = "admin", Heslo = "alya123456", JeAdmin = true },
+                new Models.Uzivatel { Id = 2, Login = "obsluha", Heslo = "obsluha123", JeAdmin = false }
+            };
+
             var zariadenia = new List<Models.Zariadenie>
             {
                 new Models.Zariadenie { Id = 1, NazovZariadenia = "Váha 1", IpAdresa = "192.168.1.10", Port = 3396 }
@@ -35,6 +41,7 @@ namespace AlyaVaha.DAL
                 new Models.Zasobnik { Id = 3, NazovZasobnika = "Zásobník 3", Skratka = "Z3", DatumVytvorenia = DateTime.Now, DatumUpravy = DateTime.Now, CestaDoVahy = true, CestaZVahy = true},
             };
 
+            modelBuilder.Entity<Models.Uzivatel>().HasData(uzivatelia);
             modelBuilder.Entity<Models.Zariadenie>().HasData(zariadenia);
             modelBuilder.Entity<Models.Material>().HasData(materialy);
             modelBuilder.Entity<Models.Zasobnik>().HasData(zasobniky);
