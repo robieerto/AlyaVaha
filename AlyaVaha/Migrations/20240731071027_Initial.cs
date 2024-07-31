@@ -138,8 +138,8 @@ namespace AlyaVaha.Migrations
                 columns: new[] { "Id", "DatumUpravy", "DatumVytvorenia", "HmotnostMaterialu", "JeAktivny", "NazovMaterialu" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9949), new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9874), 100.0, true, "Materiál 1" },
-                    { 2, new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9957), new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9956), 200.0, true, "Materiál 2" }
+                    { 1, new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5586), new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5499), 100.0, true, "Materiál 1" },
+                    { 2, new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5594), new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5593), 200.0, true, "Materiál 2" }
                 });
 
             migrationBuilder.InsertData(
@@ -147,8 +147,8 @@ namespace AlyaVaha.Migrations
                 columns: new[] { "Id", "Email", "Heslo", "JeAdmin", "Login" },
                 values: new object[,]
                 {
-                    { 1, null, "alya123456", true, "admin" },
-                    { 2, null, "obsluha123", false, "obsluha" }
+                    { 1, null, "alya123456", true, "Admin" },
+                    { 2, null, "obsluha123", false, "Obsluha" }
                 });
 
             migrationBuilder.InsertData(
@@ -161,9 +161,9 @@ namespace AlyaVaha.Migrations
                 columns: new[] { "Id", "CestaDoVahy", "CestaZVahy", "DatumUpravy", "DatumVytvorenia", "NazovZasobnika", "Skratka" },
                 values: new object[,]
                 {
-                    { 1, true, true, new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9965), new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9963), "Zásobník 1", "Z1" },
-                    { 2, true, true, new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9971), new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9970), "Zásobník 2", "Z2" },
-                    { 3, true, true, new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9974), new DateTime(2024, 7, 31, 9, 6, 14, 798, DateTimeKind.Local).AddTicks(9973), "Zásobník 3", "Z3" }
+                    { 1, true, true, new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5603), new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5600), "Zásobník 1", "Z1" },
+                    { 2, true, true, new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5608), new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5606), "Zásobník 2", "Z2" },
+                    { 3, true, true, new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5611), new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5609), "Zásobník 3", "Z3" }
                 });
 
             migrationBuilder.CreateIndex(
