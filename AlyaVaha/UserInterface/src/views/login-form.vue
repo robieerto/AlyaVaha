@@ -65,7 +65,6 @@ import DxForm, {
   DxButtonItem,
   DxButtonOptions
 } from 'devextreme-vue/form'
-import { notify } from '@/utils/helpers'
 
 import auth from '../auth'
 
@@ -93,7 +92,6 @@ export default {
       const result = await auth.logIn(email, password)
       if (!result.isOk) {
         loading.value = false
-        notify(result.message, 'error')
       } else {
         router.push(route.query.redirect || '/')
       }

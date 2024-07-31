@@ -21,7 +21,21 @@ function initCommandHandler() {
         try {
           const response = JSON.parse(responseStr) as AlyaVaha.IWindowCommand
           switch (response.Command) {
-            case 'ActualData':
+            case 'Login': {
+              const operationResult = JSON.parse(response.Value!) as AlyaVaha.IOperationResult
+              if (operationResult.Success) {
+                store.isUserLoggedIn = true
+                getAllData()
+              } else {
+                store.isUserLoggedIn = false
+                notify(operationResult.Message, 'error')
+              }
+              break
+            }
+            case 'ActualData': {
+              if (!store.isUserLoggedIn) {
+                return
+              }
               store.connected = true
               store.wasConnected = true
               clearTimeout(timeoutId)
@@ -32,6 +46,7 @@ function initCommandHandler() {
               setActualOutputs()
               setActualStateTexts()
               break
+            }
             case 'SetValues': {
               const notSetValues = JSON.parse(response.Value!) as string[]
               if (notSetValues.length > 0) {

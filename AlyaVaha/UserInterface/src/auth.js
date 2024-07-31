@@ -1,33 +1,44 @@
-const defaultUser = {
-  email: 'Admin'
-}
+import { watch } from 'vue'
+import store from '@/store'
+import { sendCommand } from './commandHandler'
 
 export default {
-  _user: defaultUser,
+  _user: null,
   loggedIn() {
     return !!this._user
   },
 
   async logIn(email, password) {
-    try {
-      // Send request
-      if (email !== 'admin' || password !== 'alya123456') throw new Error()
-
-      this._user = { ...defaultUser, email }
-
-      return {
-        isOk: true,
-        data: this._user
+    return new Promise((resolve) => {
+      try {
+        const stop = watch(
+          () => store.isUserLoggedIn,
+          () => {
+            stop()
+            if (store.isUserLoggedIn) {
+              store.isUserLoggedIn = true
+              this._user = { email }
+              resolve({
+                isOk: true,
+                data: this._user
+              })
+            } else {
+              store.isUserLoggedIn = null
+              resolve({
+                isOk: false
+              })
+            }
+          }
+        )
+        sendCommand('Login', { login: email, heslo: password })
+      } catch (error) {
+        resolve(error)
       }
-    } catch {
-      return {
-        isOk: false,
-        message: 'Nesprávne prihlasovacie údaje'
-      }
-    }
+    })
   },
 
   async logOut() {
+    store.isUserLoggedIn = false
     this._user = null
   },
 

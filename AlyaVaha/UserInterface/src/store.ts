@@ -3,6 +3,7 @@ import * as VahaAPI from '@/types/vahaTypes'
 import { Messages } from '@/messages'
 
 const store = reactive({
+  isUserLoggedIn: null as boolean | null,
   connected: false,
   wasConnected: false,
   actualData: {} as VahaAPI.IVahaModel,

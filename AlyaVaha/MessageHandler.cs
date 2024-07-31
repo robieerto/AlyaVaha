@@ -8,6 +8,11 @@ namespace AlyaVaha
 {
     public static class MainMessageHandler
     {
+        static public JsonSerializerOptions jsonOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
         static public void MessageHandler(object sender, string message)
         {
             var window = (PhotinoWindow)sender;
@@ -30,6 +35,18 @@ namespace AlyaVaha
 
                 switch (windowCommand.Command)
                 {
+                    case "Login":
+                        responseValue = new OperationResult("Nesprávne prihlasovacie údaje", false);
+                        var loginData = JsonSerializer.Deserialize<Uzivatel>(windowCommand.Value!, jsonOptions);
+                        if (loginData != null && loginData.Login != null && loginData.Heslo != null)
+                        {
+                            var uzivatel = UzivatelRepository.Authenticate(loginData.Login, loginData.Heslo);
+                            if (uzivatel != null)
+                            {
+                                responseValue = new OperationResult("Prihlásenie bolo úspešné", true);
+                            }
+                        }
+                        break;
                     case "SetValues":
                         DataCommunicator.CommandQueue.Enqueue(windowCommand);
                         break;
@@ -42,10 +59,6 @@ namespace AlyaVaha
                     case "GetNavazovania":
                     case "GetExportNavazovania":
                     case "GetStatistiky":
-                        var jsonOptions = new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true
-                        };
                         var loadOptions = JsonSerializer.Deserialize<DataSourceLoadOptionsBase>(windowCommand.Value!, jsonOptions);
                         responseValue = NavazovanieRepository.GetList(loadOptions!);
                         if (loadOptions != null && loadOptions.Take == 0)

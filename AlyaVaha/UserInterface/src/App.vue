@@ -54,9 +54,9 @@ export default {
       document.title = 'Alya Váha'
       subscribe(screenSizeChanged)
       initCommandHandler()
-      setTimeout(async () => {
-        getAllData()
-      }, 100)
+      // setTimeout(async () => {
+      //   getAllData()
+      // }, 100)
     })
 
     onBeforeUnmount(() => {

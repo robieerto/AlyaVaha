@@ -16,6 +16,12 @@ namespace AlyaVaha.DAL.Repositories
             return context.Uzivatelia.FirstOrDefault(u => u.Login == login);
         }
 
+        public static Uzivatel? Authenticate(string login, string password)
+        {
+            using var context = new AlyaVahaDbContext();
+            return context.Uzivatelia.FirstOrDefault(u => u.Login == login && u.Heslo == password);
+        }
+
         public static OperationResult Add(Uzivatel uzivatel)
         {
             try
