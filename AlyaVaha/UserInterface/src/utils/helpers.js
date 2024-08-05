@@ -25,6 +25,13 @@ const toDate = (value) => {
   else return ''
 }
 
+const toTime = (value) => {
+  if (!value) return ''
+  const date = new Date(value).toLocaleTimeString('sk-SK').replace(':00', '')
+  if (date != 'Invalid Date') return date
+  else return ''
+}
+
 const toTimezoneDate = (value) => {
   var date = new Date(value)
   var userTimezoneOffset = date.getTimezoneOffset() * 60000
@@ -81,6 +88,7 @@ export {
   timeFormat,
   toFloatNumber,
   toDate,
+  toTime,
   toTimezoneDate,
   toCustomDate,
   getTomorrow,

@@ -12,6 +12,7 @@ import { sendCommand } from '@/commandHandler'
 import {
   toFloatNumber,
   toDate,
+  toTime,
   toTimezoneDate,
   getTomorrow,
   getIncrementByMinute
@@ -175,8 +176,12 @@ function filterToStr() {
       ? state.zariadenia.find((zariadenie) => zariadenie.Id === state.filterOptions.zariadenie)
           .NazovZariadenia
       : '(Všetko)',
-    datumOd: toDate(state.filterOptions.datumOd),
-    datumDo: toDate(state.filterOptions.datumDo),
+    datumOd:
+      toDate(state.filterOptions.datumOd) +
+      (store.isDateTimeStatistiky ? String(' ' + toTime(state.filterOptions.datumOd)) : ''),
+    datumDo:
+      toDate(state.filterOptions.datumDo) +
+      (store.isDateTimeStatistiky ? String(' ' + toTime(state.filterOptions.datumDo)) : ''),
     uzivatel: state.filterOptions.uzivatel
       ? store.aktivniUzivatelia.find((uzivatel) => uzivatel.Id === state.filterOptions.uzivatel)
           .Login
@@ -290,7 +295,7 @@ function exportToPdf() {
 
           <div class="d-flex justify-content-end mt-4 mr-5">
             <DxCheckBox
-              text="Filtrovať aj podľa času"
+              text="Filtrovať podľa času"
               class="mr-5"
               v-model:value="store.isDateTimeStatistiky"
             />
