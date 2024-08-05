@@ -4,6 +4,8 @@ import { Messages } from '@/messages'
 
 const store = reactive({
   isUserLoggedIn: null as boolean | null,
+  isUserAdmin: null as boolean | null,
+  user: null as any,
   connected: false,
   wasConnected: false,
   actualData: {} as VahaAPI.IVahaModel,
@@ -35,6 +37,8 @@ const store = reactive({
   navazovaniaData: null,
   navazovaniaDataExport: null,
   zariadenia: [] as AlyaVaha.Models.IZariadenie[],
+  uzivatelia: [] as AlyaVaha.Models.IUzivatel[],
+  aktivniUzivatelia: [] as AlyaVaha.Models.IUzivatel[],
   materialy: [] as AlyaVaha.Models.IMaterial[],
   aktivneMaterialy: [] as AlyaVaha.Models.IMaterial[],
   zasobniky: [] as AlyaVaha.Models.IZasobnik[],
@@ -42,9 +46,10 @@ const store = reactive({
   zasobnikyZVahy: [] as AlyaVaha.Models.IZasobnik[],
   statistiky: [] as Number[],
   navazovaniaLoading: false,
+  uzivateliaLoading: true,
   materialyLoading: true,
   zasobnikyLoading: true,
-  statistikyLoading: false,
+  statistikyLoading: true,
   isStartNavazovanieModalOpened: false,
   isNavazovanieInitSuccess: false,
   isDateTime: false

@@ -94,7 +94,7 @@ export const dxMessages = {
       'Presu\u0148te hlavi\u010Dku st\u013Apca tu pre zl\u00FA\u010Denie',
     'dxDataGrid-noDataText': '\u017Diadne d\u00E1ta',
     'dxDataGrid-searchPanelPlaceholder': 'H\u013Eadanie...',
-    'dxDataGrid-filterRowShowAllText': '(V\u0161etky)',
+    'dxDataGrid-filterRowShowAllText': '(V\u0161etko)',
     'dxDataGrid-filterRowResetOperationText': 'Reset',
     'dxDataGrid-filterRowOperationEquals': 'Rovn\xe1 sa',
     'dxDataGrid-filterRowOperationNotEquals': 'Nerovn\xe1 sa',

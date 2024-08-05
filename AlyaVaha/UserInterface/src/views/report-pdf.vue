@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import { toFloatNumber } from '@/utils/helpers'
 
 const props = defineProps<{
   filterStr: {
     zariadenie: String
+    uzivatel: String
     datumOd: String
     datumDo: String
     material: String
@@ -54,6 +54,14 @@ const props = defineProps<{
       </div>
       <div class="row mb-1">
         <div class="col-4">
+          <strong>Užívateľ:</strong>
+        </div>
+        <div class="col-4">
+          {{ props.filterStr.uzivatel }}
+        </div>
+      </div>
+      <div class="row mb-1">
+        <div class="col-4">
           <strong>Materiál:</strong>
         </div>
         <div class="col-4">
@@ -68,7 +76,7 @@ const props = defineProps<{
           {{ props.filterStr.odkial }}
         </div>
       </div>
-      <div class="row mb-3">
+      <div class="row mb-4">
         <div class="col-4">
           <strong>Zásobník kam:</strong>
         </div>

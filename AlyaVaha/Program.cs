@@ -1,4 +1,5 @@
 ﻿using AlyaVaha;
+using Microsoft.Extensions.Configuration;
 using Photino.NET;
 using PhotinoNET.Server;
 using System.Drawing;
@@ -20,6 +21,14 @@ class Program
         //DbSeed.Seed();
         //Console.WriteLine("Seed applied");
 
+        // Read configuration file
+        var config = new ConfigurationBuilder()
+            .AddJsonFile("configuration.json", optional: false, reloadOnChange: false)
+            .Build();
+
+        var zoom = config.GetValue<int>("zoom");
+        if (zoom == 0) zoom = 100;
+
         PhotinoServer
             .CreateStaticFileServer(args, out string baseUrl)
             .RunAsync();
@@ -40,6 +49,7 @@ class Program
             .SetUseOsDefaultSize(false)
             .SetMaximized(true)
             .SetSize(new Size(1000, 800))
+            .SetZoom(zoom)
             // Center window in the middle of the screen
             .Center()
             // Users can resize windows by default.

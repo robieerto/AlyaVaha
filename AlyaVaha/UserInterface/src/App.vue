@@ -23,7 +23,7 @@ import AppFooter from './components/app-footer.vue'
 import { sizes, subscribe, unsubscribe } from './utils/media-query'
 import { getCurrentInstance, reactive, onMounted, onBeforeUnmount, computed } from 'vue'
 
-import { initCommandHandler, getAllData } from './commandHandler'
+import { initCommandHandler, getLoggedInUser } from './commandHandler'
 
 function getScreenSizeInfo() {
   const screenSizes = sizes()
@@ -54,9 +54,9 @@ export default {
       document.title = 'Alya Váha'
       subscribe(screenSizeChanged)
       initCommandHandler()
-      // setTimeout(async () => {
-      //   getAllData()
-      // }, 100)
+      setTimeout(async () => {
+        getLoggedInUser()
+      }, 100)
     })
 
     onBeforeUnmount(() => {

@@ -3,9 +3,8 @@ import store from '@/store'
 import { sendCommand } from './commandHandler'
 
 export default {
-  _user: null,
   loggedIn() {
-    return !!this._user
+    return !!store.user
   },
 
   async logIn(email, password) {
@@ -16,11 +15,9 @@ export default {
           () => {
             stop()
             if (store.isUserLoggedIn) {
-              store.isUserLoggedIn = true
-              this._user = { email }
               resolve({
                 isOk: true,
-                data: this._user
+                data: store.user
               })
             } else {
               store.isUserLoggedIn = null
@@ -39,7 +36,7 @@ export default {
 
   async logOut() {
     store.isUserLoggedIn = false
-    this._user = null
+    store.user = null
   },
 
   async getUser() {
@@ -48,7 +45,7 @@ export default {
 
       return {
         isOk: true,
-        data: this._user
+        data: store.user
       }
     } catch {
       return {

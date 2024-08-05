@@ -32,7 +32,13 @@
 		<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
 	</ItemGroup>
 
-	<PropertyGroup>
+	<ItemGroup>
+	  <None Include="configuration.json">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+  </ItemGroup>
+
+  <PropertyGroup>
 		<UiRoot>UserInterface\</UiRoot>
     <UiBuildOutput>dist\</UiBuildOutput>
 		<WwwRoot Condition=" '$(EmbedWwwRoot)' != 'true' ">wwwroot\</WwwRoot>

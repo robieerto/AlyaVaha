@@ -7,6 +7,7 @@ module AlyaVaha {
 	{
 		Message: string;
 		Success: boolean;
+		Data?: string;
 	}
 	export interface IWindowCommand
 	{
@@ -50,10 +51,13 @@ module AlyaVaha.Models {
 	export interface IUzivatel
 	{
 		Id: number;
+		DatumVytvorenia?: any;
+		DatumUpravy?: any;
 		Login?: string;
 		Heslo?: string;
 		Email?: string;
 		JeAdmin?: boolean;
+		JeAktivny?: boolean;
 	}
 	export interface IZariadenie
 	{

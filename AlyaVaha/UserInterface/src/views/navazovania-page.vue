@@ -58,6 +58,11 @@ const state = reactive({
                   .map((e) => ({ key: e.Id }))
               })
               break
+            case 'UzivatelId':
+              resolve({
+                data: store.uzivatelia.map((e) => ({ key: e.Id }))
+              })
+              break
             default:
               resolve({ data: [] })
           }
@@ -152,7 +157,7 @@ function getExportNavazovania(dataSourceLoadOptions) {
 }
 
 async function exportToXls() {
-  if (store.navazovaniaData.totalCount > 100000) {
+  if (state.dataGridInstance.totalCount() > 100000) {
     notify('Nie je možné exportovať viac ako 100 000 záznamov', 'error')
     return
   }
@@ -287,14 +292,14 @@ async function exportToXls() {
         data-field="PozadovaneMnozstvo"
         caption="Požadované množstvo (kg)"
         data-type="number"
-        :min-width="100"
+        :min-width="110"
         :filterOperations="filterOperations"
       />
       <DxColumn
         data-field="PozadovanyPocetDavok"
         caption="Požadovaný počet dávok"
         data-type="number"
-        :min-width="100"
+        :min-width="110"
         :filterOperations="filterOperations"
       />
       <DxColumn
@@ -312,6 +317,9 @@ async function exportToXls() {
       </DxColumn>
       <DxColumn data-field="KamId" caption="Zásobník kam" :min-width="180">
         <DxLookup :data-source="store.zasobniky" value-expr="Id" display-expr="NazovZasobnika" />
+      </DxColumn>
+      <DxColumn data-field="UzivatelId" caption="Užívateľ" :min-width="180">
+        <DxLookup :data-source="store.uzivatelia" value-expr="Id" display-expr="Login" />
       </DxColumn>
       <!-- <DxSummary>
         <DxTotalItem column="DatumStartu" summary-type="count" :display-format="'Spolu: {0}'" />

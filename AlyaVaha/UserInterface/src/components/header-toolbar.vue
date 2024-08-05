@@ -30,14 +30,14 @@
               height="100%"
               styling-mode="text"
             >
-              <user-panel :email="email" :menu-items="userMenuItems" menu-mode="context" />
+              <user-panel :username="username" :menu-items="userMenuItems" menu-mode="context" />
             </dx-button>
           </div>
         </template>
       </dx-item>
 
       <template #menuUserItem>
-        <user-panel :email="email" :menu-items="userMenuItems" menu-mode="list" />
+        <user-panel :username="username" :menu-items="userMenuItems" menu-mode="list" />
       </template>
     </dx-toolbar>
   </header>
@@ -65,8 +65,10 @@ export default {
     const router = useRouter()
     const route = useRoute()
 
-    const email = ref('')
-    auth.getUser().then((e) => (email.value = e.data.email))
+    const username = ref('')
+    auth.getUser().then((e) => {
+      username.value = e.data.Login
+    })
 
     const userMenuItems = [
       // {
@@ -97,7 +99,7 @@ export default {
     }
 
     return {
-      email,
+      username,
       userMenuItems,
       store
     }

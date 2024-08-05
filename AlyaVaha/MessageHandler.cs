@@ -43,9 +43,14 @@ namespace AlyaVaha
                             var uzivatel = UzivatelRepository.Authenticate(loginData.Login, loginData.Heslo);
                             if (uzivatel != null)
                             {
-                                responseValue = new OperationResult("Prihlásenie bolo úspešné", true);
+                                DataCommunicator.LoggedInUzivatel = uzivatel;
+                                responseValue = new OperationResult("Prihlásenie bolo úspešné", true, JsonSerializer.Serialize(uzivatel));
                             }
                         }
+                        break;
+                    case "GetLoggedInUser":
+                        responseValue = DataCommunicator.LoggedInUzivatel;
+                        responseValue ??= "null";
                         break;
                     case "SetValues":
                         DataCommunicator.CommandQueue.Enqueue(windowCommand);
@@ -75,6 +80,9 @@ namespace AlyaVaha
                         break;
                     case "GetZasobniky":
                         responseValue = ZasobnikRepository.GetList();
+                        break;
+                    case "GetUzivatelia":
+                        responseValue = UzivatelRepository.GetList();
                         break;
                     case "AddMaterial":
                         responseValue = new OperationResult("Materiál nebol pridaný", false);
@@ -154,6 +162,36 @@ namespace AlyaVaha
                                 responseValue = ZariadenieRepository.Update(zariadenie);
                                 DataCommunicator.InitVahaCommunicator();
                             }
+                        }
+                        break;
+                    case "AddUzivatel":
+                        responseValue = new OperationResult("Užívateľ nebol pridaný", false);
+                        if (windowCommand.Value != null)
+                        {
+                            var uzivatel = JsonSerializer.Deserialize<Uzivatel>(windowCommand.Value);
+                            if (uzivatel != null)
+                            {
+                                responseValue = UzivatelRepository.Add(uzivatel);
+                            }
+                        }
+                        break;
+                    case "UpdateUzivatel":
+                        responseValue = new OperationResult("Užívateľ nebol upravený", false);
+                        if (windowCommand.Value != null)
+                        {
+                            var uzivatel = JsonSerializer.Deserialize<Uzivatel>(windowCommand.Value);
+                            if (uzivatel != null)
+                            {
+                                responseValue = UzivatelRepository.Update(uzivatel);
+                            }
+                        }
+                        break;
+                    case "DeleteUzivatel":
+                        responseValue = new OperationResult("Užívateľ nebol zmazaný", false);
+                        if (windowCommand.Value != null)
+                        {
+                            int id = JsonSerializer.Deserialize<int>(windowCommand.Value);
+                            responseValue = UzivatelRepository.Delete(id);
                         }
                         break;
                     default:

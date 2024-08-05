@@ -1,9 +1,11 @@
 import auth from './auth'
+import store from '@/store'
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from './views/home-page.vue'
 import Materialy from './views/materialy-page.vue'
 import Zasobniky from './views/zasobniky-page.vue'
+import Uzivatelia from './views/uzivatelia-page.vue'
 import Navazovania from './views/navazovania-page.vue'
 import Statistiky from './views/statistiky-page.vue'
 import Profile from './views/profile-page.vue'
@@ -45,6 +47,15 @@ const router = new createRouter({
         layout: defaultLayout
       },
       component: Statistiky
+    },
+    {
+      path: '/uzivatelia',
+      name: 'uzivatelia',
+      meta: {
+        requiresAuth: true,
+        layout: defaultLayout
+      },
+      component: Uzivatelia
     },
     {
       path: '/materialy',
@@ -144,7 +155,7 @@ const router = new createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
+const loggedInLogic = (to, from, next) => {
   if (to.name === 'login-form' && auth.loggedIn()) {
     next({ name: 'home' })
   }
@@ -161,6 +172,13 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
+}
+
+router.beforeEach((to, from, next) => {
+  if (store.isUserLoggedIn === null) {
+    return
+  }
+  loggedInLogic(to, from, next)
 })
 
 export default router

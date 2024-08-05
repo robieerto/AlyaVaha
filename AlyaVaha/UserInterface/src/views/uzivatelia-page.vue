@@ -19,7 +19,7 @@ const state = reactive({
 })
 
 watch(
-  () => store.materialy,
+  () => store.uzivatelia,
   () => {
     state.dataGridInstance.refresh()
   }
@@ -34,15 +34,15 @@ function initNewRow(rowEvent) {
 }
 
 function addRow(rowEvent) {
-  sendCommand('AddMaterial', rowEvent.data)
+  sendCommand('AddUzivatel', rowEvent.data)
 }
 
 function updateRow(rowEvent) {
-  sendCommand('UpdateMaterial', { ...rowEvent.oldData, ...rowEvent.newData })
+  sendCommand('UpdateUzivatel', { ...rowEvent.oldData, ...rowEvent.newData })
 }
 
 function deleteRow(rowEvent) {
-  sendCommand('DeleteMaterial', rowEvent.data.Id)
+  sendCommand('DeleteUzivatel', rowEvent.data.Id)
 }
 
 // const calculatePoradie = (rowIndex) =>
@@ -51,12 +51,12 @@ function deleteRow(rowEvent) {
 
 <template>
   <div>
-    <h2 class="content-block">Evidencia materiálov</h2>
-    <DxLoadPanel v-model:visible="store.materialyLoading" :position="{ of: '#data-grid' }" />
+    <h2 class="content-block">Evidencia užívateľov</h2>
+    <DxLoadPanel v-model:visible="store.uzivateliaLoading" :position="{ of: '#data-grid' }" />
     <DxDataGrid
       id="data-grid"
       class="dx-card wide-card"
-      :data-source="store.materialy"
+      :data-source="store.uzivatelia"
       :key-expr="'Id'"
       :width="'100%'"
       :show-borders="false"
@@ -80,8 +80,8 @@ function deleteRow(rowEvent) {
       <!-- <dx-column caption="Riadok" :allow-search="false" :allow-sorting="false" :alignment="'right'" cell-template="poradieTemplate" /> -->
       <DxColumn data-field="Id" caption="Id" :width="100" :visible="false" />
       <DxColumn
-        data-field="NazovMaterialu"
-        caption="Názov materiálu"
+        data-field="Login"
+        caption="Užívateľské meno"
         :filterOperations="filterStringOperations"
       />
       <DxColumn
@@ -100,13 +100,8 @@ function deleteRow(rowEvent) {
         :allow-editing="false"
         :filterOperations="filterOperations"
       />
-      <DxColumn
-        data-field="HmotnostMaterialu"
-        caption="Hmotnosť materiálu (kg)"
-        data-type="number"
-        alignment="left"
-        :filterOperations="filterOperations"
-      />
+      <DxColumn data-field="Heslo" caption="Heslo" :allowFiltering="false" />
+      <DxColumn data-field="JeAdmin" caption="Admin práva" data-type="boolean" />
       <DxColumn data-field="JeAktivny" caption="Viditeľný" data-type="boolean" />
       <!-- <template #poradieTemplate="{ data }">{{ calculatePoradie(data.row.rowIndex) }}</template> -->
     </DxDataGrid>

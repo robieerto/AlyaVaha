@@ -19,8 +19,8 @@ namespace AlyaVaha.DAL
         {
             var uzivatelia = new List<Models.Uzivatel>
             {
-                new Models.Uzivatel { Id = 1, Login = "Admin", Heslo = "alya123456", JeAdmin = true },
-                new Models.Uzivatel { Id = 2, Login = "Obsluha", Heslo = "obsluha123", JeAdmin = false }
+                new Models.Uzivatel { Id = 1, Login = "Admin", Heslo = "alya123456", JeAdmin = true, JeAktivny = true, DatumVytvorenia = DateTime.Now, DatumUpravy = DateTime.Now, },
+                new Models.Uzivatel { Id = 2, Login = "Obsluha", Heslo = "obsluha123", JeAdmin = false, JeAktivny = true, DatumVytvorenia = DateTime.Now, DatumUpravy = DateTime.Now, }
             };
 
             var zariadenia = new List<Models.Zariadenie>

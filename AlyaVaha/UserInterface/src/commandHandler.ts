@@ -1,6 +1,8 @@
 import { notify } from '@/utils/helpers'
+import { useRoute } from 'vue-router'
 
 import store from '@/store'
+import router from '@/router'
 import * as VahaAPI from '@/types/vahaTypes'
 import { Messages } from './messages'
 
@@ -24,11 +26,31 @@ function initCommandHandler() {
             case 'Login': {
               const operationResult = JSON.parse(response.Value!) as AlyaVaha.IOperationResult
               if (operationResult.Success) {
+                store.user = JSON.parse(operationResult.Data!) as AlyaVaha.Models.IUzivatel
+                store.isUserAdmin = store.user.JeAdmin
                 store.isUserLoggedIn = true
                 getAllData()
               } else {
                 store.isUserLoggedIn = false
                 notify(operationResult.Message, 'error')
+              }
+              break
+            }
+            case 'GetLoggedInUser': {
+              if (response.Value !== '"null"') {
+                store.user = JSON.parse(response.Value!) as AlyaVaha.Models.IUzivatel
+                store.isUserAdmin = store.user.JeAdmin
+                store.isUserLoggedIn = true
+                getAllData()
+                const params = new URL(document.location.toString()).searchParams
+                const redirectUrl = params.get('redirect')
+                const path = window.location.href.substring(
+                  window.location.href.lastIndexOf('/') + 1
+                )
+                router.push(redirectUrl ?? path)
+              } else {
+                store.isUserLoggedIn = false
+                router.push('/')
               }
               break
             }
@@ -76,19 +98,35 @@ function initCommandHandler() {
               break
             }
             case 'GetZariadenia': {
-              store.zariadenia = JSON.parse(response.Value!) as AlyaVaha.Models.IZariadenie[]
+              store.zariadenia = (
+                JSON.parse(response.Value!) as AlyaVaha.Models.IZariadenie[]
+              ).sort((a, b) => a.NazovZariadenia!.localeCompare(b.NazovZariadenia!))
+              break
+            }
+            case 'GetUzivatelia': {
+              store.uzivatelia = JSON.parse(response.Value!) as AlyaVaha.Models.IUzivatel[]
+              store.aktivniUzivatelia = store.uzivatelia
+                .filter((m) => m.JeAktivny)
+                .sort((a, b) => a.Login!.localeCompare(b.Login!))
+              store.uzivateliaLoading = false
               break
             }
             case 'GetMaterialy': {
               store.materialy = JSON.parse(response.Value!) as AlyaVaha.Models.IMaterial[]
-              store.aktivneMaterialy = store.materialy.filter((m) => m.JeAktivny)
+              store.aktivneMaterialy = store.materialy
+                .filter((m) => m.JeAktivny)
+                .sort((a, b) => a.NazovMaterialu!.localeCompare(b.NazovMaterialu!))
               store.materialyLoading = false
               break
             }
             case 'GetZasobniky': {
               store.zasobniky = JSON.parse(response.Value!) as AlyaVaha.Models.IZasobnik[]
-              store.zasobnikyDoVahy = store.zasobniky.filter((z) => z.CestaDoVahy)
-              store.zasobnikyZVahy = store.zasobniky.filter((z) => z.CestaZVahy)
+              store.zasobnikyDoVahy = store.zasobniky
+                .filter((z) => z.CestaDoVahy)
+                .sort((a, b) => a.NazovZasobnika!.localeCompare(b.NazovZasobnika!))
+              store.zasobnikyZVahy = store.zasobniky
+                .filter((z) => z.CestaZVahy)
+                .sort((a, b) => a.NazovZasobnika!.localeCompare(b.NazovZasobnika!))
               store.zasobnikyLoading = false
               break
             }
@@ -127,20 +165,24 @@ function initCommandHandler() {
                 response.Command == 'DeleteMaterial'
               ) {
                 sendCommand('GetMaterialy')
-              }
-              if (
+              } else if (
                 response.Command == 'AddZasobnik' ||
                 response.Command == 'UpdateZasobnik' ||
                 response.Command == 'DeleteZasobnik'
               ) {
                 sendCommand('GetZasobniky')
-              }
-              if (
+              } else if (
                 response.Command == 'AddZariadenie' ||
                 response.Command == 'UpdateZariadenie' ||
                 response.Command == 'DeleteZariadenie'
               ) {
                 sendCommand('GetZariadenia')
+              } else if (
+                response.Command == 'AddUzivatel' ||
+                response.Command == 'UpdateUzivatel' ||
+                response.Command == 'DeleteUzivatel'
+              ) {
+                sendCommand('GetUzivatelia')
               }
               break
             }
@@ -165,10 +207,15 @@ async function sendCommand(command: string, value: any = {}) {
   }
 }
 
+async function getLoggedInUser() {
+  sendCommand('GetLoggedInUser')
+}
+
 async function getAllData() {
   sendCommand('GetZariadenia')
   sendCommand('GetMaterialy')
   sendCommand('GetZasobniky')
+  sendCommand('GetUzivatelia')
 }
 
 async function setActualInputs() {
@@ -332,4 +379,4 @@ const getStavRiadeniaNavazovania = () =>
     ] as keyof typeof Messages.StavRiadeniaNavazovania
   ]
 
-export { initCommandHandler, sendCommand, getAllData, changeDigitalOutput }
+export { initCommandHandler, sendCommand, getAllData, getLoggedInUser, changeDigitalOutput }

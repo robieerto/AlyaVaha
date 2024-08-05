@@ -4,7 +4,7 @@
       <div class="image-container">
         <div class="user-image" />
       </div>
-      <div class="user-name">{{ email }}</div>
+      <div class="user-name">{{ username }}</div>
     </div>
 
     <dx-context-menu
@@ -30,7 +30,7 @@ export default {
   props: {
     menuMode: String,
     menuItems: Array,
-    email: String
+    username: String
   },
   components: {
     DxContextMenu,

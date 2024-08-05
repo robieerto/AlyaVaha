@@ -13,33 +13,29 @@ import ReportPdf from './report-pdf.vue'
 
 const html2pdfRef = ref()
 
-const getCelkovyPocetNavazeni = () =>
-  store.zariadenia?.reduce((acc, zariadenie) => acc + zariadenie.PocetNavazeni, 0)
-const getCelkovyNavazeneMnozstvo = () =>
-  store.zariadenia?.reduce((acc, zariadenie) => acc + zariadenie.NavazeneMnozstvo, 0)
-const getCelkovyNavazenyPocetDavok = () =>
-  store.zariadenia?.reduce((acc, zariadenie) => acc + zariadenie.NavazenyPocetDavok, 0)
-
-const getZariadenia = () => [{ Id: 0, NazovZariadenia: '(Všetky)' }, ...store.zariadenia]
-const getMaterialy = () => [{ Id: 0, NazovMaterialu: '(Všetky)' }, ...store.aktivneMaterialy]
-const getZasobnikyDoVahy = () => [{ Id: 0, NazovZasobnika: '(Všetky)' }, ...store.zasobnikyDoVahy]
-const getZasobnikyZVahy = () => [{ Id: 0, NazovZasobnika: '(Všetky)' }, ...store.zasobnikyZVahy]
+const getZariadenia = () => [{ Id: 0, NazovZariadenia: '(Všetko)' }, ...store.zariadenia]
+const getUzivatelia = () => [{ Id: 0, Login: '(Všetko)' }, ...store.aktivniUzivatelia]
+const getMaterialy = () => [{ Id: 0, NazovMaterialu: '(Všetko)' }, ...store.aktivneMaterialy]
+const getZasobnikyDoVahy = () => [{ Id: 0, NazovZasobnika: '(Všetko)' }, ...store.zasobnikyDoVahy]
+const getZasobnikyZVahy = () => [{ Id: 0, NazovZasobnika: '(Všetko)' }, ...store.zasobnikyZVahy]
 
 sendCommand('GetZariadenia')
 
 const state = reactive({
-  pocetNavazeni: getCelkovyPocetNavazeni(),
-  navazeneMnozstvo: getCelkovyNavazeneMnozstvo(),
-  navazenyPocetDavok: getCelkovyNavazenyPocetDavok(),
+  pocetNavazeni: 0,
+  navazeneMnozstvo: 0,
+  navazenyPocetDavok: 0,
   zariadenia: getZariadenia(),
+  uzivatelia: getUzivatelia(),
   materialy: getMaterialy(),
   zasobnikyDoVahy: getZasobnikyDoVahy(),
   zasobnikyZVahy: getZasobnikyZVahy(),
-  zariadenie: 0,
   isActualData: true,
   filterOptions: {
+    zariadenie: 0,
     datumOd: null,
     datumDo: null,
+    uzivatel: 0,
     material: 0,
     odkial: 0,
     kam: 0
@@ -48,6 +44,7 @@ const state = reactive({
     zariadenie: '',
     datumOd: '',
     datumDo: '',
+    uzivatel: '',
     material: '',
     odkial: '',
     kam: ''
@@ -58,7 +55,13 @@ watch(
   () => store.zariadenia,
   () => {
     state.zariadenia = getZariadenia()
-    getPrecalculatedStatistics()
+  }
+)
+
+watch(
+  () => store.aktivniUzivatelia,
+  () => {
+    state.uzivatelia = getUzivatelia()
   }
 )
 
@@ -95,7 +98,7 @@ watch(
 )
 
 watch(
-  () => [state.filterOptions, state.zariadenie],
+  () => state.filterOptions,
   () => {
     state.isActualData = false
   },
@@ -105,8 +108,11 @@ watch(
 // function getCobminedFilter, which builds a filter object based on the state.filterOptions
 function getCombinedFilter() {
   const filter = []
-  if (state.zariadenie) {
-    filter.push(['ZariadenieId', '>=', state.zariadenie])
+  if (state.filterOptions.zariadenie) {
+    filter.push(['ZariadenieId', '=', state.filterOptions.zariadenie])
+  }
+  if (state.filterOptions.uzivatel) {
+    filter.push(['UzivatelId', '=', state.filterOptions.uzivatel])
   }
   if (state.filterOptions.datumOd) {
     var date = new Date(state.filterOptions.datumOd)
@@ -129,62 +135,46 @@ function getCombinedFilter() {
   return filter
 }
 
-function getPrecalculatedStatistics() {
-  state.pocetNavazeni = getCelkovyPocetNavazeni()
-  state.navazeneMnozstvo = getCelkovyNavazeneMnozstvo()
-  state.navazenyPocetDavok = getCelkovyNavazenyPocetDavok()
+function getStatistics() {
+  store.statistikyLoading = true
+  const dataSourceLoadOptions = {}
+  dataSourceLoadOptions.Filter = getCombinedFilter()
+  dataSourceLoadOptions.TotalSummary = [
+    { Selector: 'NavazeneMnozstvo', SummaryType: 'sum' },
+    { Selector: 'NavazenyPocetDavok', SummaryType: 'sum' }
+  ]
+  dataSourceLoadOptions.RequireTotalCount = true
+  dataSourceLoadOptions.Skip = 0
+  dataSourceLoadOptions.Take = 1
+  sendCommand('GetStatistiky', dataSourceLoadOptions)
 }
 
-function getStatistics() {
-  // we can find statistics instantly if no filter is applied or just zariadenie is selected
-  if (Object.values(state.filterOptions).every((value) => !value)) {
-    if (!state.zariadenie) {
-      getPrecalculatedStatistics()
-    } else {
-      const selectedZariadenie = store.zariadenia.find(
-        (zariadenie) => zariadenie.Id === state.zariadenie
-      )
-      if (selectedZariadenie) {
-        state.pocetNavazeni = selectedZariadenie.PocetNavazeni
-        state.navazeneMnozstvo = selectedZariadenie.NavazeneMnozstvo
-        state.navazenyPocetDavok = selectedZariadenie.NavazenyPocetDavok
-      }
-    }
-    state.isActualData = true
-  } else {
-    store.statistikyLoading = true
-    const dataSourceLoadOptions = {}
-    dataSourceLoadOptions.Filter = getCombinedFilter()
-    dataSourceLoadOptions.TotalSummary = [
-      { Selector: 'NavazeneMnozstvo', SummaryType: 'sum' },
-      { Selector: 'NavazenyPocetDavok', SummaryType: 'sum' }
-    ]
-    dataSourceLoadOptions.RequireTotalCount = true
-    dataSourceLoadOptions.Skip = 0
-    dataSourceLoadOptions.Take = 1
-    sendCommand('GetStatistiky', dataSourceLoadOptions)
-  }
-}
+getStatistics()
 
 function filterToStr() {
   const filterStr = {
-    zariadenie: state.zariadenie
-      ? state.zariadenia.find((zariadenie) => zariadenie.Id === state.zariadenie).NazovZariadenia
-      : '(Všetky)',
+    zariadenie: state.filterOptions.zariadenie
+      ? state.zariadenia.find((zariadenie) => zariadenie.Id === state.filterOptions.zariadenie)
+          .NazovZariadenia
+      : '(Všetko)',
     datumOd: toDate(state.filterOptions.datumOd),
     datumDo: toDate(state.filterOptions.datumDo),
+    uzivatel: state.filterOptions.uzivatel
+      ? store.aktivniUzivatelia.find((uzivatel) => uzivatel.Id === state.filterOptions.uzivatel)
+          .Login
+      : '(Všetko)',
     material: state.filterOptions.material
       ? store.aktivneMaterialy.find((material) => material.Id === state.filterOptions.material)
           .NazovMaterialu
-      : '(Všetky)',
+      : '(Všetko)',
     odkial: state.filterOptions.odkial
       ? store.zasobnikyDoVahy.find((zasobnik) => zasobnik.Id === state.filterOptions.odkial)
           .NazovZasobnika
-      : '(Všetky)',
+      : '(Všetko)',
     kam: state.filterOptions.kam
       ? store.zasobnikyZVahy.find((zasobnik) => zasobnik.Id === state.filterOptions.kam)
           .NazovZasobnika
-      : '(Všetky)'
+      : '(Všetko)'
   }
   state.filterOptionsStr = filterStr
 }
@@ -240,9 +230,10 @@ function exportToPdf() {
             <div class="col-8 ml-2">
               <DxSelectBox
                 :data-source="state.zariadenia"
-                v-model:value="state.zariadenie"
+                v-model:value="state.filterOptions.zariadenie"
                 value-expr="Id"
                 display-expr="NazovZariadenia"
+                :searchEnabled="true"
               />
             </div>
           </div>
@@ -280,9 +271,32 @@ function exportToPdf() {
               />
             </div>
           </div>
+
+          <div class="row ml-3 mt-4">
+            <div class="col-12 mt-2">
+              <DxButton text="Načítať" type="success" @click="getStatistics" />
+            </div>
+          </div>
         </div>
 
         <div class="col">
+          <div class="row ml-3 my-2">
+            <div class="col-2">
+              <div class="align-middle">
+                <p class="my-3">Užívateľ:</p>
+              </div>
+            </div>
+            <div class="col-8 ml-2">
+              <DxSelectBox
+                :data-source="state.uzivatelia"
+                v-model:value="state.filterOptions.uzivatel"
+                value-expr="Id"
+                display-expr="Login"
+                :searchEnabled="true"
+              />
+            </div>
+          </div>
+
           <div class="row ml-3 my-2">
             <div class="col-2">
               <div class="align-middle">
@@ -295,6 +309,7 @@ function exportToPdf() {
                 v-model:value="state.filterOptions.material"
                 value-expr="Id"
                 display-expr="NazovMaterialu"
+                :searchEnabled="true"
               />
             </div>
           </div>
@@ -311,6 +326,7 @@ function exportToPdf() {
                 v-model:value="state.filterOptions.odkial"
                 value-expr="Id"
                 display-expr="NazovZasobnika"
+                :searchEnabled="true"
               />
             </div>
           </div>
@@ -327,14 +343,9 @@ function exportToPdf() {
                 v-model:value="state.filterOptions.kam"
                 value-expr="Id"
                 display-expr="NazovZasobnika"
+                :searchEnabled="true"
               />
             </div>
-          </div>
-        </div>
-
-        <div class="row ml-3 my-2">
-          <div class="col-2 mt-2">
-            <DxButton text="Načítať" type="success" @click="getStatistics" />
           </div>
         </div>
 

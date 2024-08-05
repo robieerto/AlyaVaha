@@ -33,7 +33,8 @@ const defaultFormData = {
   PocetDavokSirena: store.actualData.PocetDavokSirena,
   IdCisloMaterialu: store.actualData.IdCisloMaterialu,
   IdOdbernehoMiesta: store.actualData.IdOdbernehoMiesta,
-  IdSmerovaciehoMiesta: store.actualData.IdSmerovaciehoMiesta
+  IdSmerovaciehoMiesta: store.actualData.IdSmerovaciehoMiesta,
+  IdCisloPracovnika: store.user.Id
 } as VahaAPI.IVahaModel
 
 const popupRef = ref(null)
@@ -199,6 +200,7 @@ store.isNavazovanieInitSuccess = false
                 v-model:value="state.formData.IdCisloMaterialu"
                 value-expr="Id"
                 display-expr="NazovMaterialu"
+                :searchEnabled="true"
               />
             </div>
           </div>
@@ -215,6 +217,7 @@ store.isNavazovanieInitSuccess = false
                 v-model:value="state.formData.IdOdbernehoMiesta"
                 value-expr="Id"
                 display-expr="NazovZasobnika"
+                :searchEnabled="true"
               />
             </div>
           </div>
@@ -231,6 +234,7 @@ store.isNavazovanieInitSuccess = false
                 v-model:value="state.formData.IdSmerovaciehoMiesta"
                 value-expr="Id"
                 display-expr="NazovZasobnika"
+                :searchEnabled="true"
               />
             </div>
           </div>

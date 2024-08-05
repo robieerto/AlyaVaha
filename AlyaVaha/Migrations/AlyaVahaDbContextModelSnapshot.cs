@@ -53,8 +53,8 @@ namespace AlyaVaha.Migrations
                         new
                         {
                             Id = 1,
-                            DatumUpravy = new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5586),
-                            DatumVytvorenia = new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5499),
+                            DatumUpravy = new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(868),
+                            DatumVytvorenia = new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(865),
                             HmotnostMaterialu = 100.0,
                             JeAktivny = true,
                             NazovMaterialu = "Materiál 1"
@@ -62,8 +62,8 @@ namespace AlyaVaha.Migrations
                         new
                         {
                             Id = 2,
-                            DatumUpravy = new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5594),
-                            DatumVytvorenia = new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5593),
+                            DatumUpravy = new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(876),
+                            DatumVytvorenia = new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(875),
                             HmotnostMaterialu = 200.0,
                             JeAktivny = true,
                             NazovMaterialu = "Materiál 2"
@@ -143,6 +143,12 @@ namespace AlyaVaha.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime?>("DatumUpravy")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DatumVytvorenia")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -150,6 +156,9 @@ namespace AlyaVaha.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("JeAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("JeAktivny")
                         .HasColumnType("bit");
 
                     b.Property<string>("Login")
@@ -163,15 +172,21 @@ namespace AlyaVaha.Migrations
                         new
                         {
                             Id = 1,
+                            DatumUpravy = new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(847),
+                            DatumVytvorenia = new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(769),
                             Heslo = "alya123456",
                             JeAdmin = true,
+                            JeAktivny = true,
                             Login = "Admin"
                         },
                         new
                         {
                             Id = 2,
+                            DatumUpravy = new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(852),
+                            DatumVytvorenia = new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(851),
                             Heslo = "obsluha123",
                             JeAdmin = false,
+                            JeAktivny = true,
                             Login = "Obsluha"
                         });
                 });
@@ -255,8 +270,8 @@ namespace AlyaVaha.Migrations
                             Id = 1,
                             CestaDoVahy = true,
                             CestaZVahy = true,
-                            DatumUpravy = new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5603),
-                            DatumVytvorenia = new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5600),
+                            DatumUpravy = new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(885),
+                            DatumVytvorenia = new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(882),
                             NazovZasobnika = "Zásobník 1",
                             Skratka = "Z1"
                         },
@@ -265,8 +280,8 @@ namespace AlyaVaha.Migrations
                             Id = 2,
                             CestaDoVahy = true,
                             CestaZVahy = true,
-                            DatumUpravy = new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5608),
-                            DatumVytvorenia = new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5606),
+                            DatumUpravy = new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(888),
+                            DatumVytvorenia = new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(887),
                             NazovZasobnika = "Zásobník 2",
                             Skratka = "Z2"
                         },
@@ -275,8 +290,8 @@ namespace AlyaVaha.Migrations
                             Id = 3,
                             CestaDoVahy = true,
                             CestaZVahy = true,
-                            DatumUpravy = new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5611),
-                            DatumVytvorenia = new DateTime(2024, 7, 31, 9, 10, 26, 918, DateTimeKind.Local).AddTicks(5609),
+                            DatumUpravy = new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(890),
+                            DatumVytvorenia = new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(889),
                             NazovZasobnika = "Zásobník 3",
                             Skratka = "Z3"
                         });

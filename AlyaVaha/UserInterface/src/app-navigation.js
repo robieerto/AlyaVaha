@@ -25,6 +25,10 @@ export default [
       {
         text: 'Zásobníky',
         path: '/zasobniky'
+      },
+      {
+        text: 'Užívatelia',
+        path: '/uzivatelia'
       }
     ]
   },

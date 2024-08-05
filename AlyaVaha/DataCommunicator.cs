@@ -1,4 +1,5 @@
 ﻿using AlyaVaha.DAL.Repositories;
+using AlyaVaha.Models;
 using Photino.NET;
 using System.Text.Json;
 using VahaAPI;
@@ -10,6 +11,7 @@ namespace AlyaVaha
         private static VahaAPI.VahaAPI? vahaAPI { get; set; }
         private static PhotinoWindow? Window { get; set; }
 
+        public static Uzivatel? LoggedInUzivatel { get; set; }
         public static Queue<WindowCommand> CommandQueue { get; set; } = new Queue<WindowCommand>();
 
         public static void Init(PhotinoWindow window)
@@ -20,6 +22,9 @@ namespace AlyaVaha
 
         public static void InitVahaCommunicator()
         {
+            //#if DEBUG
+            //            LoggedInUzivatel = UzivatelRepository.Get("Admin");
+            //#endif
             var zariadenie = ZariadenieRepository.GetList()[0];
             if (zariadenie != null)
             {
