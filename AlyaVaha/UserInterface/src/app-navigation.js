@@ -35,6 +35,7 @@ export default [
   {
     text: 'Nastavenia',
     path: '/settings',
-    icon: 'preferences'
+    icon: 'preferences',
+    admin: true
   }
 ]

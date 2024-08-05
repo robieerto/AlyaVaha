@@ -22,6 +22,7 @@ import DxTreeView from 'devextreme-vue/tree-view'
 import navigation from '../app-navigation'
 import { onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import store from '@/store'
 
 export default {
   props: {
@@ -32,12 +33,14 @@ export default {
     const router = useRouter()
 
     // const isLargeScreen = sizes()['screen-large']
-    const items = navigation.map((item) => {
-      if (item.path && !/^\//.test(item.path)) {
-        item.path = `/${item.path}`
-      }
-      return { ...item, expanded: false }
-    })
+    var items = navigation
+      .map((item) => {
+        if (item.path && !/^\//.test(item.path)) {
+          item.path = `/${item.path}`
+        }
+        return { ...item, expanded: false }
+      })
+      .filter((item) => !item.admin || store.isUserAdmin)
 
     const treeViewRef = ref(null)
 

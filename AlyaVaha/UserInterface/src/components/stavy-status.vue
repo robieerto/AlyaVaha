@@ -71,7 +71,7 @@ import store from '@/store'
             </p>
           </div>
         </div>
-        <div class="card col-12">
+        <div v-if="store.isUserAdmin" class="card col-12">
           <div class="row h-100 d-flex align-items-center py-2 pl-3">
             <p class="col-6">Stav prevodníka:</p>
             <p class="col-6 fw-bold">

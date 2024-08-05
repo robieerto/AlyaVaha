@@ -76,7 +76,12 @@ function deleteRow(rowEvent) {
       <DxPaging :page-size="10" />
       <DxPager :show-page-size-selector="true" :show-info="true" />
       <DxFilterRow :visible="true" />
-      <DxEditing :allow-updating="true" :allow-deleting="true" :allow-adding="true" mode="row" />
+      <DxEditing
+        :allow-updating="store.isUserAdmin"
+        :allow-deleting="store.isUserAdmin"
+        :allow-adding="store.isUserAdmin"
+        mode="row"
+      />
       <!-- <dx-column caption="Riadok" :allow-search="false" :allow-sorting="false" :alignment="'right'" cell-template="poradieTemplate" /> -->
       <DxColumn data-field="Id" caption="Id" :width="100" :visible="false" />
       <DxColumn

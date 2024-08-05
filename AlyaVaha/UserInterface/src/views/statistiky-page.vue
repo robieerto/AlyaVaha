@@ -2,13 +2,20 @@
 import 'devextreme/data/odata/store'
 import { reactive, watch, ref } from 'vue'
 import { DxDateBox, DxSelectBox, DxButton } from 'devextreme-vue'
+import { DxCheckBox } from 'devextreme-vue/check-box'
 import { DxLoadIndicator } from 'devextreme-vue/load-indicator'
 import Vue3Html2pdf from 'vue3-html2pdf'
 import jsPDF from 'jspdf'
 
 import store from '@/store'
 import { sendCommand } from '@/commandHandler'
-import { toFloatNumber, toDate, getTomorrow } from '@/utils/helpers'
+import {
+  toFloatNumber,
+  toDate,
+  toTimezoneDate,
+  getTomorrow,
+  getIncrementByMinute
+} from '@/utils/helpers'
 import ReportPdf from './report-pdf.vue'
 
 const html2pdfRef = ref()
@@ -105,6 +112,14 @@ watch(
   { deep: true }
 )
 
+watch(
+  () => store.isDateTimeStatistiky,
+  () => {
+    state.filterOptions.datumOd = null
+    state.filterOptions.datumDo = null
+  }
+)
+
 // function getCobminedFilter, which builds a filter object based on the state.filterOptions
 function getCombinedFilter() {
   const filter = []
@@ -115,11 +130,14 @@ function getCombinedFilter() {
     filter.push(['UzivatelId', '=', state.filterOptions.uzivatel])
   }
   if (state.filterOptions.datumOd) {
-    var date = new Date(state.filterOptions.datumOd)
+    var date = toTimezoneDate(state.filterOptions.datumOd)
     filter.push(['DatumStartu', '>=', date])
   }
   if (state.filterOptions.datumDo) {
-    var dateAfter = getTomorrow(state.filterOptions.datumDo)
+    var next = store.isDateTimeStatistiky
+      ? getIncrementByMinute(state.filterOptions.datumDo)
+      : getTomorrow(state.filterOptions.datumDo)
+    var dateAfter = toTimezoneDate(next)
     filter.push(['DatumStartu', '<', dateAfter])
   }
   if (state.filterOptions.material) {
@@ -222,7 +240,7 @@ function exportToPdf() {
       <div class="row">
         <div class="col">
           <div class="row ml-3 my-2">
-            <div class="col-2">
+            <div class="col-3">
               <div class="align-middle">
                 <p class="my-3">Zariadenie:</p>
               </div>
@@ -239,7 +257,7 @@ function exportToPdf() {
           </div>
 
           <div class="row ml-3 my-2">
-            <div class="col-2">
+            <div class="col-3">
               <div class="align-middle">
                 <p class="my-3">Dátum od:</p>
               </div>
@@ -247,16 +265,15 @@ function exportToPdf() {
             <div class="col-8 ml-2">
               <DxDateBox
                 v-model="state.filterOptions.datumOd"
-                date-serialization-format="yyyy-MM-dd"
-                :input-attr="{ 'aria-label': 'Date' }"
-                type="date"
+                :input-attr="{ 'aria-label': store.isDateTimeStatistiky ? 'Date Time' : 'Date' }"
+                :type="store.isDateTimeStatistiky ? 'datetime' : 'date'"
                 :show-clear-button="true"
               />
             </div>
           </div>
 
           <div class="row ml-3 my-2">
-            <div class="col-2">
+            <div class="col-3">
               <div class="align-middle">
                 <p class="my-3">Dátum do:</p>
               </div>
@@ -264,18 +281,19 @@ function exportToPdf() {
             <div class="col-8 ml-2">
               <DxDateBox
                 v-model="state.filterOptions.datumDo"
-                date-serialization-format="yyyy-MM-dd"
-                :input-attr="{ 'aria-label': 'Date' }"
-                type="date"
+                :input-attr="{ 'aria-label': store.isDateTimeStatistiky ? 'Date Time' : 'Date' }"
+                :type="store.isDateTimeStatistiky ? 'datetime' : 'date'"
                 :show-clear-button="true"
               />
             </div>
           </div>
 
-          <div class="row ml-3 mt-4">
-            <div class="col-12 mt-2">
-              <DxButton text="Načítať" type="success" @click="getStatistics" />
-            </div>
+          <div class="d-flex justify-content-end mt-4 mr-5">
+            <DxCheckBox
+              text="Filtrovať aj podľa času"
+              class="mr-5"
+              v-model:value="store.isDateTimeStatistiky"
+            />
           </div>
         </div>
 
@@ -346,6 +364,12 @@ function exportToPdf() {
                 :searchEnabled="true"
               />
             </div>
+          </div>
+        </div>
+
+        <div class="row ml-3 my-0">
+          <div class="col-12 mt-2">
+            <DxButton text="Načítať" type="success" @click="getStatistics" />
           </div>
         </div>
 

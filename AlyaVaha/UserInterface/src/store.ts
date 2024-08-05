@@ -52,7 +52,8 @@ const store = reactive({
   statistikyLoading: true,
   isStartNavazovanieModalOpened: false,
   isNavazovanieInitSuccess: false,
-  isDateTime: false
+  isDateTimePrehlad: false,
+  isDateTimeStatistiky: false
 })
 
 export default store

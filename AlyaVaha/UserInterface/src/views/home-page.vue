@@ -118,7 +118,7 @@ function openStartNavazovanieModal() {
           <UdajeStatus />
         </div>
       </div>
-      <div class="row mt-4">
+      <div v-if="store.isUserAdmin" class="row mt-4">
         <div class="col">
           <VstupyStatus />
         </div>
@@ -127,7 +127,7 @@ function openStartNavazovanieModal() {
         </div>
       </div>
 
-      <div class="row mt-5">
+      <div v-if="store.isUserAdmin" class="row mt-5">
         <DataStatus />
       </div>
     </div>

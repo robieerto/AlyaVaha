@@ -105,7 +105,7 @@ const state = reactive({
 })
 
 watch(
-  () => store.isDateTime,
+  () => store.isDateTimePrehlad,
   () => {
     state.dataGridInstance.repaint()
   }
@@ -199,7 +199,11 @@ async function exportToXls() {
           "
         >
         </DxButton>
-        <DxCheckBox text="Dátum a čas v 1 stĺpci" class="ml-5" v-model:value="store.isDateTime" />
+        <DxCheckBox
+          text="Dátum a čas v 1 stĺpci"
+          class="ml-5"
+          v-model:value="store.isDateTimePrehlad"
+        />
       </div>
       <div>
         <button
@@ -234,7 +238,12 @@ async function exportToXls() {
       <DxPaging :page-size="10" />
       <DxPager :show-page-size-selector="false" :show-info="true" />
       <DxFilterRow :visible="true" />
-      <DxEditing :allow-updating="false" :allow-deleting="true" :allow-adding="false" mode="row" />
+      <DxEditing
+        :allow-updating="false"
+        :allow-deleting="store.isUserAdmin"
+        :allow-adding="false"
+        mode="row"
+      />
       <DxExport :enabled="false"></DxExport>
       <DxSorting mode="none" />
       <!-- <dx-column caption="Riadok" :allow-search="false" :allow-sorting="false" :alignment="'right'" cell-template="poradieTemplate" /> -->
@@ -251,9 +260,9 @@ async function exportToXls() {
       <DxColumn
         data-field="DatumStartu"
         caption="Dátum navažovania"
-        :data-type="store.isDateTime ? 'datetime' : 'date'"
+        :data-type="store.isDateTimePrehlad ? 'datetime' : 'date'"
         :min-width="170"
-        :format="store.isDateTime ? dateTimeFormat : dateFormat"
+        :format="store.isDateTimePrehlad ? dateTimeFormat : dateFormat"
         :allow-editing="false"
         :filterOperations="filterOperations"
       />
@@ -262,7 +271,7 @@ async function exportToXls() {
         caption="Čas navažovania"
         data-type="datetime"
         width="140"
-        :visible="!store.isDateTime"
+        :visible="!store.isDateTimePrehlad"
         :format="timeFormat"
         :allow-editing="false"
         :editorOptions="{ type: 'time' }"

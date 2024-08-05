@@ -25,6 +25,13 @@ const toDate = (value) => {
   else return ''
 }
 
+const toTimezoneDate = (value) => {
+  var date = new Date(value)
+  var userTimezoneOffset = date.getTimezoneOffset() * 60000
+  console.log(userTimezoneOffset)
+  return new Date(date.getTime() - userTimezoneOffset)
+}
+
 const toCustomDate = (value) => {
   if (!value) return ''
   const date = new Date(value).toISOString().replace('T', ' ').replace('Z', '')
@@ -36,6 +43,12 @@ const getTomorrow = (date) => {
   const tomorrow = new Date(date)
   tomorrow.setDate(tomorrow.getDate() + 1)
   return tomorrow
+}
+
+const getIncrementByMinute = (date) => {
+  const increment = new Date(date)
+  increment.setMinutes(increment.getMinutes() + 1)
+  return increment
 }
 
 const notify = (message, type) => {
@@ -68,8 +81,10 @@ export {
   timeFormat,
   toFloatNumber,
   toDate,
+  toTimezoneDate,
   toCustomDate,
   getTomorrow,
+  getIncrementByMinute,
   notify,
   shortNotify
 }

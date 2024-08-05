@@ -10,6 +10,7 @@ export default {
   async logIn(email, password) {
     return new Promise((resolve) => {
       try {
+        store.isUserLoggedIn = null
         const stop = watch(
           () => store.isUserLoggedIn,
           () => {
