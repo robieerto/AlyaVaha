@@ -107,6 +107,12 @@ const classHornaKlapka = computed(() => ({
   undefined: isHornaKlapkaNedefinovana.value
 }))
 
+const classHornaKlapkaText = computed(() => [
+  (isHornaKlapkaOtvorena.value || isHornaKlapkaSaOtvara.value) && 'text-success',
+  (isHornaKlapkaZatvorena.value || isHornaKlapkaSaZatvara.value) && 'text-danger',
+  isHornaKlapkaVPoruche.value && 'text-danger'
+])
+
 const classDolnaKlapka = computed(() => ({
   open: isDolnaKlapkaOtvorena.value,
   closed: isDolnaKlapkaZatvorena.value,
@@ -118,6 +124,12 @@ const classDolnaKlapka = computed(() => ({
   animate__bounceIn: isDolnaKlapkaVPoruche.value,
   undefined: isDolnaKlapkaNedefinovana.value
 }))
+
+const classDolnaKlapkaText = computed(() => [
+  (isDolnaKlapkaOtvorena.value || isDolnaKlapkaSaOtvara.value) && 'text-success',
+  (isDolnaKlapkaZatvorena.value || isDolnaKlapkaSaZatvara.value) && 'text-danger',
+  isDolnaKlapkaVPoruche.value && 'text-danger'
+])
 
 const classSirena = computed(() => ({
   'is-on': isSirenaZapnuta.value || isSirenaZapnutaPrerusovane.value,
@@ -175,8 +187,12 @@ const setVibratorControl = () => {
 
 <template>
   <div>
-    <div class="horna-klapka-control" @click="setHornaKlapkaControl">
-      <p class="p-0 text-center">
+    <div
+      class="horna-klapka-control"
+      :class="isHornaKlapkaVPoruche && 'klapka-porucha'"
+      @click="setHornaKlapkaControl"
+    >
+      <p class="p-0 fw-bold text-center" :class="classHornaKlapkaText">
         {{ store.actualStateTexts.StavHornejKlapky }}
       </p>
     </div>
@@ -209,8 +225,13 @@ const setVibratorControl = () => {
         </span>
       </div>
     </div>
-    <div class="dolna-klapka-control" @click="setDolnaKlapkaControl" :disabled="!store.connected">
-      <p class="p-0 text-center">
+    <div
+      class="dolna-klapka-control"
+      :class="isDolnaKlapkaVPoruche && 'klapka-porucha'"
+      @click="setDolnaKlapkaControl"
+      :disabled="!store.connected"
+    >
+      <p class="p-0 fw-bold text-center" :class="classDolnaKlapkaText">
         {{ store.actualStateTexts.StavDolnejKlapky }}
       </p>
     </div>
@@ -288,6 +309,10 @@ const setVibratorControl = () => {
   left: 157px;
   cursor: pointer;
   z-index: 100;
+}
+
+.klapka-porucha {
+  border: 2px solid red;
 }
 
 .aktualna-vaha {
