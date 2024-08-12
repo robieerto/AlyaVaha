@@ -285,7 +285,7 @@ async function exportToXls() {
       </DxColumn>
       <DxColumn
         data-field="NavazeneMnozstvo"
-        caption="Navážené množstvo (kg)"
+        caption="Navážená hmotnosť (kg)"
         data-type="number"
         :min-width="180"
         :filterOperations="filterOperations"
@@ -299,7 +299,7 @@ async function exportToXls() {
       />
       <DxColumn
         data-field="PozadovaneMnozstvo"
-        caption="Požadované množstvo (kg)"
+        caption="Požadovaná hmotnosť (kg)"
         data-type="number"
         :min-width="110"
         :filterOperations="filterOperations"

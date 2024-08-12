@@ -1,13 +1,20 @@
 ﻿using AlyaVaha;
+using AlyaVaha.DAL;
+using DeviceId;
 using Microsoft.Extensions.Configuration;
 using Photino.NET;
 using PhotinoNET.Server;
 using System.Drawing;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Photino.HelloPhotino.Vue;
 
 class Program
 {
+    private static readonly string initialKey = "5e8eeebe52f9a8226663bbbe8fee08aa";
+    private static readonly string initialConfigFile = "initialConfiguration.json";
+
 #if DEBUG
     public static bool IsDebugMode = true;
 #else
@@ -26,8 +33,67 @@ class Program
             .AddJsonFile("configuration.json", optional: false, reloadOnChange: false)
             .Build();
 
-        var zoom = config.GetValue<int>("zoom");
+        var zoom = config.GetValue<int>("Zoom");
         if (zoom == 0) zoom = 100;
+
+        //var connectionString = config.GetConnectionString("DefaultConnection");
+
+        // Check if initial config file exists
+        if (File.Exists(initialConfigFile) && new FileInfo(initialConfigFile).Length != 0)
+        {
+            // Read the file
+            var initialConfig = new ConfigurationBuilder()
+                .AddJsonFile(initialConfigFile, optional: false, reloadOnChange: false)
+                .Build();
+
+            var initialConfigKey = initialConfig.GetValue<String>("Key");
+
+            if (initialConfigKey != null && initialConfigKey.Equals(initialKey))
+            {
+                using var context = new AlyaVahaDbContext();
+                // Check if database exists
+                if (!context.Database.CanConnect())
+                {
+                    // Create the database
+                    context.Database.EnsureCreated();
+                }
+
+                var zariadeniaCount = initialConfig.GetValue<int>("DeviceCount");
+                var zariadeniaString = $"{initialKey} {zariadeniaCount}";
+                using var sha256 = SHA256.Create();
+                var zariadeniaHash = GetHash(sha256, zariadeniaString);
+
+                context.Programy.Update(new AlyaVaha.Models.Program { Id = 1, PcId = GetPcId(), Zariadenia = zariadeniaHash });
+                context.SaveChanges();
+
+                // Remove content of file
+                File.WriteAllText(initialConfigFile, "");
+            }
+        }
+
+        using (var context = new AlyaVahaDbContext())
+        {
+            var program = context.Programy.FirstOrDefault();
+            if (program != null)
+            {
+                // Check if the PC ID is the same
+                if (!CompareStrings(program.PcId!, GetPcId()))
+                {
+                    return;
+                }
+
+                // Check if the hash of the devices is the same
+                var zariadeniaCount = context.Zariadenia.Count();
+                var zariadeniaString = $"{initialKey} {zariadeniaCount}";
+                using var sha256 = SHA256.Create();
+                var zariadeniaHash = GetHash(sha256, zariadeniaString);
+
+                if (!VerifyHash(sha256, zariadeniaString, program.Zariadenia!))
+                {
+                    return;
+                }
+            }
+        }
 
         PhotinoServer
             .CreateStaticFileServer(args, out string baseUrl)
@@ -83,5 +149,61 @@ class Program
         Task.Run(async () => DataCommunicator.Run());
 
         window.WaitForClose(); // Starts the application event loop
+    }
+
+    private static string GetPcId()
+    {
+        string deviceId = new DeviceIdBuilder()
+            //.AddMachineName()
+            //.AddOsVersion()
+            .OnWindows(windows => windows
+                .AddProcessorId()
+                .AddMotherboardSerialNumber()
+                .AddSystemDriveSerialNumber())
+            .OnLinux(linux => linux
+                .AddMotherboardSerialNumber()
+                .AddSystemDriveSerialNumber())
+            .OnMac(mac => mac
+                .AddSystemDriveSerialNumber()
+                .AddPlatformSerialNumber())
+            .ToString();
+
+        return deviceId;
+    }
+
+    private static string GetHash(HashAlgorithm hashAlgorithm, string input)
+    {
+
+        // Convert the input string to a byte array and compute the hash.
+        byte[] data = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+        // Create a new Stringbuilder to collect the bytes
+        // and create a string.
+        var sBuilder = new StringBuilder();
+
+        // Loop through each byte of the hashed data
+        // and format each one as a hexadecimal string.
+        for (int i = 0; i < data.Length; i++)
+        {
+            sBuilder.Append(data[i].ToString("x2"));
+        }
+
+        // Return the hexadecimal string.
+        return sBuilder.ToString();
+    }
+
+    // Compare two strings by comparing their byte values.
+    private static bool CompareStrings(string a, string b)
+    {
+        return a.Equals(b, StringComparison.OrdinalIgnoreCase);
+    }
+
+    // Verify a hash against a string.
+    private static bool VerifyHash(HashAlgorithm hashAlgorithm, string input, string hash)
+    {
+        // Hash the input.
+        var hashOfInput = GetHash(hashAlgorithm, input);
+
+        return CompareStrings(hashOfInput, hash);
     }
 }

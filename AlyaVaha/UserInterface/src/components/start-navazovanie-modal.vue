@@ -15,7 +15,7 @@ import * as VahaAPI from '@/types/vahaTypes'
 
 const radioTypNavazovania = [
   { text: 'Nedefinované', value: 'nedefinovane' },
-  { text: 'Požadované množstvo', value: 'mnozstvo' },
+  { text: 'Požadovaná hmotnosť', value: 'hmotnost' },
   { text: 'Požadovaný počet dávok', value: 'davky' }
 ]
 
@@ -83,7 +83,7 @@ watch(
 
 function startAction() {
   // Typ navazovania
-  if (state.selectedTypNavazovania === 'mnozstvo') {
+  if (state.selectedTypNavazovania === 'hmotnost') {
     state.formData.PozadovanyPocetDavok = 0
   } else if (state.selectedTypNavazovania === 'davky') {
     state.formData.PozadovanaCelkovaVaha = 0
@@ -158,9 +158,9 @@ store.isNavazovanieInitSuccess = false
                   </div>
                   <div class="col-4">
                     <DxNumberBox
-                      v-if="data.value === 'mnozstvo'"
+                      v-if="data.value === 'hmotnost'"
                       v-model:value="state.formData.PozadovanaCelkovaVaha"
-                      :disabled="state.selectedTypNavazovania !== 'mnozstvo'"
+                      :disabled="state.selectedTypNavazovania !== 'hmotnost'"
                       :show-spin-buttons="true"
                       :min="0"
                     />
@@ -172,7 +172,7 @@ store.isNavazovanieInitSuccess = false
                       :min="0"
                     />
                   </div>
-                  <div v-if="data.value === 'mnozstvo'" class="col-1 ps-0">
+                  <div v-if="data.value === 'hmotnost'" class="col-1 ps-0">
                     <div class="align-middle">
                       <p class="my-3">kg</p>
                     </div>

@@ -9,7 +9,7 @@ import store from '@/store'
         <div class="col">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Aktuálna váha (kg)</h5>
+              <h5 class="card-title">Aktuálna hmotnosť (kg)</h5>
               <p class="card-text fw-bold fs-3">
                 {{
                   store.actualData.BruttoVaha !== -10000
@@ -23,7 +23,7 @@ import store from '@/store'
         <div class="col">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Váha navažovania (kg)</h5>
+              <h5 class="card-title">Hmotnosť dávky (kg)</h5>
               <p class="card-text fw-bold fs-3">
                 {{
                   store.actualData.VahaNavazovania !== -10000

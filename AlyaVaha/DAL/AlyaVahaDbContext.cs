@@ -4,6 +4,7 @@ namespace AlyaVaha.DAL
 {
     public class AlyaVahaDbContext : DbContext
     {
+        public DbSet<Models.Program> Programy { get; set; }
         public DbSet<Models.Zariadenie> Zariadenia { get; set; }
         public DbSet<Models.Uzivatel> Uzivatelia { get; set; }
         public DbSet<Models.Material> Materialy { get; set; }
@@ -12,11 +13,16 @@ namespace AlyaVaha.DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(LocalDB)\\MSSQLLocalDB;Database=AlyaVaha;MultipleActiveResultSets=True;Integrated Security=True;");
+            optionsBuilder.UseSqlServer("Server=(LocalDB)\\AlyaDB;Database=AlyaVaha;MultipleActiveResultSets=True;User ID=sa;Password=MuL7J58B6ftSWkaESXLN");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            var programy = new List<Models.Program>
+            {
+                new Models.Program { Id = 1 }
+            };
+
             var uzivatelia = new List<Models.Uzivatel>
             {
                 new Models.Uzivatel { Id = 1, Login = "Admin", Heslo = "alya123456", JeAdmin = true, JeAktivny = true, DatumVytvorenia = DateTime.Now, DatumUpravy = DateTime.Now, },
@@ -41,6 +47,7 @@ namespace AlyaVaha.DAL
                 new Models.Zasobnik { Id = 3, NazovZasobnika = "Zásobník 3", Skratka = "Z3", DatumVytvorenia = DateTime.Now, DatumUpravy = DateTime.Now, CestaDoVahy = true, CestaZVahy = true},
             };
 
+            modelBuilder.Entity<Models.Program>().HasData(programy);
             modelBuilder.Entity<Models.Uzivatel>().HasData(uzivatelia);
             modelBuilder.Entity<Models.Zariadenie>().HasData(zariadenia);
             modelBuilder.Entity<Models.Material>().HasData(materialy);

@@ -31,6 +31,20 @@ namespace AlyaVaha.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Programy",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PcId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Zariadenia = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Programy", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Uzivatelia",
                 columns: table => new
                 {
@@ -141,17 +155,22 @@ namespace AlyaVaha.Migrations
                 columns: new[] { "Id", "DatumUpravy", "DatumVytvorenia", "HmotnostMaterialu", "JeAktivny", "NazovMaterialu" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(868), new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(865), 100.0, true, "Materiál 1" },
-                    { 2, new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(876), new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(875), 200.0, true, "Materiál 2" }
+                    { 1, new DateTime(2024, 8, 12, 7, 47, 11, 330, DateTimeKind.Local).AddTicks(3423), new DateTime(2024, 8, 12, 7, 47, 11, 330, DateTimeKind.Local).AddTicks(3420), 100.0, true, "Materiál 1" },
+                    { 2, new DateTime(2024, 8, 12, 7, 47, 11, 330, DateTimeKind.Local).AddTicks(3433), new DateTime(2024, 8, 12, 7, 47, 11, 330, DateTimeKind.Local).AddTicks(3432), 200.0, true, "Materiál 2" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Programy",
+                columns: new[] { "Id", "PcId", "Zariadenia" },
+                values: new object[] { 1, null, null });
 
             migrationBuilder.InsertData(
                 table: "Uzivatelia",
                 columns: new[] { "Id", "DatumUpravy", "DatumVytvorenia", "Email", "Heslo", "JeAdmin", "JeAktivny", "Login" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(847), new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(769), null, "alya123456", true, true, "Admin" },
-                    { 2, new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(852), new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(851), null, "obsluha123", false, true, "Obsluha" }
+                    { 1, new DateTime(2024, 8, 12, 7, 47, 11, 330, DateTimeKind.Local).AddTicks(3399), new DateTime(2024, 8, 12, 7, 47, 11, 330, DateTimeKind.Local).AddTicks(3310), null, "alya123456", true, true, "Admin" },
+                    { 2, new DateTime(2024, 8, 12, 7, 47, 11, 330, DateTimeKind.Local).AddTicks(3404), new DateTime(2024, 8, 12, 7, 47, 11, 330, DateTimeKind.Local).AddTicks(3403), null, "obsluha123", false, true, "Obsluha" }
                 });
 
             migrationBuilder.InsertData(
@@ -164,9 +183,9 @@ namespace AlyaVaha.Migrations
                 columns: new[] { "Id", "CestaDoVahy", "CestaZVahy", "DatumUpravy", "DatumVytvorenia", "NazovZasobnika", "Skratka" },
                 values: new object[,]
                 {
-                    { 1, true, true, new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(885), new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(882), "Zásobník 1", "Z1" },
-                    { 2, true, true, new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(888), new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(887), "Zásobník 2", "Z2" },
-                    { 3, true, true, new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(890), new DateTime(2024, 8, 4, 18, 53, 37, 397, DateTimeKind.Local).AddTicks(889), "Zásobník 3", "Z3" }
+                    { 1, true, true, new DateTime(2024, 8, 12, 7, 47, 11, 330, DateTimeKind.Local).AddTicks(3442), new DateTime(2024, 8, 12, 7, 47, 11, 330, DateTimeKind.Local).AddTicks(3439), "Zásobník 1", "Z1" },
+                    { 2, true, true, new DateTime(2024, 8, 12, 7, 47, 11, 330, DateTimeKind.Local).AddTicks(3449), new DateTime(2024, 8, 12, 7, 47, 11, 330, DateTimeKind.Local).AddTicks(3448), "Zásobník 2", "Z2" },
+                    { 3, true, true, new DateTime(2024, 8, 12, 7, 47, 11, 330, DateTimeKind.Local).AddTicks(3452), new DateTime(2024, 8, 12, 7, 47, 11, 330, DateTimeKind.Local).AddTicks(3451), "Zásobník 3", "Z3" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -200,6 +219,9 @@ namespace AlyaVaha.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Navazovania");
+
+            migrationBuilder.DropTable(
+                name: "Programy");
 
             migrationBuilder.DropTable(
                 name: "Materialy");

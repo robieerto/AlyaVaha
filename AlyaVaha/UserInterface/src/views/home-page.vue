@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { DxButton } from 'devextreme-vue'
+import DxLoadIndicator from 'devextreme-vue/load-indicator'
+import { reactive, watch } from 'vue'
 
 import * as VahaAPI from '@/types/vahaTypes'
 
@@ -14,6 +16,21 @@ import AnimationVaha from '../components/animation-vaha.vue'
 
 import store from '@/store'
 import { sendCommand } from '@/commandHandler'
+
+const state = reactive({
+  ukoncujePoDokonceniDavky: false,
+  ukoncujeOkamzite: false
+})
+
+watch(
+  () => store.actualData.StavNavazovania,
+  () => {
+    if (store.actualData.StavNavazovania === VahaAPI.StavNavazovania.NavazovanieUkoncene) {
+      state.ukoncujePoDokonceniDavky = false
+      state.ukoncujeOkamzite = false
+    }
+  }
+)
 
 function openStartNavazovanieModal() {
   store.isStartNavazovanieModalOpened = true
@@ -78,14 +95,30 @@ function openStartNavazovanieModal() {
             "
             class="col-auto ml-3 mt-3"
             @click="
-              () =>
+              () => {
                 sendCommand('SetControlValues', {
                   StavNavazovania: VahaAPI.StavNavazovaniaPovel.UkonceniePoUkonceniDavky
                 })
+                state.ukoncujePoDokonceniDavky = true
+              }
             "
-            text="Ukončenie po ukončení dávky"
+            text="Ukončenie po dovážení dávky"
             type="warning"
-          />
+          >
+            <template #content>
+              <span>
+                <DxLoadIndicator
+                  :visible="state.ukoncujePoDokonceniDavky"
+                  class="button-indicator mr-3"
+                  :height="20"
+                  :width="20"
+                />
+                <span class="dx-button-text">{{
+                  state.ukoncujePoDokonceniDavky ? 'Ukončuje' : 'Ukončenie po dovážení dávky'
+                }}</span>
+              </span>
+            </template>
+          </DxButton>
 
           <DxButton
             v-if="
@@ -94,14 +127,30 @@ function openStartNavazovanieModal() {
             "
             class="col-auto ml-3 mt-3"
             @click="
-              () =>
+              () => {
                 sendCommand('SetControlValues', {
                   StavNavazovania: VahaAPI.StavNavazovaniaPovel.OkamziteUkoncenie
                 })
+                state.ukoncujeOkamzite = true
+              }
             "
             text="Okamžité ukončenie"
             type="danger"
-          />
+          >
+            <template #content>
+              <span>
+                <DxLoadIndicator
+                  :visible="state.ukoncujeOkamzite"
+                  class="button-indicator mr-3"
+                  :height="20"
+                  :width="20"
+                />
+                <span class="dx-button-text">{{
+                  state.ukoncujeOkamzite ? 'Ukončuje' : 'Okamžité ukončenie'
+                }}</span>
+              </span>
+            </template>
+          </DxButton>
         </div>
       </div>
     </div>

@@ -98,7 +98,7 @@ const props = defineProps<{
       </div>
       <div class="row mb-1">
         <div class="col-4">
-          <strong>Navážené množstvo (kg):</strong>
+          <strong>Navážená hmotnosť (kg):</strong>
         </div>
         <div class="col-4">
           {{ toFloatNumber(props.navazeneMnozstvo, 1) }}

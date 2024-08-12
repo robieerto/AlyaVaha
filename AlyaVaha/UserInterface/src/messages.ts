@@ -52,7 +52,9 @@ export const Messages = {
     KlapkaSaOtvara: 'Otvára sa',
     KlapkaZatvorena: 'Zatvorená',
     KlapkaSaZatvara: 'Zatvára sa',
-    KlapkaVPoruche: 'V poruche'
+    KlapkaVPoruche: 'V poruche',
+    KlapkaSaOtvaraNaStred: 'Otvára sa na stred',
+    KlapkaJeNaStred: 'Je na stred'
   },
   StavDolnejKlapkyPovel: {
     OtvorKlapku: 'Otvor',
@@ -84,7 +86,7 @@ export const Messages = {
   },
   TypNavazovania: {
     Donekonecna: 'Nedefinované - donekonečna',
-    PozadovanaVaha: 'Požadovaná celková váha - váha ukončenia',
+    PozadovanaVaha: 'Požadovaná celková hmotnosť - váha ukončenia',
     PozadovanyPocetDavok: 'Požadovaný počet dávok - počet dávok ukončenia'
   }
 }

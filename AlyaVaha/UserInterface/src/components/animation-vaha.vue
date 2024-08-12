@@ -35,6 +35,12 @@ const isHornaKlapkaVPoruche = computed(
 const isHornaKlapkaNedefinovana = computed(
   () => state.stavHornejKlapky === VahaAPI.StavKlapky.Nedefinovane
 )
+const isKlapkaSaOtvaraNaStred = computed(
+  () => state.stavHornejKlapky === VahaAPI.StavKlapky.KlapkaSaOtvaraNaStred
+)
+const IsKlapkaNaStred = computed(
+  () => state.stavHornejKlapky === VahaAPI.StavKlapky.KlapkaJeNaStred
+)
 
 // dolna klapka
 const isDolnaKlapkaOtvorena = computed(
@@ -98,10 +104,13 @@ const isDolnaKlapkaZatvorenaControl = computed(
 const classHornaKlapka = computed(() => ({
   open: isHornaKlapkaOtvorena.value,
   closed: isHornaKlapkaZatvorena.value,
+  naStred: IsKlapkaNaStred.value,
   'animate-opening': isHornaKlapkaSaOtvara.value,
   animate__rotateOutDownRight: isHornaKlapkaSaOtvara.value,
   'animate-closing': isHornaKlapkaSaZatvara.value,
   animate__rotateInDownLeft: isHornaKlapkaSaZatvara.value,
+  'animate-opening-na-stred': isKlapkaSaOtvaraNaStred.value,
+  animate__rotateInDownRight: isKlapkaSaOtvaraNaStred.value,
   error: isHornaKlapkaVPoruche.value,
   animate__bounceIn: isHornaKlapkaVPoruche.value,
   undefined: isHornaKlapkaNedefinovana.value
@@ -192,7 +201,7 @@ const setVibratorControl = () => {
       :class="isHornaKlapkaVPoruche && 'klapka-porucha'"
       @click="setHornaKlapkaControl"
     >
-      <p class="p-0 fw-bold text-center" :class="classHornaKlapkaText">
+      <p class="p-0 fs-5 fw-bold text-center" :class="classHornaKlapkaText">
         {{ store.actualStateTexts.StavHornejKlapky }}
       </p>
     </div>
@@ -231,7 +240,7 @@ const setVibratorControl = () => {
       @click="setDolnaKlapkaControl"
       :disabled="!store.connected"
     >
-      <p class="p-0 fw-bold text-center" :class="classDolnaKlapkaText">
+      <p class="p-0 fs-5 fw-bold text-center" :class="classDolnaKlapkaText">
         {{ store.actualStateTexts.StavDolnejKlapky }}
       </p>
     </div>
@@ -356,6 +365,11 @@ const setVibratorControl = () => {
   background: linear-gradient(#de8e8c, #bb2d3b);
 }
 
+.naStred {
+  transform: rotate3d(0, 0, 1, -45deg);
+  background: linear-gradient(#ffc107, orange);
+}
+
 .error {
   background: linear-gradient(#de8e8c, #bb2d3b);
   --animate-duration: 1.5s;
@@ -373,6 +387,11 @@ const setVibratorControl = () => {
 .animate-closing {
   --animate-duration: 1.5s;
   background: linear-gradient(#de8e8c, #bb2d3b);
+}
+
+.animate-opening-na-stred {
+  --animate-duration: 1.5s;
+  background: linear-gradient(#ffc107, orange);
 }
 
 @keyframes rotateOutDownRight {
@@ -394,6 +413,17 @@ const setVibratorControl = () => {
 
   to {
     transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes rotateInDownRight {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    transform: rotate3d(0, 0, 1, -45deg);
     opacity: 1;
   }
 }

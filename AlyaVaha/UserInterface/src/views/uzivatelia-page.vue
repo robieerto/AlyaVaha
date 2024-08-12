@@ -30,6 +30,7 @@ function onDataGridInitialized(e) {
 }
 
 function initNewRow(rowEvent) {
+  rowEvent.data.JeAdmin = false
   rowEvent.data.JeAktivny = true
 }
 

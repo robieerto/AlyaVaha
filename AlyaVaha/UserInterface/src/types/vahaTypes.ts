@@ -120,7 +120,9 @@ export enum StavKlapky {
 	KlapkaSaOtvara = 2,
 	KlapkaZatvorena = 3,
 	KlapkaSaZatvara = 4,
-	KlapkaVPoruche = 5
+	KlapkaVPoruche = 5,
+	KlapkaSaOtvaraNaStred = 6,
+	KlapkaJeNaStred = 7
 }
 export enum StavRiadeniaNavazovania {
 	Nedefinovane = 0,

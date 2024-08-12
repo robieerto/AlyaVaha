@@ -399,7 +399,7 @@ function exportToPdf() {
           <div class="col">
             <div class="card">
               <div class="row h-100 d-flex align-items-center py-2 pl-3">
-                <h5 class="card-title">Navážené množstvo (kg)</h5>
+                <h5 class="card-title">Navážená hmotnosť (kg)</h5>
                 <p class="card-text fw-bold fs-3">
                   {{ toFloatNumber(state.navazeneMnozstvo, 1) }}
                 </p>

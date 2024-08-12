@@ -228,6 +228,8 @@ namespace VahaAPI
         KlapkaZatvorena = 3,
         KlapkaSaZatvara = 4,
         KlapkaVPoruche = 5,
+        KlapkaSaOtvaraNaStred = 6,
+        KlapkaJeNaStred = 7,
     }
 
     [TsEnum]

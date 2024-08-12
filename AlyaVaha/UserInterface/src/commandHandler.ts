@@ -1,5 +1,4 @@
 import { notify } from '@/utils/helpers'
-import { useRoute } from 'vue-router'
 
 import store from '@/store'
 import router from '@/router'

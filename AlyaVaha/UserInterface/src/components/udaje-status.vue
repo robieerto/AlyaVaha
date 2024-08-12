@@ -8,7 +8,7 @@ import store from '@/store'
       <div class="row m-0">
         <div class="card col">
           <div class="row h-100 d-flex align-items-center py-2 pl-3">
-            <p class="col-6">Požadovaná váha dávky (kg):</p>
+            <p class="col-6">Požadovaná hmotnosť dávky (kg):</p>
             <p class="col-6 fw-bold">
               {{ store.actualData.PozadovanaVahaDavky }}
             </p>
@@ -18,7 +18,7 @@ import store from '@/store'
       <div class="row m-0">
         <div class="card col">
           <div class="row h-100 d-flex align-items-center py-2 pl-3">
-            <p class="col-6">Požadovaná celková váha (kg):</p>
+            <p class="col-6">Požadovaná celková hmotnosť (kg):</p>
             <p class="col-6 fw-bold">
               {{ store.actualData.PozadovanaCelkovaVaha }}
             </p>
@@ -50,7 +50,11 @@ import store from '@/store'
           <div class="row h-100 d-flex align-items-center py-2 pl-3">
             <p class="col-6">Celkový výkon:</p>
             <p class="col-6 fw-bold">
-              {{ store.actualData.VykonCelkovy }}
+              {{
+                store.actualData.VykonCelkovy
+                  ? (store.actualData.VykonCelkovy / 1000).toFixed(2)
+                  : ''
+              }}
             </p>
           </div>
         </div>
