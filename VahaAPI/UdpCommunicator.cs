@@ -12,13 +12,17 @@ namespace VahaAPI
 
         public readonly string ipAddress;
         public readonly int port;
+        public readonly int timeout;
+        public readonly int lightTimeout;
 
-        public UdpCommunicator(string remoteAddress, int remotePort)
+        public UdpCommunicator(string remoteAddress, int remotePort, int newTimeout, int newLightTimeout)
         {
             try
             {
                 ipAddress = remoteAddress;
                 port = remotePort;
+                timeout = newTimeout;
+                lightTimeout = newLightTimeout;
                 udpClient = new UdpClient();
                 remoteEndPoint = new IPEndPoint(IPAddress.Parse(remoteAddress), remotePort);
                 udpClient.Connect(remoteEndPoint);
@@ -83,7 +87,7 @@ namespace VahaAPI
         {
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
-            Task.Delay(100).ContinueWith(async (t) =>
+            Task.Delay(timeout).ContinueWith(async (t) =>
             {
                 Console.WriteLine("Reopen communication");
                 Reconnect();
@@ -95,7 +99,7 @@ namespace VahaAPI
         {
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
-            Task.Delay(1000).ContinueWith(async (t) =>
+            Task.Delay(lightTimeout).ContinueWith(async (t) =>
             {
                 Console.WriteLine("Reopen communication");
                 Reconnect();

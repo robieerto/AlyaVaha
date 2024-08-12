@@ -24,7 +24,7 @@
 		<PackageReference Include="DeviceId.Linux" Version="6.4.0" />
 		<PackageReference Include="DeviceId.Mac" Version="6.3.0" />
 		<PackageReference Include="DeviceId.Windows.Wmi" Version="6.6.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="8.0.7" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.6">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -33,6 +33,7 @@
 		<PackageReference Include="Photino.NET" Version="3.0.14" />
 		<PackageReference Include="Photino.NET.Server" Version="1.0.0" />
 		<PackageReference Include="Reinforced.Typings" Version="1.6.3" />
+		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.9" />
 		<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
 	</ItemGroup>
 

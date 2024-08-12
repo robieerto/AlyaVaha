@@ -1,3 +1,5 @@
 {
-  "Zoom": 130
+  "Zoom": 130,
+  "Timeout": 100,
+  "LightTimeout": 1000
 }

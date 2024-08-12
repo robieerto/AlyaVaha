@@ -13,7 +13,29 @@ namespace AlyaVaha.DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(LocalDB)\\AlyaDB;Database=AlyaVaha;MultipleActiveResultSets=True;User ID=sa;Password=MuL7J58B6ftSWkaESXLN");
+            optionsBuilder.UseSqlite("Data Source=C:\\sqlite\\AlyaVaha.db");
+
+            //optionsBuilder.UseSqlServer("Server=(LocalDB)\\AlyaDB;Database=AlyaVaha;MultipleActiveResultSets=True;User ID=sa;Password=MuL7J58B6ftSWkaESXLN");
+
+            //var connectionStringBuilder = new SqliteConnectionStringBuilder
+            //{
+            //    DataSource = "AlyaVahaEncrypted.db"
+            //};
+
+            //var connection = new SqliteConnection(connectionStringBuilder.ToString());
+            //connection.Open();
+
+            //// Set the encryption key
+            //var command = connection.CreateCommand();
+            //command.CommandText = "PRAGMA key = 'MuL7J58B6ftSWkaESXLN';";
+            //command.ExecuteNonQuery();
+
+            //optionsBuilder.UseSqlite(connection);
+        }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder.Properties<string>().UseCollation("NOCASE");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

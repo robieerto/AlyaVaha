@@ -34,7 +34,7 @@ const defaultFormData = {
   IdCisloMaterialu: store.actualData.IdCisloMaterialu,
   IdOdbernehoMiesta: store.actualData.IdOdbernehoMiesta,
   IdSmerovaciehoMiesta: store.actualData.IdSmerovaciehoMiesta,
-  IdCisloPracovnika: store.user.Id
+  IdCisloPracovnika: store.user?.Id
 } as VahaAPI.IVahaModel
 
 const popupRef = ref(null)

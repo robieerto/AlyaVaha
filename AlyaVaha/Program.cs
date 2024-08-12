@@ -27,10 +27,6 @@ class Program
     {
         try
         {
-            //Console.WriteLine("Applying seed...");
-            //DbSeed.Seed();
-            //Console.WriteLine("Seed applied");
-
             // Read configuration file
             var config = new ConfigurationBuilder()
                 .AddJsonFile("configuration.json", optional: false, reloadOnChange: false)
@@ -38,6 +34,13 @@ class Program
 
             var zoom = config.GetValue<int>("Zoom");
             if (zoom == 0) zoom = 100;
+
+            var timeout = config.GetValue<int>("Timeout");
+            if (timeout == 0) timeout = 100;
+
+            var lightTimeout = config.GetValue<int>("LightTimeout");
+            if (lightTimeout == 0) lightTimeout = 1000;
+
 
             //var connectionString = config.GetConnectionString("DefaultConnection");
 
@@ -54,19 +57,23 @@ class Program
                 if (initialConfigKey != null && initialConfigKey.Equals(initialKey))
                 {
                     using var context = new AlyaVahaDbContext();
-                    // Check if database exists
-                    if (!context.Database.CanConnect())
-                    {
-                        // Create the database
-                        context.Database.EnsureCreated();
-                    }
+                    // Create the database
+                    context.Database.EnsureCreated();
 
-                    var zariadeniaCount = initialConfig.GetValue<int>("DeviceCount");
-                    var zariadeniaString = $"{initialKey} {zariadeniaCount}";
                     using var sha256 = SHA256.Create();
+
+                    // Generate PC ID and hash it
+                    var pcId = GetPcId();
+                    var pcIdString = $"{initialKey} {pcId}";
+                    var pcIdHash = GetHash(sha256, pcIdString);
+
+                    // Generate hash of the devices
+                    var zariadeniaCount = initialConfig.GetValue<int>("DeviceCount");
+                    var zariadeniaString = $"{pcIdString} {zariadeniaCount}";
                     var zariadeniaHash = GetHash(sha256, zariadeniaString);
 
-                    context.Programy.Update(new AlyaVaha.Models.Program { Id = 1, PcId = GetPcId(), Zariadenia = zariadeniaHash });
+                    context.Programy.Update(new AlyaVaha.Models.Program { Id = 1, PcId = pcIdHash, Zariadenia = zariadeniaHash });
+
                     var zariadeniaCountDb = context.Zariadenia.Count();
                     if (zariadeniaCount > zariadeniaCountDb)
                     {
@@ -90,13 +97,21 @@ class Program
                 }
             }
 
+            //Console.WriteLine("Applying seed...");
+            //DbSeed.Seed();
+            //Console.WriteLine("Seed applied");
+
             using (var context = new AlyaVahaDbContext())
             {
                 var program = context.Programy.FirstOrDefault();
                 if (program != null)
                 {
+                    using var sha256 = SHA256.Create();
+
                     // Check if the PC ID is the same
-                    if (!CompareStrings(program.PcId!, GetPcId()))
+                    var pcId = GetPcId();
+                    var pcIdString = $"{initialKey} {pcId}";
+                    if (!VerifyHash(sha256, pcIdString, program.PcId!))
                     {
                         Library.WriteLog("Nesprávne PC ID");
                         return;
@@ -104,9 +119,7 @@ class Program
 
                     // Check if the hash of the devices is the same
                     var zariadeniaCount = context.Zariadenia.Count();
-                    var zariadeniaString = $"{initialKey} {zariadeniaCount}";
-                    using var sha256 = SHA256.Create();
-                    var zariadeniaHash = GetHash(sha256, zariadeniaString);
+                    var zariadeniaString = $"{pcIdString} {zariadeniaCount}";
 
                     if (!VerifyHash(sha256, zariadeniaString, program.Zariadenia!))
                     {
@@ -165,7 +178,7 @@ class Program
             window.LogVerbosity = 0;
 
             // Initialize the DataCommunicator
-            DataCommunicator.Init(window);
+            DataCommunicator.Init(window, timeout, lightTimeout);
             // Start the DataCommunicator
             Task.Run(async () => DataCommunicator.Run());
 

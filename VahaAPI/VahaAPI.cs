@@ -10,9 +10,9 @@ namespace VahaAPI
         private readonly UdpCommunicator udpCommunicator;
         public VahaModel Vaha { get; set; } = new VahaModel();
 
-        public VahaAPI(String ipAddress, int port)
+        public VahaAPI(String ipAddress, int port, int timeout, int lightTimeout)
         {
-            udpCommunicator = new UdpCommunicator(ipAddress, port);
+            udpCommunicator = new UdpCommunicator(ipAddress, port, timeout, lightTimeout);
         }
 
         public void ReadValues()

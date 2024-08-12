@@ -14,15 +14,19 @@ namespace AlyaVaha
 
         public static Uzivatel? LoggedInUzivatel { get; set; }
         public static Queue<WindowCommand> CommandQueue { get; set; } = new Queue<WindowCommand>();
+        public static int Timeout { get; set; }
+        public static int LightTimeout { get; set; }
 
-        public static void Init(PhotinoWindow window)
+        public static void Init(PhotinoWindow window, int timeout, int lightTimeout)
         {
             Window = window;
+            Timeout = timeout;
+            LightTimeout = lightTimeout;
         }
 
         public static void InitVahaCommunicator(Zariadenie zariadenie)
         {
-            vahaAPI = new VahaAPI.VahaAPI(zariadenie.IpAdresa!, zariadenie.Port ?? 0);
+            vahaAPI = new VahaAPI.VahaAPI(zariadenie.IpAdresa!, zariadenie.Port ?? 0, Timeout, LightTimeout);
         }
 
         public static void CloseVahaCommunicator()
