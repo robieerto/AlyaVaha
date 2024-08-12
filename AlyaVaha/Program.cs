@@ -1,4 +1,5 @@
-﻿using AlyaVaha;
+﻿using AlyaLibrary;
+using AlyaVaha;
 using AlyaVaha.DAL;
 using DeviceId;
 using Microsoft.Extensions.Configuration;
@@ -24,131 +25,157 @@ class Program
     [STAThread]
     static void Main(string[] args)
     {
-        //Console.WriteLine("Applying seed...");
-        //DbSeed.Seed();
-        //Console.WriteLine("Seed applied");
-
-        // Read configuration file
-        var config = new ConfigurationBuilder()
-            .AddJsonFile("configuration.json", optional: false, reloadOnChange: false)
-            .Build();
-
-        var zoom = config.GetValue<int>("Zoom");
-        if (zoom == 0) zoom = 100;
-
-        //var connectionString = config.GetConnectionString("DefaultConnection");
-
-        // Check if initial config file exists
-        if (File.Exists(initialConfigFile) && new FileInfo(initialConfigFile).Length != 0)
+        try
         {
-            // Read the file
-            var initialConfig = new ConfigurationBuilder()
-                .AddJsonFile(initialConfigFile, optional: false, reloadOnChange: false)
+            //Console.WriteLine("Applying seed...");
+            //DbSeed.Seed();
+            //Console.WriteLine("Seed applied");
+
+            // Read configuration file
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("configuration.json", optional: false, reloadOnChange: false)
                 .Build();
 
-            var initialConfigKey = initialConfig.GetValue<String>("Key");
+            var zoom = config.GetValue<int>("Zoom");
+            if (zoom == 0) zoom = 100;
 
-            if (initialConfigKey != null && initialConfigKey.Equals(initialKey))
+            //var connectionString = config.GetConnectionString("DefaultConnection");
+
+            // Check if initial config file exists
+            if (File.Exists(initialConfigFile) && new FileInfo(initialConfigFile).Length != 0)
             {
-                using var context = new AlyaVahaDbContext();
-                // Check if database exists
-                if (!context.Database.CanConnect())
+                // Read the file
+                var initialConfig = new ConfigurationBuilder()
+                    .AddJsonFile(initialConfigFile, optional: false, reloadOnChange: false)
+                    .Build();
+
+                var initialConfigKey = initialConfig.GetValue<String>("Key");
+
+                if (initialConfigKey != null && initialConfigKey.Equals(initialKey))
                 {
-                    // Create the database
-                    context.Database.EnsureCreated();
+                    using var context = new AlyaVahaDbContext();
+                    // Check if database exists
+                    if (!context.Database.CanConnect())
+                    {
+                        // Create the database
+                        context.Database.EnsureCreated();
+                    }
+
+                    var zariadeniaCount = initialConfig.GetValue<int>("DeviceCount");
+                    var zariadeniaString = $"{initialKey} {zariadeniaCount}";
+                    using var sha256 = SHA256.Create();
+                    var zariadeniaHash = GetHash(sha256, zariadeniaString);
+
+                    context.Programy.Update(new AlyaVaha.Models.Program { Id = 1, PcId = GetPcId(), Zariadenia = zariadeniaHash });
+                    var zariadeniaCountDb = context.Zariadenia.Count();
+                    if (zariadeniaCount > zariadeniaCountDb)
+                    {
+                        for (int i = zariadeniaCountDb + 1; i <= zariadeniaCount; i++)
+                        {
+                            context.Zariadenia.Add(new AlyaVaha.Models.Zariadenie
+                            {
+                                NazovZariadenia = $"Váha {i}",
+                                IpAdresa = "192.168.1.10",
+                                Port = 3396,
+                                PocetNavazeni = 0,
+                                NavazeneMnozstvo = 0,
+                                NavazenyPocetDavok = 0
+                            });
+                        }
+                    }
+                    context.SaveChanges();
+
+                    // Remove content of file
+                    File.WriteAllText(initialConfigFile, "");
                 }
-
-                var zariadeniaCount = initialConfig.GetValue<int>("DeviceCount");
-                var zariadeniaString = $"{initialKey} {zariadeniaCount}";
-                using var sha256 = SHA256.Create();
-                var zariadeniaHash = GetHash(sha256, zariadeniaString);
-
-                context.Programy.Update(new AlyaVaha.Models.Program { Id = 1, PcId = GetPcId(), Zariadenia = zariadeniaHash });
-                context.SaveChanges();
-
-                // Remove content of file
-                File.WriteAllText(initialConfigFile, "");
             }
-        }
 
-        using (var context = new AlyaVahaDbContext())
+            using (var context = new AlyaVahaDbContext())
+            {
+                var program = context.Programy.FirstOrDefault();
+                if (program != null)
+                {
+                    // Check if the PC ID is the same
+                    if (!CompareStrings(program.PcId!, GetPcId()))
+                    {
+                        Library.WriteLog("Nesprávne PC ID");
+                        return;
+                    }
+
+                    // Check if the hash of the devices is the same
+                    var zariadeniaCount = context.Zariadenia.Count();
+                    var zariadeniaString = $"{initialKey} {zariadeniaCount}";
+                    using var sha256 = SHA256.Create();
+                    var zariadeniaHash = GetHash(sha256, zariadeniaString);
+
+                    if (!VerifyHash(sha256, zariadeniaString, program.Zariadenia!))
+                    {
+                        Library.WriteLog("Nesprávny počet zariadení");
+                        return;
+                    }
+                }
+            }
+
+            PhotinoServer
+                .CreateStaticFileServer(args, out string baseUrl)
+                .RunAsync();
+
+            // The appUrl is set to the local development server when in debug mode.
+            // This helps with hot reloading and debugging.
+            string appUrl = IsDebugMode ? "http://localhost:5173" : $"{baseUrl}/index.html";
+            Console.WriteLine($"Serving Vue app at {appUrl}");
+
+            // Window title declared here for visibility
+            string windowTitle = "Alya Váha";
+
+            // Creating a new PhotinoWindow instance with the fluent API
+            var window = new PhotinoWindow()
+                .SetTitle(windowTitle)
+                // Resize to a percentage of the main monitor work area
+                //.Resize(50, 50, "%")
+                .SetUseOsDefaultSize(false)
+                .SetMaximized(true)
+                .SetSize(new Size(1000, 800))
+                .SetZoom(zoom)
+                // Center window in the middle of the screen
+                .Center()
+                // Users can resize windows by default.
+                // Let's make this one fixed instead.
+                .SetResizable(true)
+                .SetContextMenuEnabled(IsDebugMode)
+                .SetDevToolsEnabled(IsDebugMode)
+                //.RegisterCustomSchemeHandler("app", (object sender, string scheme, string url, out string contentType) =>
+                //{
+                //    contentType = "text/javascript";
+                //    return new MemoryStream(Encoding.UTF8.GetBytes(@"
+                //            (() =>{
+                //                window.setTimeout(() => {
+                //                    alert(`🎉 Dynamically inserted JavaScript.`);
+                //                }, 1000);
+                //            })();
+                //        "));
+                //})
+                // Most event handlers can be registered after the
+                // PhotinoWindow was instantiated by calling a registration 
+                // method like the following RegisterWebMessageReceivedHandler.
+                // This could be added in the PhotinoWindowOptions if preferred.
+                .RegisterWebMessageReceivedHandler(MainMessageHandler.MessageHandler)
+                .Load(appUrl); // Can be used with relative path strings or "new URI()" instance to load a website.
+
+            window.LogVerbosity = 0;
+
+            // Initialize the DataCommunicator
+            DataCommunicator.Init(window);
+            // Start the DataCommunicator
+            Task.Run(async () => DataCommunicator.Run());
+
+            window.WaitForClose(); // Starts the application event loop
+
+        }
+        catch (Exception ex)
         {
-            var program = context.Programy.FirstOrDefault();
-            if (program != null)
-            {
-                // Check if the PC ID is the same
-                if (!CompareStrings(program.PcId!, GetPcId()))
-                {
-                    return;
-                }
-
-                // Check if the hash of the devices is the same
-                var zariadeniaCount = context.Zariadenia.Count();
-                var zariadeniaString = $"{initialKey} {zariadeniaCount}";
-                using var sha256 = SHA256.Create();
-                var zariadeniaHash = GetHash(sha256, zariadeniaString);
-
-                if (!VerifyHash(sha256, zariadeniaString, program.Zariadenia!))
-                {
-                    return;
-                }
-            }
+            Library.WriteLog(ex);
         }
-
-        PhotinoServer
-            .CreateStaticFileServer(args, out string baseUrl)
-            .RunAsync();
-
-        // The appUrl is set to the local development server when in debug mode.
-        // This helps with hot reloading and debugging.
-        string appUrl = IsDebugMode ? "http://localhost:5173" : $"{baseUrl}/index.html";
-        Console.WriteLine($"Serving Vue app at {appUrl}");
-
-        // Window title declared here for visibility
-        string windowTitle = "Alya Váha";
-
-        // Creating a new PhotinoWindow instance with the fluent API
-        var window = new PhotinoWindow()
-            .SetTitle(windowTitle)
-            // Resize to a percentage of the main monitor work area
-            //.Resize(50, 50, "%")
-            .SetUseOsDefaultSize(false)
-            .SetMaximized(true)
-            .SetSize(new Size(1000, 800))
-            .SetZoom(zoom)
-            // Center window in the middle of the screen
-            .Center()
-            // Users can resize windows by default.
-            // Let's make this one fixed instead.
-            .SetResizable(true)
-            .SetContextMenuEnabled(IsDebugMode)
-            .SetDevToolsEnabled(IsDebugMode)
-            //.RegisterCustomSchemeHandler("app", (object sender, string scheme, string url, out string contentType) =>
-            //{
-            //    contentType = "text/javascript";
-            //    return new MemoryStream(Encoding.UTF8.GetBytes(@"
-            //            (() =>{
-            //                window.setTimeout(() => {
-            //                    alert(`🎉 Dynamically inserted JavaScript.`);
-            //                }, 1000);
-            //            })();
-            //        "));
-            //})
-            // Most event handlers can be registered after the
-            // PhotinoWindow was instantiated by calling a registration 
-            // method like the following RegisterWebMessageReceivedHandler.
-            // This could be added in the PhotinoWindowOptions if preferred.
-            .RegisterWebMessageReceivedHandler(MainMessageHandler.MessageHandler)
-            .Load(appUrl); // Can be used with relative path strings or "new URI()" instance to load a website.
-
-        window.LogVerbosity = 0;
-
-        // Initialize the DataCommunicator
-        DataCommunicator.Init(window);
-        // Start the DataCommunicator
-        Task.Run(async () => DataCommunicator.Run());
-
-        window.WaitForClose(); // Starts the application event loop
     }
 
     private static string GetPcId()

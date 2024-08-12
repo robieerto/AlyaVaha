@@ -1,4 +1,5 @@
-﻿using AlyaVaha.Models;
+﻿using AlyaLibrary;
+using AlyaVaha.Models;
 using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Data.ResponseModel;
 
@@ -32,6 +33,7 @@ namespace AlyaVaha.DAL.Repositories
             }
             catch (Exception)
             {
+                Library.WriteLog("Navažovanie s neznámymi evidenčnými ID - pravdepodobne bolo spustené s inou databázou");
                 navazovanie.ZariadenieId = null;
                 navazovanie.MaterialId = null;
                 navazovanie.OdkialId = null;
@@ -52,6 +54,7 @@ namespace AlyaVaha.DAL.Repositories
             }
             catch (Exception ex)
             {
+                Library.WriteLog(ex);
                 return new OperationResult(ex.Message, false);
             }
         }
@@ -72,6 +75,7 @@ namespace AlyaVaha.DAL.Repositories
             }
             catch (Exception ex)
             {
+                Library.WriteLog(ex);
                 return new OperationResult(ex.Message, false);
             }
         }

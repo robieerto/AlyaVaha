@@ -5,9 +5,11 @@ VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlyaVaha", "AlyaVaha\AlyaVaha.csproj", "{06C09DF9-B72F-480A-A801-FAE8B7873150}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VahaAPI", "VahaAPI\VahaAPI.csproj", "{EDEB2302-9E47-4893-8F6D-156C6FC14827}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VahaAPI", "VahaAPI\VahaAPI.csproj", "{EDEB2302-9E47-4893-8F6D-156C6FC14827}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VahaConsole", "VahaConsole\VahaConsole.csproj", "{0CA1DB7A-372E-4D9B-8AFC-4809679B4CF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VahaConsole", "VahaConsole\VahaConsole.csproj", "{0CA1DB7A-372E-4D9B-8AFC-4809679B4CF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlyaLibrary", "AlyaLibrary\AlyaLibrary.csproj", "{054822B3-012B-42B3-95D5-58289738A4D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{0CA1DB7A-372E-4D9B-8AFC-4809679B4CF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CA1DB7A-372E-4D9B-8AFC-4809679B4CF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CA1DB7A-372E-4D9B-8AFC-4809679B4CF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{054822B3-012B-42B3-95D5-58289738A4D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{054822B3-012B-42B3-95D5-58289738A4D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{054822B3-012B-42B3-95D5-58289738A4D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{054822B3-012B-42B3-95D5-58289738A4D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

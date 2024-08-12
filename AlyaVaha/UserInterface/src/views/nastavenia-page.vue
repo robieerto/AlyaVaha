@@ -7,16 +7,16 @@ import store from '@/store'
 import { sendCommand } from '@/commandHandler'
 
 const state = reactive({
-  deviceName: store.zariadenia?.[0]?.NazovZariadenia ?? '',
-  ipAddress: store.zariadenia?.[0]?.IpAdresa ?? '',
-  port: store.zariadenia?.[0]?.Port ?? 0,
+  deviceName: store.zariadenie?.NazovZariadenia ?? '',
+  ipAddress: store.zariadenie?.IpAdresa ?? '',
+  port: store.zariadenie?.Port ?? 0,
   isIpAddressValid: true
 })
 
 watchEffect(() => {
-  state.deviceName = store.zariadenia?.[0]?.NazovZariadenia ?? ''
-  state.ipAddress = store.zariadenia?.[0]?.IpAdresa ?? ''
-  state.port = store.zariadenia?.[0]?.Port ?? 0
+  state.deviceName = store.zariadenie?.NazovZariadenia ?? ''
+  state.ipAddress = store.zariadenie?.IpAdresa ?? ''
+  state.port = store.zariadenie?.Port ?? 0
 })
 
 const ipAddressValid = computed(() =>
@@ -30,7 +30,7 @@ async function updateSettings() {
     return
   }
   sendCommand('UpdateZariadenie', {
-    ...store.zariadenia[0],
+    ...store.zariadenie,
     NazovZariadenia: state.deviceName,
     IpAdresa: state.ipAddress,
     Port: state.port

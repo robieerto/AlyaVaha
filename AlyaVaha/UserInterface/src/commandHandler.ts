@@ -1,6 +1,6 @@
 import { notify } from '@/utils/helpers'
 
-import store from '@/store'
+import store, { resetLoggedInZariadenieData } from '@/store'
 import router from '@/router'
 import * as VahaAPI from '@/types/vahaTypes'
 import { Messages } from './messages'
@@ -26,7 +26,7 @@ function initCommandHandler() {
               const operationResult = JSON.parse(response.Value!) as AlyaVaha.IOperationResult
               if (operationResult.Success) {
                 store.user = JSON.parse(operationResult.Data!) as AlyaVaha.Models.IUzivatel
-                store.isUserAdmin = store.user.JeAdmin
+                store.isUserAdmin = store.user.JeAdmin!
                 store.isUserLoggedIn = true
                 getAllData()
               } else {
@@ -38,7 +38,7 @@ function initCommandHandler() {
             case 'GetLoggedInUser': {
               if (response.Value !== '"null"') {
                 store.user = JSON.parse(response.Value!) as AlyaVaha.Models.IUzivatel
-                store.isUserAdmin = store.user.JeAdmin
+                store.isUserAdmin = store.user.JeAdmin!
                 store.isUserLoggedIn = true
                 getAllData()
                 const params = new URL(document.location.toString()).searchParams
@@ -53,12 +53,14 @@ function initCommandHandler() {
               }
               break
             }
+            case 'Logout': {
+              break
+            }
             case 'ActualData': {
               if (!store.isUserLoggedIn) {
                 return
               }
               store.connected = true
-              store.wasConnected = true
               clearTimeout(timeoutId)
               timeoutId = setTimeout(afterTimeout, 3000)
 
@@ -100,6 +102,9 @@ function initCommandHandler() {
               store.zariadenia = (
                 JSON.parse(response.Value!) as AlyaVaha.Models.IZariadenie[]
               ).sort((a, b) => a.NazovZariadenia!.localeCompare(b.NazovZariadenia!))
+              if (!store.zariadenie) {
+                store.zariadenie = store.zariadenia?.[0]
+              }
               break
             }
             case 'GetUzivatelia': {
@@ -208,6 +213,7 @@ async function sendCommand(command: string, value: any = {}) {
 
 async function getLoggedInUser() {
   sendCommand('GetLoggedInUser')
+  sendCommand('GetZariadenia')
 }
 
 async function getAllData() {

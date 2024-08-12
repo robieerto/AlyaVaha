@@ -1,4 +1,5 @@
-﻿using AlyaVaha.Models;
+﻿using AlyaLibrary;
+using AlyaVaha.Models;
 
 namespace AlyaVaha.DAL.Repositories
 {
@@ -19,7 +20,12 @@ namespace AlyaVaha.DAL.Repositories
         public static Uzivatel? Authenticate(string login, string password)
         {
             var context = new AlyaVahaDbContext();
-            return context.Uzivatelia.FirstOrDefault(u => u.Login == login && u.Heslo == password);
+            var user = context.Uzivatelia.FirstOrDefault(u => u.Login == login);
+            if (user != null && user.Heslo == password)
+            {
+                return user;
+            }
+            return null;
         }
 
         public static OperationResult Add(Uzivatel uzivatel)
@@ -27,6 +33,10 @@ namespace AlyaVaha.DAL.Repositories
             try
             {
                 var context = new AlyaVahaDbContext();
+                if (context.Uzivatelia.Any(x => x.Login == uzivatel.Login))
+                {
+                    throw new Exception("Užívateľ s týmto menom už existuje");
+                }
                 uzivatel.DatumVytvorenia = DateTime.Now;
                 uzivatel.DatumUpravy = DateTime.Now;
                 context.Uzivatelia.Add(uzivatel);
@@ -35,6 +45,7 @@ namespace AlyaVaha.DAL.Repositories
             }
             catch (Exception ex)
             {
+                Library.WriteLog(ex);
                 return new OperationResult(ex.Message, false);
             }
         }
@@ -44,6 +55,10 @@ namespace AlyaVaha.DAL.Repositories
             try
             {
                 var context = new AlyaVahaDbContext();
+                if (context.Uzivatelia.Any(x => x.Login == uzivatel.Login && x.Id != uzivatel.Id))
+                {
+                    throw new Exception("Užívateľ s týmto menom už existuje");
+                }
                 var oldUzivatel = context.Uzivatelia.FirstOrDefault(x => x.Id == uzivatel.Id);
                 if (oldUzivatel == null)
                 {
@@ -68,6 +83,7 @@ namespace AlyaVaha.DAL.Repositories
             }
             catch (Exception ex)
             {
+                Library.WriteLog(ex);
                 return new OperationResult(ex.Message, false);
             }
         }
@@ -96,6 +112,7 @@ namespace AlyaVaha.DAL.Repositories
             }
             catch (Exception ex)
             {
+                Library.WriteLog(ex);
                 return new OperationResult(ex.Message, false);
             }
         }

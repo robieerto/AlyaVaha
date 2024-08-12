@@ -18,6 +18,19 @@
         <dx-required-rule message="Heslo je povinné" />
         <dx-label :visible="false" />
       </dx-item>
+      <dx-item
+        data-field="zariadenieId"
+        editor-type="dxSelectBox"
+        :editor-options="{
+          stylingMode: 'filled',
+          placeholder: 'Zariadenie',
+          dataSource: store.zariadenia,
+          displayExpr: 'NazovZariadenia',
+          valueExpr: 'Id'
+        }"
+      >
+        <dx-label :visible="true" text="Zariadenie" />
+      </dx-item>
       <!-- <dx-item
         data-field="rememberMe"
         editor-type="dxCheckBox"
@@ -67,6 +80,7 @@ import DxForm, {
 } from 'devextreme-vue/form'
 
 import auth from '../auth'
+import store from '@/store'
 
 import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -78,7 +92,8 @@ export default {
 
     const formData = reactive({
       email: '',
-      password: ''
+      password: '',
+      zariadenieId: store.zariadenie.Id
     })
     const loading = ref(false)
 
@@ -87,9 +102,10 @@ export default {
     }
 
     async function onSubmit() {
-      const { email, password } = formData
+      const { email, password, zariadenieId } = formData
       loading.value = true
-      const result = await auth.logIn(email, password)
+      store.zariadenie = store.zariadenia.find((z) => z.Id === zariadenieId)
+      const result = await auth.logIn(email, password, zariadenieId)
       if (!result.isOk) {
         loading.value = false
       } else {
@@ -98,6 +114,7 @@ export default {
     }
 
     return {
+      store,
       formData,
       loading,
       onCreateAccountClick,

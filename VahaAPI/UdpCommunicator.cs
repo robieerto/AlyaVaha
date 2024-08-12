@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using AlyaLibrary;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
@@ -24,7 +25,7 @@ namespace VahaAPI
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Library.WriteLog(ex);
             }
         }
 
@@ -57,6 +58,7 @@ namespace VahaAPI
             {
                 if (ex.GetType() != typeof(SocketException))
                 {
+                    Library.WriteLog(ex);
                     Console.WriteLine(ex.Message);
                 }
             }

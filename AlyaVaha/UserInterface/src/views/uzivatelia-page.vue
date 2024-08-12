@@ -8,6 +8,7 @@ import DxDataGrid, {
   DxEditing
 } from 'devextreme-vue/data-grid'
 import { DxLoadPanel } from 'devextreme-vue/load-panel'
+import { DxRequiredRule } from 'devextreme-vue/validator'
 import { reactive, watch } from 'vue'
 
 import { dateTimeFormat, filterOperations, filterStringOperations } from '@/utils/helpers'
@@ -89,7 +90,9 @@ function deleteRow(rowEvent) {
         data-field="Login"
         caption="Užívateľské meno"
         :filterOperations="filterStringOperations"
-      />
+      >
+        <DxRequiredRule message="Užívateľské meno je povinné" />
+      </DxColumn>
       <DxColumn
         data-field="DatumVytvorenia"
         caption="Dátum vytvorenia"
@@ -106,7 +109,14 @@ function deleteRow(rowEvent) {
         :allow-editing="false"
         :filterOperations="filterOperations"
       />
-      <DxColumn data-field="Heslo" caption="Heslo" :allowFiltering="false" />
+      <DxColumn
+        data-field="Heslo"
+        caption="Heslo"
+        :allowFiltering="false"
+        :customize-text="() => '••••••••'"
+      >
+        <DxRequiredRule message="Heslo je povinné" />
+      </DxColumn>
       <DxColumn data-field="JeAdmin" caption="Admin práva" data-type="boolean" />
       <DxColumn data-field="JeAktivny" caption="Viditeľný" data-type="boolean" />
       <!-- <template #poradieTemplate="{ data }">{{ calculatePoradie(data.row.rowIndex) }}</template> -->

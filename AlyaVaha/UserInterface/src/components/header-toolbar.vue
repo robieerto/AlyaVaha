@@ -7,11 +7,19 @@
         </template>
       </dx-item>
 
-      <dx-item v-if="title" location="before" css-class="header-title dx-toolbar-label">
-        <div>{{ title }}</div>
+      <dx-item location="before" css-class="header-title dx-toolbar-label">
+        <div class="alya-logo" />
       </dx-item>
 
-      <dx-item v-if="title" location="before" css-class="header-title dx-toolbar-label px-3">
+      <dx-item
+        v-if="store.zariadenie"
+        location="before"
+        css-class="header-title dx-toolbar-label px-3"
+      >
+        <div>{{ store.zariadenie?.NazovZariadenia }}:</div>
+      </dx-item>
+
+      <dx-item v-if="title" location="before" css-class="header-title dx-toolbar-label">
         <p
           :class="
             'col fw-bold status contact-status status-' + store.connected?.toString().toLowerCase()
@@ -52,7 +60,8 @@ import { ref } from 'vue'
 
 import UserPanel from './user-panel.vue'
 
-import store from '@/store'
+import store, { resetLoggedInZariadenieData } from '@/store'
+import { sendCommand } from '@/commandHandler'
 
 export default {
   props: {
@@ -84,7 +93,9 @@ export default {
     ]
 
     function onLogoutClick() {
-      auth.logOut()
+      sendCommand('Logout')
+      resetLoggedInZariadenieData()
+      store.isUserLoggedIn = false
       router.push({
         path: '/login-form',
         query: { redirect: route.path }
@@ -206,5 +217,12 @@ export default {
     display: block;
     padding: 15px 16px 14px;
   }
+}
+
+.alya-logo {
+  width: 90px;
+  height: 30px;
+  background: url('../assets/alya-logo.png') no-repeat;
+  background-size: cover;
 }
 </style>

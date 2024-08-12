@@ -7,7 +7,7 @@ export default {
     return !!store.user
   },
 
-  async logIn(email, password) {
+  async logIn(email, password, zariadenie) {
     return new Promise((resolve) => {
       try {
         store.isUserLoggedIn = null
@@ -28,7 +28,7 @@ export default {
             }
           }
         )
-        sendCommand('Login', { login: email, heslo: password })
+        sendCommand('Login', { login: email, heslo: password, id: zariadenie })
       } catch (error) {
         resolve(error)
       }

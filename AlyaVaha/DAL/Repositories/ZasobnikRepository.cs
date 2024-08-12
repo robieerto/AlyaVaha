@@ -1,4 +1,5 @@
-﻿using AlyaVaha.Models;
+﻿using AlyaLibrary;
+using AlyaVaha.Models;
 
 namespace AlyaVaha.DAL.Repositories
 {
@@ -15,6 +16,10 @@ namespace AlyaVaha.DAL.Repositories
             try
             {
                 var context = new AlyaVahaDbContext();
+                if (context.Zasobniky.Any(x => x.NazovZasobnika == zasobnik.NazovZasobnika))
+                {
+                    throw new Exception("Zásobník s týmto názvom už existuje");
+                }
                 zasobnik.DatumVytvorenia = DateTime.Now;
                 zasobnik.DatumUpravy = DateTime.Now;
                 context.Zasobniky.Add(zasobnik);
@@ -23,6 +28,7 @@ namespace AlyaVaha.DAL.Repositories
             }
             catch (Exception ex)
             {
+                Library.WriteLog(ex);
                 return new OperationResult(ex.Message, false);
             }
         }
@@ -32,6 +38,10 @@ namespace AlyaVaha.DAL.Repositories
             try
             {
                 var context = new AlyaVahaDbContext();
+                if (context.Zasobniky.Any(x => x.NazovZasobnika == zasobnik.NazovZasobnika && x.Id != zasobnik.Id))
+                {
+                    throw new Exception("Zásobník s týmto názvom už existuje");
+                }
                 zasobnik.DatumUpravy = DateTime.Now;
                 context.Zasobniky.Update(zasobnik);
                 context.SaveChanges();
@@ -39,6 +49,7 @@ namespace AlyaVaha.DAL.Repositories
             }
             catch (Exception ex)
             {
+                Library.WriteLog(ex);
                 return new OperationResult(ex.Message, false);
             }
         }
@@ -63,6 +74,7 @@ namespace AlyaVaha.DAL.Repositories
             }
             catch (Exception ex)
             {
+                Library.WriteLog(ex);
                 return new OperationResult(ex.Message, false);
             }
         }

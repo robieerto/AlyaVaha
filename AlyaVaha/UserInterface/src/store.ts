@@ -2,12 +2,11 @@ import { reactive } from 'vue'
 import * as VahaAPI from '@/types/vahaTypes'
 import { Messages } from '@/messages'
 
-const store = reactive({
+const initDataUzivatelZariadenie = {
   isUserLoggedIn: null as boolean | null,
   isUserAdmin: null as boolean | null,
-  user: null as any,
   connected: false,
-  wasConnected: false,
+  user: null as AlyaVaha.Models.IUzivatel | null,
   actualData: {} as VahaAPI.IVahaModel,
   actualInputs: {
     HornaKlapkaOtvorena: false,
@@ -32,7 +31,12 @@ const store = reactive({
     Odfuk: false,
     Blokovanie1: false
   } as VahaAPI.IProgramVahaOutput,
-  actualStateTexts: {} as Partial<Record<keyof typeof Messages, string>>,
+  actualStateTexts: {} as Partial<Record<keyof typeof Messages, string>>
+}
+
+const store = reactive({
+  ...initDataUzivatelZariadenie,
+  zariadenie: null as AlyaVaha.Models.IZariadenie | null,
   navazovania: [] as AlyaVaha.Models.INavazovanie[],
   navazovaniaData: null,
   navazovaniaDataExport: null,
@@ -55,5 +59,16 @@ const store = reactive({
   isDateTimePrehlad: false,
   isDateTimeStatistiky: false
 })
+
+export const resetLoggedInZariadenieData = () => {
+  store.isUserLoggedIn = initDataUzivatelZariadenie.isUserLoggedIn
+  store.isUserAdmin = initDataUzivatelZariadenie.isUserAdmin
+  store.user = initDataUzivatelZariadenie.user
+  store.connected = initDataUzivatelZariadenie.connected
+  store.actualData = initDataUzivatelZariadenie.actualData
+  store.actualInputs = initDataUzivatelZariadenie.actualInputs
+  store.actualOutputs = initDataUzivatelZariadenie.actualOutputs
+  store.actualStateTexts = initDataUzivatelZariadenie.actualStateTexts
+}
 
 export default store

@@ -8,6 +8,7 @@ import DxDataGrid, {
   DxEditing
 } from 'devextreme-vue/data-grid'
 import { DxLoadPanel } from 'devextreme-vue/load-panel'
+import { DxRequiredRule } from 'devextreme-vue/validator'
 import { reactive, watch } from 'vue'
 
 import { dateTimeFormat, filterOperations, filterStringOperations } from '@/utils/helpers'
@@ -89,7 +90,9 @@ function deleteRow(rowEvent) {
         data-field="NazovZasobnika"
         caption="Názov zásobníka"
         :filterOperations="filterStringOperations"
-      />
+      >
+        <DxRequiredRule />
+      </DxColumn>
       <DxColumn
         data-field="DatumVytvorenia"
         caption="Dátum vytvorenia"

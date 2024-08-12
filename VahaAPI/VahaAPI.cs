@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using AlyaLibrary;
+using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 
@@ -76,6 +77,7 @@ namespace VahaAPI
                 }
                 catch (Exception ex)
                 {
+                    Library.WriteLog(ex);
                     Console.WriteLine(ex.Message);
                 }
             }
@@ -109,6 +111,7 @@ namespace VahaAPI
                 }
                 catch (Exception ex)
                 {
+                    Library.WriteLog(ex);
                     Console.WriteLine(ex.Message);
                 }
             }

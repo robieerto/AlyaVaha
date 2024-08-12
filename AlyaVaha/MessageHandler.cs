@@ -1,4 +1,5 @@
-﻿using AlyaVaha.DAL.Repositories;
+﻿using AlyaLibrary;
+using AlyaVaha.DAL.Repositories;
 using AlyaVaha.Models;
 using DevExtreme.AspNet.Data;
 using Photino.NET;
@@ -43,7 +44,12 @@ namespace AlyaVaha
                             var uzivatel = UzivatelRepository.Authenticate(loginData.Login, loginData.Heslo);
                             if (uzivatel != null)
                             {
-                                DataCommunicator.LoggedInUzivatel = uzivatel;
+                                var zariadenie = ZariadenieRepository.GetList()?.Find(z => z.Id == loginData.Id);
+                                if (zariadenie != null)
+                                {
+                                    DataCommunicator.InitVahaCommunicator(zariadenie);
+                                    DataCommunicator.LoggedInUzivatel = uzivatel;
+                                }
                                 responseValue = new OperationResult("Prihlásenie bolo úspešné", true, JsonSerializer.Serialize(uzivatel));
                             }
                         }
@@ -51,6 +57,11 @@ namespace AlyaVaha
                     case "GetLoggedInUser":
                         responseValue = DataCommunicator.LoggedInUzivatel;
                         responseValue ??= "null";
+                        break;
+                    case "Logout":
+                        DataCommunicator.CloseVahaCommunicator();
+                        DataCommunicator.LoggedInUzivatel = null;
+                        responseValue = new OperationResult("Odhlásenie bolo úspešné", true);
                         break;
                     case "SetValues":
                         DataCommunicator.CommandQueue.Enqueue(windowCommand);
@@ -160,7 +171,7 @@ namespace AlyaVaha
                             if (zariadenie != null)
                             {
                                 responseValue = ZariadenieRepository.Update(zariadenie);
-                                DataCommunicator.InitVahaCommunicator();
+                                DataCommunicator.InitVahaCommunicator(zariadenie);
                             }
                         }
                         break;
@@ -200,7 +211,8 @@ namespace AlyaVaha
             }
             catch (Exception ex)
             {
-                responseValue = ex.Message;
+                Library.WriteLog(ex);
+                responseValue = new OperationResult(ex.Message, false);
             }
 
             try
@@ -213,7 +225,7 @@ namespace AlyaVaha
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Library.WriteLog(ex);
             }
         }
     }

@@ -19,7 +19,7 @@ export const dxMessages = {
     'dxCollectionWidget-noDataText': '\u017Diadne d\u00E1ta k zobrazeniu',
     'dxDropDownEditor-selectLabel': 'V\u00FDber',
     'validation-required': 'povinn\xe9',
-    'validation-required-formatted': '{0} je povinn\xfdch',
+    'validation-required-formatted': '{0} je povinn\xfd',
     'validation-numeric': 'Hodnota mus\u00ED by\u0165 \u010D\u00EDslo',
     'validation-numeric-formatted': '{0} mus\u00ED by\u0165 \u010D\u00EDslo',
     'validation-range': 'Hodnota je mimo rozsah',
