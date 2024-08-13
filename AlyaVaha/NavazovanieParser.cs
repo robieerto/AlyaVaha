@@ -23,8 +23,7 @@ namespace AlyaVaha
                 OdkialId = TryParseInt(parts[8]),
                 KamId = TryParseInt(parts[9]),
                 MaterialId = TryParseInt(parts[10]),
-                //UzivatelId = TryParseInt(parts[11]) // Assuming USR1 maps to UzivatelId based on the context
-                // USR2 is not directly mapped in the model provided. Adjust as necessary.
+                UzivatelId = TryParseInt(parts[11])
             };
 
             navazovanie.CasStartu = navazovanie.DatumStartu?.ToString("HH:mm");

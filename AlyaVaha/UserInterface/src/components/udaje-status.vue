@@ -51,7 +51,7 @@ import store from '@/store'
             <p class="col-6">Celkový výkon:</p>
             <p class="col-6 fw-bold">
               {{
-                store.actualData.VykonCelkovy
+                store.actualData.VykonCelkovy !== undefined
                   ? (store.actualData.VykonCelkovy / 1000).toFixed(2)
                   : ''
               }}

@@ -4,7 +4,7 @@ export const Messages = {
     PrerusenieNavazovania: 'Prerušenie navažovania',
     PokracovanieNavazovania: 'Pokračovanie navažovania',
     OkamziteUkoncenie: 'Okamžité ukončenie',
-    UkonceniePoUkonceniDavky: 'Ukončenie po ukončení práve prebiehajúcej dávky'
+    UkonceniePoUkonceniDavky: 'Ukončenie po dovážení dávky'
   },
   StavNavazovania: {
     Nedefinovane: 'Nedefinované',
@@ -14,8 +14,8 @@ export const Messages = {
   },
   StavVahy: {
     ZiadnaChyba: 'Žiadna chyba',
-    VahaPodMinimum: 'Váha je pod dovolené minimum',
-    VahaNadMaximum: 'Váha je nad dovolené maximum'
+    VahaPodMinimum: 'Hmotnosť je pod dovolené minimum',
+    VahaNadMaximum: 'Hmotnosť je nad dovolené maximum'
   },
   StavPrevodnika: {
     ZiadnaChyba: 'Žiadna chyba',
@@ -86,7 +86,7 @@ export const Messages = {
   },
   TypNavazovania: {
     Donekonecna: 'Nedefinované - donekonečna',
-    PozadovanaVaha: 'Požadovaná celková hmotnosť - váha ukončenia',
-    PozadovanyPocetDavok: 'Požadovaný počet dávok - počet dávok ukončenia'
+    PozadovanaVaha: 'Požadovaná celková hmotnosť',
+    PozadovanyPocetDavok: 'Požadovaný počet dávok'
   }
 }

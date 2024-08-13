@@ -131,7 +131,7 @@ const calculatePoradie = (rowIndex) =>
   rowIndex + state.dataGridInstance.pageIndex() * state.dataGridInstance.pageSize()
 
 function calculateTimeCellValue(rowData) {
-  return rowData.CasStartu.toString()
+  return rowData.CasStartu?.toString()
 }
 
 function calculateTimeFilterExpression(filterValue, selectedFilterOperation) {
@@ -169,7 +169,7 @@ function getExportNavazovania(dataSourceLoadOptions) {
 }
 
 async function exportToXls() {
-  if (state.dataGridInstance.totalCount() > 100000) {
+  if (state.dataGridInstance?.totalCount?.() > 100000) {
     notify('Nie je možné exportovať viac ako 100 000 záznamov', 'error')
     return
   }
