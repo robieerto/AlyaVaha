@@ -16,6 +16,8 @@ class Program
     private static readonly string initialKey = "5e8eeebe52f9a8226663bbbe8fee08aa";
     private static readonly string initialConfigFile = "initialConfiguration.json";
 
+    public static string ConnectionString = "";
+
 #if DEBUG
     public static bool IsDebugMode = true;
 #else
@@ -31,6 +33,8 @@ class Program
             var config = new ConfigurationBuilder()
                 .AddJsonFile("configuration.json", optional: false, reloadOnChange: false)
                 .Build();
+
+            ConnectionString = config.GetValue<string>("ConnectionString") ?? "";
 
             var zoom = config.GetValue<int>("Zoom");
             if (zoom == 0) zoom = 100;

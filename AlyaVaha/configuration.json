@@ -1,4 +1,5 @@
 {
+  "ConnectionString": "Data Source=C:\\sqlite\\AlyaVaha.db",
   "Zoom": 130,
   "Timeout": 100,
   "LightTimeout": 1000

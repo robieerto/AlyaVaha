@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Photino.HelloPhotino.Vue;
 
 namespace AlyaVaha.DAL
 {
@@ -13,7 +14,7 @@ namespace AlyaVaha.DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=C:\\sqlite\\AlyaVaha.db");
+            optionsBuilder.UseSqlite(Program.ConnectionString);
 
             //optionsBuilder.UseSqlServer("Server=(LocalDB)\\AlyaDB;Database=AlyaVaha;MultipleActiveResultSets=True;User ID=sa;Password=MuL7J58B6ftSWkaESXLN");
 
