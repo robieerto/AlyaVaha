@@ -163,6 +163,14 @@ namespace AlyaVaha
                             responseValue = NavazovanieRepository.Delete(id);
                         }
                         break;
+                    case "DeleteNavazovaniaByFilter":
+                        responseValue = new OperationResult("Navažovania neboli zmazané", false);
+                        if (windowCommand.Value != null)
+                        {
+                            loadOptions = JsonSerializer.Deserialize<DataSourceLoadOptionsBase>(windowCommand.Value, jsonOptions);
+                            responseValue = NavazovanieRepository.DeleteByFilter(loadOptions!);
+                        }
+                        break;
                     case "UpdateZariadenie":
                         responseValue = new OperationResult("Zariadenie nebolo upravené", false);
                         if (windowCommand.Value != null)

@@ -71,7 +71,35 @@ namespace AlyaVaha.DAL.Repositories
                 }
                 context.Navazovania.Remove(navazovanie);
                 context.SaveChanges();
-                return new OperationResult("Navažovanie bolo vymazané", true);
+                return new OperationResult("Navažovanie bolo zmazané", true);
+            }
+            catch (Exception ex)
+            {
+                Library.WriteLog(ex);
+                return new OperationResult(ex.Message, false);
+            }
+        }
+
+        public static OperationResult DeleteByFilter(DataSourceLoadOptionsBase loadOptions)
+        {
+            try
+            {
+                var context = new AlyaVahaDbContext();
+                var query = context.Navazovania.AsQueryable();
+
+                // Apply the filter to get the filtered data
+                var loadResult = DataSourceLoader.Load(query, loadOptions);
+                var itemsToDelete = loadResult.data.Cast<Navazovanie>().ToList();
+
+                if (itemsToDelete.Count == 0)
+                {
+                    return new OperationResult("Nie sú vybraté žiadne navažovnia", false);
+                }
+
+                context.Navazovania.RemoveRange(itemsToDelete);
+                context.SaveChanges();
+
+                return new OperationResult($"{itemsToDelete.Count} navažovaní bolo zmazaných", true);
             }
             catch (Exception ex)
             {

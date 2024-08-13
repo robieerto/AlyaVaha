@@ -57,7 +57,8 @@ const store = reactive({
   isStartNavazovanieModalOpened: false,
   isNavazovanieInitSuccess: false,
   isDateTimePrehlad: false,
-  isDateTimeStatistiky: false
+  isDateTimeStatistiky: false,
+  isNavazovaniaDeleting: false
 })
 
 export const resetLoggedInZariadenieData = () => {

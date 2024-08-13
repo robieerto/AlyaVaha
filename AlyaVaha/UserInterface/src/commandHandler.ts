@@ -187,6 +187,8 @@ function initCommandHandler() {
                 response.Command == 'DeleteUzivatel'
               ) {
                 sendCommand('GetUzivatelia')
+              } else if (response.Command == 'DeleteNavazovaniaByFilter') {
+                store.isNavazovaniaDeleting = false
               }
               break
             }

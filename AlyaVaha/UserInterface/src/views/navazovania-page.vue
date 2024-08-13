@@ -8,13 +8,15 @@ import DxDataGrid, {
   DxEditing,
   DxLookup,
   DxExport,
-  DxSummary,
-  DxTotalItem,
+  // DxSummary,
+  // DxTotalItem,
   DxHeaderFilter,
   DxSorting
 } from 'devextreme-vue/data-grid'
+import { DxPopup } from 'devextreme-vue'
 import DxButton from 'devextreme-vue/button'
 import { DxCheckBox } from 'devextreme-vue/check-box'
+import { DxLoadPanel } from 'devextreme-vue/load-panel'
 import CustomStore from 'devextreme/data/custom_store'
 import { reactive, watch } from 'vue'
 import { exportDataGrid } from 'devextreme/excel_exporter'
@@ -27,6 +29,7 @@ import { sendCommand } from '@/commandHandler'
 
 const state = reactive({
   dataGridInstance: null,
+  confirmDialogVisible: false,
   dataSource: new CustomStore({
     key: 'Id',
     load: function (loadOptions) {
@@ -111,6 +114,15 @@ watch(
   }
 )
 
+watch(
+  () => store.isNavazovaniaDeleting,
+  () => {
+    if (!store.isNavazovaniaDeleting) {
+      state.dataGridInstance.refresh()
+    }
+  }
+)
+
 function onDataGridInitialized(e) {
   state.dataGridInstance = e.component
 }
@@ -181,10 +193,28 @@ async function exportToXls() {
     })
   })
 }
+
+async function deleteByFilter() {
+  store.isNavazovaniaDeleting = true
+  const dataSourceLoadOptions = {}
+  dataSourceLoadOptions.Filter = state.dataGridInstance.getCombinedFilter()
+  dataSourceLoadOptions.Skip = 0
+  dataSourceLoadOptions.Take = 0
+  sendCommand('DeleteNavazovaniaByFilter', dataSourceLoadOptions)
+}
 </script>
 
 <template>
-  <div>
+  <div id="navazovania-page">
+    <DxLoadPanel
+      :position="{ of: '#navazovania-page' }"
+      v-model:visible="store.isNavazovaniaDeleting"
+      :show-indicator="true"
+      :show-pane="true"
+      :shading="true"
+      :hide-on-outside-click="false"
+      shading-color="rgba(0,0,0,0.4)"
+    />
     <div class="d-flex justify-content-between">
       <div class="d-flex justify-content-start">
         <h2 class="content-block">Prehľad navažovaní</h2>
@@ -205,10 +235,19 @@ async function exportToXls() {
           v-model:value="store.isDateTimePrehlad"
         />
       </div>
-      <div>
+      <div class="d-flex justify-content-start">
+        <button
+          v-if="store.isUserAdmin"
+          type="button "
+          class="btn btn-danger h-50 m-3 mr-0"
+          @click="() => (state.confirmDialogVisible = true)"
+          :disabled="store.isNavazovaniaDeleting"
+        >
+          Vymazať vyfiltrované
+        </button>
         <button
           type="button "
-          class="btn btn-primary h-50 m-3 mr-0"
+          class="btn btn-primary h-50 m-3 ml-0 mr-0"
           @click="exportToXls"
           :disabled="store.navazovaniaLoading"
         >
@@ -338,4 +377,30 @@ async function exportToXls() {
       <template #poradieTemplate="{ data }">{{ calculatePoradie(data.row.rowIndex) }}</template>
     </DxDataGrid>
   </div>
+  <DxPopup
+    :visible="store.isUserAdmin && state.confirmDialogVisible"
+    title="Potvrdenie zmazania"
+    :width="340"
+    :height="290"
+    :drag-enabled="false"
+    :close-on-outside-click="true"
+    :showTitle="true"
+    :showCloseButton="true"
+    :onHidden="() => (state.confirmDialogVisible = false)"
+  >
+    <div class="my-2 fw-bold">Počet záznamov: {{ state.dataGridInstance?.totalCount?.() }}</div>
+    <div class="my-2">Naozaj si prajete vymazať vyfiltrované navažovania?</div>
+    <div class="my-2">Uistite sa, že dáta máte prípadne zálohované.</div>
+    <div class="my-2">Pri veľkom počte záznamov môže mazanie trvať aj niekoľko minút.</div>
+
+    <!-- Action Buttons -->
+    <div class="row justify-content-between mt-3">
+      <div class="col-auto">
+        <DxButton text="Zrušiť" @click="() => (state.confirmDialogVisible = false)" />
+      </div>
+      <div class="col-auto">
+        <DxButton text="Zmazať" type="danger" @click="deleteByFilter" />
+      </div>
+    </div>
+  </DxPopup>
 </template>
