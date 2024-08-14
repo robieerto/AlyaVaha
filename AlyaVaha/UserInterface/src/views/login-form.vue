@@ -82,7 +82,7 @@ import DxForm, {
 import auth from '../auth'
 import store from '@/store'
 
-import { reactive, ref } from 'vue'
+import { reactive, ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 export default {
@@ -93,9 +93,13 @@ export default {
     const formData = reactive({
       email: '',
       password: '',
-      zariadenieId: store.zariadenie.Id
+      zariadenieId: store.zariadenie?.Id
     })
     const loading = ref(false)
+
+    watchEffect(() => {
+      formData.zariadenieId = store.zariadenie?.Id
+    })
 
     function onCreateAccountClick() {
       router.push('/create-account')
@@ -104,11 +108,11 @@ export default {
     async function onSubmit() {
       const { email, password, zariadenieId } = formData
       loading.value = true
-      store.zariadenie = store.zariadenia.find((z) => z.Id === zariadenieId)
       const result = await auth.logIn(email, password, zariadenieId)
       if (!result.isOk) {
         loading.value = false
       } else {
+        store.zariadenie = store.zariadenia.find((z) => z.Id === zariadenieId)
         router.push(route.query.redirect || '/')
       }
     }

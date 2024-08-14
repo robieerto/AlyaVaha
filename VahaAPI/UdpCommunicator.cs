@@ -62,7 +62,7 @@ namespace VahaAPI
             {
                 if (ex.GetType() != typeof(SocketException))
                 {
-                    Library.WriteLog(ex);
+                    //Library.WriteLog(ex);
                     Console.WriteLine(ex.Message);
                 }
             }

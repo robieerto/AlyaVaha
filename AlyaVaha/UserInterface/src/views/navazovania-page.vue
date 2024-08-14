@@ -110,7 +110,8 @@ const state = reactive({
 watch(
   () => store.isDateTimePrehlad,
   () => {
-    state.dataGridInstance.repaint()
+    state.dataGridInstance.clearFilter()
+    // state.dataGridInstance.repaint()
   }
 )
 

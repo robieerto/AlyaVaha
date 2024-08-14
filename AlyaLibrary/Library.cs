@@ -36,5 +36,22 @@
             {
             }
         }
+
+        public static void WriteClientLog(string message)
+        {
+            try
+            {
+                using var sw = new StreamWriter("error.log", true);
+                sw.WriteLine(
+                    "=>{0} Client: {1}{2}",
+                    DateTime.Now,
+                    message,
+                    Environment.NewLine
+                );
+            }
+            catch
+            {
+            }
+        }
     }
 }

@@ -1,3 +1,4 @@
 export default {
-  title: 'Alya Váha'
+  title: 'Alya Váha',
+  version: '1.0'
 }

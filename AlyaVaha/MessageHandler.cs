@@ -58,6 +58,10 @@ namespace AlyaVaha
                         responseValue = DataCommunicator.LoggedInUzivatel;
                         responseValue ??= "null";
                         break;
+                    case "GetSelectedZariadenie":
+                        responseValue = DataCommunicator.SelectedZariadenie ?? ZariadenieRepository.GetList().FirstOrDefault();
+                        responseValue ??= "null";
+                        break;
                     case "Logout":
                         DataCommunicator.CloseVahaCommunicator();
                         DataCommunicator.LoggedInUzivatel = null;
@@ -211,6 +215,12 @@ namespace AlyaVaha
                         {
                             int id = JsonSerializer.Deserialize<int>(windowCommand.Value);
                             responseValue = UzivatelRepository.Delete(id);
+                        }
+                        break;
+                    case "LogError":
+                        if (windowCommand.Value != null)
+                        {
+                            Library.WriteClientLog(windowCommand.Value);
                         }
                         break;
                     default:

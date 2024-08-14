@@ -1,6 +1,6 @@
 import { notify } from '@/utils/helpers'
 
-import store, { resetLoggedInZariadenieData } from '@/store'
+import store from '@/store'
 import router from '@/router'
 import * as VahaAPI from '@/types/vahaTypes'
 import { Messages } from './messages'
@@ -56,6 +56,12 @@ function initCommandHandler() {
             case 'Logout': {
               break
             }
+            case 'GetSelectedZariadenie': {
+              if (response.Value !== '"null"') {
+                store.zariadenie = JSON.parse(response.Value!) as AlyaVaha.Models.IZariadenie
+              }
+              break
+            }
             case 'ActualData': {
               if (!store.isUserLoggedIn) {
                 return
@@ -102,9 +108,6 @@ function initCommandHandler() {
               store.zariadenia = (
                 JSON.parse(response.Value!) as AlyaVaha.Models.IZariadenie[]
               ).sort((a, b) => a.NazovZariadenia!.localeCompare(b.NazovZariadenia!))
-              if (!store.zariadenie) {
-                store.zariadenie = store.zariadenia?.[0]
-              }
               break
             }
             case 'GetUzivatelia': {
@@ -213,9 +216,21 @@ async function sendCommand(command: string, value: any = {}) {
   }
 }
 
-async function getLoggedInUser() {
+async function sendCommandString(command: string, value: string) {
+  const message = { Command: command } as AlyaVaha.IWindowCommand
+  message.Value = value
+  console.log(message)
+  try {
+    ;(window.external as any).sendMessage(JSON.stringify(message))
+  } catch (e) {
+    /* empty */
+  }
+}
+
+async function getLoginData() {
   sendCommand('GetLoggedInUser')
   sendCommand('GetZariadenia')
+  sendCommand('GetSelectedZariadenie')
 }
 
 async function getAllData() {
@@ -386,4 +401,11 @@ const getStavRiadeniaNavazovania = () =>
     ] as keyof typeof Messages.StavRiadeniaNavazovania
   ]
 
-export { initCommandHandler, sendCommand, getAllData, getLoggedInUser, changeDigitalOutput }
+export {
+  initCommandHandler,
+  sendCommand,
+  sendCommandString,
+  getAllData,
+  getLoginData,
+  changeDigitalOutput
+}

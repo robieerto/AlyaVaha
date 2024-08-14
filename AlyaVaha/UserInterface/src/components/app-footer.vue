@@ -1,8 +1,6 @@
 <template>
   <div class="content-block">
-    <footer class="footer">
-      {{ this.$appInfo.title }}
-    </footer>
+    <footer class="footer">{{ this.$appInfo.title }} v{{ this.$appInfo.version }}</footer>
   </div>
 </template>
 

@@ -1,10 +1,12 @@
 <script setup>
 import 'devextreme/data/odata/store'
-import { reactive, watchEffect, computed } from 'vue'
+import { reactive, watch, computed } from 'vue'
 import { DxNumberBox, DxTextBox, DxButton } from 'devextreme-vue'
 
 import store from '@/store'
 import { sendCommand } from '@/commandHandler'
+
+sendCommand('GetZariadenia')
 
 const state = reactive({
   deviceName: store.zariadenie?.NazovZariadenia ?? '',
@@ -13,11 +15,15 @@ const state = reactive({
   isIpAddressValid: true
 })
 
-watchEffect(() => {
-  state.deviceName = store.zariadenie?.NazovZariadenia ?? ''
-  state.ipAddress = store.zariadenie?.IpAdresa ?? ''
-  state.port = store.zariadenie?.Port ?? 0
-})
+watch(
+  () => store.zariadenia,
+  () => {
+    store.zariadenie = store.zariadenia.find((z) => z.Id === store.zariadenie?.Id)
+    state.deviceName = store.zariadenie?.NazovZariadenia ?? ''
+    state.ipAddress = store.zariadenie?.IpAdresa ?? ''
+    state.port = store.zariadenie?.Port ?? 0
+  }
+)
 
 const ipAddressValid = computed(() =>
   /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/.test(
@@ -36,8 +42,6 @@ async function updateSettings() {
     Port: state.port
   })
 }
-
-sendCommand('GetZariadenia')
 </script>
 
 <template>
@@ -54,7 +58,7 @@ sendCommand('GetZariadenia')
           </div>
         </div>
         <div class="col-4 ml-2">
-          <DxTextBox v-model="state.deviceName" :maxLength="32" />
+          <DxTextBox v-model="state.deviceName" :maxLength="xx" />
         </div>
       </div>
 

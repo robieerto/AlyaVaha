@@ -13,6 +13,7 @@ namespace AlyaVaha
         private static PhotinoWindow? Window { get; set; }
 
         public static Uzivatel? LoggedInUzivatel { get; set; }
+        public static Zariadenie? SelectedZariadenie { get; set; }
         public static Queue<WindowCommand> CommandQueue { get; set; } = new Queue<WindowCommand>();
         public static int Timeout { get; set; }
         public static int LightTimeout { get; set; }
@@ -27,6 +28,7 @@ namespace AlyaVaha
         public static void InitVahaCommunicator(Zariadenie zariadenie)
         {
             vahaAPI = new VahaAPI.VahaAPI(zariadenie.IpAdresa!, zariadenie.Port ?? 0, Timeout, LightTimeout);
+            SelectedZariadenie = zariadenie;
         }
 
         public static void CloseVahaCommunicator()
