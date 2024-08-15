@@ -52,7 +52,7 @@ import store from '@/store'
             <p class="col-6 fw-bold">
               {{
                 store.actualData.VykonCelkovy !== undefined
-                  ? (store.actualData.VykonCelkovy / 1000).toFixed(2)
+                  ? Number(Number(store.actualData.VykonCelkovy / 1000).toFixed(2))
                   : ''
               }}
             </p>
