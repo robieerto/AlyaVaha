@@ -99,6 +99,6 @@ begin
   if CurPageID = wpFinished then
   begin
     NumericValue := NumericEdit.Text;
-    SaveStringToFile(ExpandConstant('{app}\initialConfiguration.json'), NumericValue, True);
+    SaveStringToFile(ExpandConstant('{app}\.initConfig'), NumericValue, True);
   end;
 end;
