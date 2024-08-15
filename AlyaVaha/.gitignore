@@ -30,8 +30,8 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
-#Resources/wwwroot
-#Resources/index.html
+Resources/wwwroot
+Resources/index.html
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
