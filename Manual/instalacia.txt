@@ -1,0 +1,34 @@
+1. Spustiť AlyaVahaInstaller.exe
+2. Vybrať počet zariadení (váh), pre ktoré sa vytvorí databáza
+3. Odklikať inštaláciu - automaticky sa vytvorí ikonka na ploche a program sa automaticky spustí
+/4. Ak by ste náhodou vybrali, že sa program automaticky nespustí, je potrebné ho prvýkrát spustiť kliknutím na neho pravým tlačidlom a vybrať "Spustiť ako správca"
+
+--------------------------------------------------------------------------------
+
+Predvolene je nainštalovaný v C:\Program Files (x86)\AlyaVaha (ak ste počas inštalácie nevybrali inú cestu).
+Pri prvom spustení programu sa inicializuje databáza, tá sa nachádza v C:\sqlite.
+Prvým spustením sa program naviaže na daný PC. Keď sa aj s databázou prekopíruje na iný PC, nebude fungovať.
+Inštalačka by sa ale nemala s nikým zdieľať.
+
+--------------------------------------------------------------------------------
+
+V zložke programu, kde je nainštalovaný, sa vytvára súbor error.log (koncovku nemusí byť vidno), kde sa logujú všetky chyby.
+Najnovšie sú na spodku súboru.
+
+--------------------------------------------------------------------------------
+
+V zložke programu je konfiguračný súbor configuration.json. Dá sa meniť len s administrátorským právom na PC (napr. si nájdeme v Ponuke Štart Poznámkový blok / Notepad, klikneme naňho pravým tlačidlom "Spustiť ako správca" a v ňom potom vyberieme cestu ku konfiguráku).
+
+Súbor môže vyzerať takto:
+{
+  "ConnectionString": "Data Source=C:\\sqlite\\AlyaVaha.db",
+  "Zoom": 130,
+  "Timeout": 100,
+  "LightTimeout": 1000
+}
+
+ConnectionString sa používa na pripojenie k databáze - obsahuje jej cestu. Dá sa zmeniť, ak chceme zmeniť databázu.
+
+Zoom nastavuje rozlíšenie programu - je to údaj v percentách. Môže sa stať, že na veľkom monitore budú texty malé, vtedy môžeme zoom dať väčší. Prípadne na malom monitore ho nastavíme menší, aby sa tam všetko zmestilo.
+
+Timeouty sú v milisekundách a sú 2 - prvý je na väčšinu komunikácie, druhý "Light" sa používa na riadiace príkazy, pri ktorých niekedy váha dlhšie odpovedá. Ak by sa stávalo, že váha v programe vypadáva (vidíme ju často že je Nepripojená), skúste ich nastaviť väčšie.
