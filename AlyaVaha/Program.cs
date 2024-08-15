@@ -14,7 +14,7 @@ namespace Photino.HelloPhotino.Vue;
 class Program
 {
     private static readonly string initialKey = "5e8eeebe52f9a8226663bbbe8fee08aa";
-    private static readonly string initialConfigFile = "initialConfiguration.json";
+    private static readonly string initialConfigFile = ".initConfig";
 
     public static string ConnectionString = "";
 
@@ -51,15 +51,29 @@ class Program
             // Check if initial config file exists
             if (File.Exists(initialConfigFile) && new FileInfo(initialConfigFile).Length != 0)
             {
-                // Read the file
-                var initialConfig = new ConfigurationBuilder()
-                    .AddJsonFile(initialConfigFile, optional: false, reloadOnChange: false)
-                    .Build();
-
-                var initialConfigKey = initialConfig.GetValue<String>("Key");
+                // Read the text file
+                var initialConfigLines = File.ReadAllLines(initialConfigFile);
+                var initialConfigKey = initialConfigLines[0];
+                var zariadeniaCount = 1;
+                try
+                {
+                    zariadeniaCount = int.Parse(initialConfigLines[^1]);
+                }
+                catch (Exception)
+                {
+                }
 
                 if (initialConfigKey != null && initialConfigKey.Equals(initialKey))
                 {
+                    // Ensure the folder from connection string is created
+                    var folder = Path.GetDirectoryName(ConnectionString);
+                    // Delete everything before '='
+                    folder = folder?.Substring(folder.IndexOf('=') + 1);
+                    if (folder?.Length > 0 && !Directory.Exists(folder))
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
+
                     using var context = new AlyaVahaDbContext();
                     // Create the database
                     context.Database.EnsureCreated();
@@ -72,7 +86,6 @@ class Program
                     var pcIdHash = GetHash(sha256, pcIdString);
 
                     // Generate hash of the devices
-                    var zariadeniaCount = initialConfig.GetValue<int>("DeviceCount");
                     var zariadeniaString = $"{pcIdString} {zariadeniaCount}";
                     var zariadeniaHash = GetHash(sha256, zariadeniaString);
 

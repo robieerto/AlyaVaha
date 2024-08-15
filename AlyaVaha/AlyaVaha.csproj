@@ -38,15 +38,15 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <None Include="initialConfiguration.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
 	<None Include="configuration.json">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".initConfig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <PropertyGroup>
@@ -92,7 +92,7 @@
 
       <RemoveDir Directories="Resources\wwwroot\assets\" />
 
-      <Delete Files="Resources\wwwroot\index.html"/>
+      <Delete Files="Resources\wwwroot\index.html" />
 
       <RemoveDir Directories="$(TargetDir)\$(WwwRoot)" />
 
