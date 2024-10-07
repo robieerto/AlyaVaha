@@ -51,6 +51,11 @@ var
   I: Integer;
 begin
   Result := True;
+  if (Length(S) = 0) then
+    begin
+      Result := False;
+      Exit;
+    end;
   for I := 1 to Length(S) do
   begin
     if (S[I] < '0') or (S[I] > '9') then

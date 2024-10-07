@@ -71,6 +71,41 @@ function initCommandHandler() {
               timeoutId = setTimeout(afterTimeout, 3000)
 
               store.actualData = JSON.parse(response.Value!) as VahaAPI.IVahaModel
+              // Test data
+              //store.actualData = {
+              //  VahaNavazovania: 100.0,
+              //  BruttoVaha: 100.0,
+              //  CelkovaVaha: 100.0,
+              //  PocetVyrobenychCyklovVazenia: 1,
+              //  PoslednaDokoncenaCelkovaVaha: 0,
+              //  PoslednyDokoncenyPocetDavok: 0,
+              //  PozadovanaVahaDavky: 200,
+              //  CasCykluDavky: 10,
+              //  PozadovanaCelkovaVaha: 500,
+              //  PozadovanyPocetDavok: 0,
+              //  PocetDavokSirena: 0,
+              //  VahaSirena: 0,
+              //  StavNavazovania: VahaAPI.StavNavazovania.NavazovanieUkoncene,
+              //  ErrorStavVahy: VahaAPI.StavVahy.ZiadnaChyba,
+              //  ErrorStavPrevodnikaVahy: VahaAPI.StavPrevodnika.ZiadnaChyba,
+              //  VykonCelkovy: 0,
+              //  VykonAktualny: 0,
+              //  StavSireny: VahaAPI.StavSireny.SirenaVypnuta,
+              //  StavVibratora: VahaAPI.StavVibratora.VibratorVypnuty,
+              //  CasDoKoncaDavky: 0,
+              //  TabulkaUdalosti: '',
+              //  StavHornejKlapky: VahaAPI.StavKlapky.KlapkaOtvorena,
+              //  StavDolnejKlapky: VahaAPI.StavKlapky.KlapkaZatvorena,
+              //  DigitalneVstupy: '00000000',
+              //  DigitalneVystupy: '',
+              //  VerziaSoftware: '1.0.0',
+              //  StavRiadeniaNavazovania: VahaAPI.StavRiadeniaNavazovania.NavazujeSa,
+              //  TabulkaVazeni: '',
+              //  IdCisloMaterialu: 0,
+              //  IdOdbernehoMiesta: 0,
+              //  IdSmerovaciehoMiesta: 0,
+              //  IdCisloPracovnika: 2
+              //}
               setActualInputs()
               setActualOutputs()
               setActualStateTexts()
