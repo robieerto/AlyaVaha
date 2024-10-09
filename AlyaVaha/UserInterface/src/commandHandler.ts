@@ -139,6 +139,15 @@ function initCommandHandler() {
               }
               break
             }
+            case 'ResetTabulky': {
+              const responseValue = JSON.parse(response.Value!) as boolean
+              if (!responseValue) {
+                notify('Reset tabuliek sa nepodaril', 'error')
+              } else {
+                notify('Tabuľky boli úspešne zresetované', 'success')
+              }
+              break
+            }
             case 'GetZariadenia': {
               store.zariadenia = (
                 JSON.parse(response.Value!) as AlyaVaha.Models.IZariadenie[]

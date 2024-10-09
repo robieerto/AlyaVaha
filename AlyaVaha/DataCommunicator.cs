@@ -108,6 +108,9 @@ namespace AlyaVaha
                                     case "SetZeroing":
                                         responseValue = vahaAPI?.SetZeroing();
                                         break;
+                                    case "ResetTabulky":
+                                        responseValue = vahaAPI?.ResetTabulky();
+                                        break;
                                     default:
                                         break;
                                 }
@@ -134,7 +137,7 @@ namespace AlyaVaha
                                     var vazenie = NavazovanieParser.Parse(vahaData.TabulkaVazeni);
                                     var externalId = vazenie.Id;
                                     vazenie.Id = 0;
-                                    vazenie.ZariadenieId = 1;
+                                    vazenie.ZariadenieId = SelectedZariadenie?.Id;
                                     NavazovanieRepository.Add(vazenie);
                                     ZariadenieRepository.UpdateStatistiky(1, vazenie.NavazeneMnozstvo, vazenie.NavazenyPocetDavok);
                                     vahaAPI?.SetTabulkaVazeniRemove(externalId);

@@ -68,12 +68,9 @@ namespace AlyaVaha
                         responseValue = new OperationResult("Odhlásenie bolo úspešné", true);
                         break;
                     case "SetValues":
-                        DataCommunicator.CommandQueue.Enqueue(windowCommand);
-                        break;
                     case "SetControlValues":
-                        DataCommunicator.CommandQueue.Enqueue(windowCommand);
-                        break;
                     case "SetZeroing":
+                    case "ResetTabulky":
                         DataCommunicator.CommandQueue.Enqueue(windowCommand);
                         break;
                     case "GetNavazovania":

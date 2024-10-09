@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { DxButton } from 'devextreme-vue'
+
 import store from '@/store'
+import { sendCommand } from '@/commandHandler'
 </script>
 
 <template>
@@ -17,5 +20,11 @@ import store from '@/store'
         </div>
       </div>
     </div>
+    <DxButton
+      class="col-auto ml-0 mt-3"
+      @click="() => sendCommand('ResetTabulky', {})"
+      text="Reset tabuliek zariadenia"
+      type="danger"
+    />
   </section>
 </template>

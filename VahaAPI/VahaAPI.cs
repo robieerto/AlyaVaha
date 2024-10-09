@@ -136,6 +136,47 @@ namespace VahaAPI
             return receivedValue == "OK";
         }
 
+        public bool ResetTabulky()
+        {
+            bool isControl = true;
+            string output = udpCommunicator.SendAndReceive("!NN=-1", isControl);
+            string[] delimitted = output.Split('=');
+            string receivedValue = delimitted[1].Replace(" ", "");
+            if (receivedValue == "OK")
+            {
+                output = udpCommunicator.SendAndReceive("!LG=-1", isControl);
+                delimitted = output.Split('=');
+                receivedValue = delimitted[1].Replace(" ", "");
+                if (receivedValue == "OK")
+                {
+                    var responseValue = SetValues(new VahaModel
+                    {
+                        IdCisloMaterialu = 0,
+                        IdOdbernehoMiesta = 0,
+                        IdSmerovaciehoMiesta = 0,
+                        IdCisloPracovnika = 0
+                    });
+
+                    if (responseValue.Count == 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public bool SetActualDateAndTime()
         {
             try
