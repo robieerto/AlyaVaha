@@ -1,7 +1,7 @@
 1. Spustiť AlyaVahaInstaller.exe
 2. Vybrať počet zariadení (váh), pre ktoré sa vytvorí databáza
 3. Odklikať inštaláciu - automaticky sa vytvorí ikonka na ploche a program sa automaticky spustí
-/4. Ak by ste náhodou vybrali, že sa program automaticky nespustí, je potrebné ho prvýkrát spustiť kliknutím na neho pravým tlačidlom a vybrať "Spustiť ako správca"
+/4. Ak by ste náhodou vybrali, že sa program automaticky nespustí alebo by sa po inštalácii reštartol PC, je potrebné ho prvýkrát spustiť kliknutím na neho pravým tlačidlom a vybrať "Spustiť ako správca"
 
 --------------------------------------------------------------------------------
 

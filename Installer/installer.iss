@@ -19,6 +19,7 @@ Name: "C:\sqlite"
 Source: "C:\Users\rober\source\repos\AlyaVaha\AlyaVaha\bin\Publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 Source: "D:\Programs\.net\windowsdesktop-runtime-8.0.7-win-x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 Source: "D:\Programs\.net\aspnetcore-runtime-8.0.7-win-x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+Source: "D:\Programs\.net\MicrosoftEdgeWebView2RuntimeInstallerX64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 ; Define the icons (shortcuts)
 [Icons]
@@ -33,6 +34,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Run]
 Filename: "{tmp}\windowsdesktop-runtime-8.0.7-win-x64.exe"; Parameters: "/install /quiet /norestart"; Flags: waituntilterminated
 Filename: "{tmp}\aspnetcore-runtime-8.0.7-win-x64.exe"; Parameters: "/install /quiet /norestart"; Flags: waituntilterminated
+Filename: "{tmp}\MicrosoftEdgeWebView2RuntimeInstallerX64.exe"; Parameters: "/silent /install"; Flags: waituntilterminated
 Filename: "{app}\AlyaVaha.exe"; Description: "{cm:LaunchProgram,AlyaVaha}"; Flags: runascurrentuser nowait postinstall; Check: "ShouldLaunchMyApp"
 
 ; Define the uninstall delete section to remove the installed folder
