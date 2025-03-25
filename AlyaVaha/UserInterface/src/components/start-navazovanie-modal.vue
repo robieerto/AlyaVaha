@@ -287,7 +287,7 @@ store.isNavazovanieInitSuccess = false
 
           <div class="row my-1">
             <div class="col-auto mt-4">
-              <DxCheckBox v-model="state.enableSirena" text="Spustenie sirény po dosiahnutí:" />
+              <DxCheckBox v-model="state.enableSirena" text="Spustiť sirénu po dosiahnutí:" />
             </div>
             <div class="col">
               <DxRadioGroup

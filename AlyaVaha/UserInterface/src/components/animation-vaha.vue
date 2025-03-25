@@ -16,6 +16,22 @@ watchEffect(() => {
   state.stavDolnejKlapky = store.actualData.StavDolnejKlapky
 })
 
+// animacia naplnovania vahy
+const floodFillOutput = computed(() => {
+  const bruttoVaha = store.actualData.BruttoVaha
+  const vahaDavky = store.actualData.PozadovanaVahaDavky
+  if (!vahaDavky || !bruttoVaha || bruttoVaha === -10000) return null
+  let ratio = ((bruttoVaha / vahaDavky) * 100) / 100
+  if (ratio < 0.01) return null
+  if (ratio > 1) ratio = 1
+  const height = Number((ratio * 68).toFixed(0))
+  const y = 80 - height
+  return {
+    height: `${height}%`,
+    y: `${y}%`
+  }
+})
+
 // horna klapka
 const isHornaKlapkaOtvorena = computed(
   () => state.stavHornejKlapky === VahaAPI.StavKlapky.KlapkaOtvorena
@@ -119,7 +135,8 @@ const classHornaKlapka = computed(() => ({
 const classHornaKlapkaText = computed(() => [
   (isHornaKlapkaOtvorena.value || isHornaKlapkaSaOtvara.value) && 'text-success',
   (isHornaKlapkaZatvorena.value || isHornaKlapkaSaZatvara.value) && 'text-danger',
-  isHornaKlapkaVPoruche.value && 'text-danger'
+  isHornaKlapkaVPoruche.value && 'text-danger',
+  (isKlapkaSaOtvaraNaStred.value || IsKlapkaNaStred.value) && 'text-purple'
 ])
 
 const classDolnaKlapka = computed(() => ({
@@ -207,6 +224,32 @@ const setVibratorControl = () => {
     </div>
     <div class="vaha-container">
       <div class="vaha-image" />
+
+      <div v-if="floodFillOutput" class="vaha-overlay" style="filter: url(#flood-filter)"></div>
+      <!-- Define the SVG filter -->
+      <svg>
+        <!-- <filter id="flood-filter" x="0" y="50%" width="100%" height="80%">
+          <feFlood flood-color="yellow" flood-opacity="1" />
+          <feOffset dy="0" in="flood" result="offsetFlood" />
+          <feComposite in="offsetFlood" in2="SourceGraphic" operator="in" />
+          <feComposite operator="over" in2="SourceGraphic" result="compositeFlood" />
+        </filter> -->
+        <filter
+          id="flood-filter"
+          x="0"
+          :y="floodFillOutput?.y"
+          width="100%"
+          :height="floodFillOutput?.height"
+        >
+          <!-- Flood color -->
+          <feFlood flood-color="#ffc107" flood-opacity="0.8" result="flood" />
+          <!-- Composite the flood effect with the original graphic -->
+          <feComposite in="flood" in2="SourceGraphic" operator="in" />
+        </filter>
+      </svg>
+
+      <div class="horny-limit" />
+
       <div class="alya-logo" />
       <div
         class="sirena animate__animated animate__infinite"
@@ -261,6 +304,17 @@ const setVibratorControl = () => {
     height: 250px;
     background: url('../assets/vaha.png') no-repeat;
     background-size: cover;
+  }
+
+  .vaha-overlay {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 500px;
+    height: 250px;
+    background: url('../assets/vaha.svg') no-repeat;
+    background-size: cover;
+    pointer-events: none;
   }
 
   .alya-logo {
@@ -326,12 +380,24 @@ const setVibratorControl = () => {
 
 .aktualna-vaha {
   position: absolute;
-  top: 111px;
+  top: 100px;
   left: 152px;
   width: 200px;
-  font-size: 30px;
+  font-size: 45px;
   font-weight: bold;
   color: white;
+  -webkit-text-stroke: 1px black;
+}
+
+.horny-limit {
+  position: absolute;
+  top: 40px;
+  left: 0px;
+  width: 500px;
+  height: 3px;
+  margin-top: 20px;
+  transform-origin: center;
+  background-color: red;
 }
 
 .horna-klapka {
@@ -367,7 +433,7 @@ const setVibratorControl = () => {
 
 .naStred {
   transform: rotate3d(0, 0, 1, -45deg);
-  background: linear-gradient(#ffc107, orange);
+  background: linear-gradient(pink, purple);
 }
 
 .error {
@@ -391,7 +457,11 @@ const setVibratorControl = () => {
 
 .animate-opening-na-stred {
   --animate-duration: 1.5s;
-  background: linear-gradient(#ffc107, orange);
+  background: linear-gradient(pink, purple);
+}
+
+.text-purple {
+  color: purple;
 }
 
 @keyframes rotateOutDownRight {

@@ -192,7 +192,7 @@ export default {
   }
 
   &.status-false {
-    @include status(#de8e8c);
+    @include status(#e3000f);
   }
 }
 </style>

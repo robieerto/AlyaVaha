@@ -58,6 +58,11 @@ const getIncrementByMinute = (date) => {
   return increment
 }
 
+const formatDateTime = (dateTime) => {
+  if (!dateTime) return ''
+  return dateTime.replace(/(\d{2}\.\d{2}\.\d{4})(\d{2}:\d{2}:\d{2})/, '$1 $2')
+}
+
 const notify = (message, type) => {
   DxNotify({
     message: message,
@@ -93,6 +98,7 @@ export {
   toCustomDate,
   getTomorrow,
   getIncrementByMinute,
+  formatDateTime,
   notify,
   shortNotify
 }

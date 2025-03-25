@@ -53,7 +53,7 @@ const store = reactive({
   uzivateliaLoading: true,
   materialyLoading: true,
   zasobnikyLoading: true,
-  statistikyLoading: true,
+  statistikyLoading: false,
   isStartNavazovanieModalOpened: false,
   isNavazovanieInitSuccess: false,
   isDateTimePrehlad: false,
