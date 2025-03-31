@@ -26,3 +26,11 @@
   margin-left: 0.4rem;
   cursor: pointer;
 }
+
+.dx-popup-bottom {
+  background-color: #f2f2f2;
+}
+
+.dx-popup-bottom.dx-toolbar .dx-toolbar-items-container {
+  height: 68px;
+}

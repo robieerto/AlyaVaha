@@ -139,7 +139,7 @@ namespace AlyaVaha
                                     vazenie.Id = 0;
                                     vazenie.ZariadenieId = SelectedZariadenie?.Id;
                                     NavazovanieRepository.Add(vazenie);
-                                    ZariadenieRepository.UpdateStatistiky(1, vazenie.NavazeneMnozstvo, vazenie.NavazenyPocetDavok);
+                                    ZariadenieRepository.UpdateStatistiky((int)vazenie.ZariadenieId!, vazenie.NavazeneMnozstvo, vazenie.NavazenyPocetDavok);
                                     vahaAPI?.SetTabulkaVazeniRemove(externalId);
                                 }
                                 catch (Exception ex)

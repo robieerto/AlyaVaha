@@ -36,7 +36,9 @@ const initDataUzivatelZariadenie = {
 
 const store = reactive({
   ...initDataUzivatelZariadenie,
+  previousBruttoVaha: null as number | null,
   zariadenie: null as AlyaVaha.Models.IZariadenie | null,
+  nastavenia: {} as AlyaVaha.Models.INastavenia,
   navazovania: [] as AlyaVaha.Models.INavazovanie[],
   navazovaniaData: null,
   navazovaniaDataExport: null,

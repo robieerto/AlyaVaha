@@ -184,6 +184,25 @@ namespace AlyaVaha
                             }
                         }
                         break;
+                    case "GetNastavenia":
+                        if (DataCommunicator.SelectedZariadenie != null)
+                        {
+                            responseValue = ZariadenieRepository.GetNastavenia(DataCommunicator.SelectedZariadenie.Id);
+                        }
+                        responseValue ??= "null";
+                        break;
+                    case "UpdateNastavenia":
+                        responseValue = false;
+                        if (windowCommand.Value != null && DataCommunicator.SelectedZariadenie != null)
+                        {
+                            var nastavenia = JsonSerializer.Deserialize<Nastavenia>(windowCommand.Value);
+                            if (nastavenia != null)
+                            {
+                                ZariadenieRepository.UpdateNastavenia(DataCommunicator.SelectedZariadenie.Id, nastavenia);
+                            }
+                            responseValue = true;
+                        }
+                        break;
                     case "AddUzivatel":
                         responseValue = new OperationResult("Užívateľ nebol pridaný", false);
                         if (windowCommand.Value != null)

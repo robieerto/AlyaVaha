@@ -380,7 +380,7 @@ const setVibratorControl = () => {
 
 .aktualna-vaha {
   position: absolute;
-  top: 100px;
+  top: 110px;
   left: 152px;
   width: 200px;
   font-size: 45px;
@@ -391,10 +391,10 @@ const setVibratorControl = () => {
 
 .horny-limit {
   position: absolute;
-  top: 40px;
+  top: 38px;
   left: 0px;
   width: 500px;
-  height: 3px;
+  height: 4px;
   margin-top: 20px;
   transform-origin: center;
   background-color: red;

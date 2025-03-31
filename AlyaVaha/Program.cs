@@ -103,7 +103,8 @@ class Program
                                 Port = 3396,
                                 PocetNavazeni = 0,
                                 NavazeneMnozstvo = 0,
-                                NavazenyPocetDavok = 0
+                                NavazenyPocetDavok = 0,
+                                Nastavenia = ""
                             });
                         }
                     }
@@ -159,6 +160,7 @@ class Program
             string windowTitle = "Alya Váha";
 
             // Creating a new PhotinoWindow instance with the fluent API
+#pragma warning disable CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
             var window = new PhotinoWindow()
                 .SetTitle(windowTitle)
                 // Resize to a percentage of the main monitor work area
@@ -191,13 +193,14 @@ class Program
                 // This could be added in the PhotinoWindowOptions if preferred.
                 .RegisterWebMessageReceivedHandler(MainMessageHandler.MessageHandler)
                 .Load(appUrl); // Can be used with relative path strings or "new URI()" instance to load a website.
+#pragma warning restore CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
 
             window.LogVerbosity = 0;
 
             // Initialize the DataCommunicator
             DataCommunicator.Init(window, timeout, lightTimeout);
             // Start the DataCommunicator
-            Task.Run(async () => DataCommunicator.Run());
+            Task.Run(() => Task.FromResult(DataCommunicator.Run()));
 
             window.WaitForClose(); // Starts the application event loop
 

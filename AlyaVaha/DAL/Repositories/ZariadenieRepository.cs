@@ -1,5 +1,6 @@
 ﻿using AlyaLibrary;
 using AlyaVaha.Models;
+using System.Text.Json;
 
 namespace AlyaVaha.DAL.Repositories
 {
@@ -74,6 +75,40 @@ namespace AlyaVaha.DAL.Repositories
                 {
                     updatedZariadenie.NavazenyPocetDavok += navazenyPocetDavok.Value;
                 }
+                context.Zariadenia.Update(updatedZariadenie);
+                context.SaveChanges();
+            }
+        }
+
+        public static Nastavenia GetNastavenia(int id)
+        {
+            var context = new AlyaVahaDbContext();
+            var zariadenie = context.Zariadenia.FirstOrDefault(x => x.Id == id);
+            if (zariadenie != null && zariadenie.Nastavenia != null && zariadenie?.Nastavenia?.Length > 0)
+            {
+                try
+                {
+                    var nastavenia = JsonSerializer.Deserialize<Nastavenia>(zariadenie.Nastavenia);
+                    if (nastavenia != null)
+                    {
+                        return nastavenia;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Library.WriteLog(ex);
+                }
+            }
+            return new Nastavenia();
+        }
+
+        public static void UpdateNastavenia(int id, Nastavenia nastavenia)
+        {
+            var context = new AlyaVahaDbContext();
+            var updatedZariadenie = context.Zariadenia.FirstOrDefault(x => x.Id == id);
+            if (updatedZariadenie != null)
+            {
+                updatedZariadenie.Nastavenia = JsonSerializer.Serialize(nastavenia);
                 context.Zariadenia.Update(updatedZariadenie);
                 context.SaveChanges();
             }

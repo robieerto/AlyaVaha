@@ -54,7 +54,7 @@ namespace AlyaVaha.DAL
 
             var zariadenia = new List<Models.Zariadenie>
             {
-                new Models.Zariadenie { Id = 1, NazovZariadenia = "Váha 1", IpAdresa = "192.168.1.10", Port = 3396, PocetNavazeni = 0, NavazeneMnozstvo = 0, NavazenyPocetDavok = 0 }
+                new Models.Zariadenie { Id = 1, NazovZariadenia = "Váha 1", IpAdresa = "192.168.1.10", Port = 3396, PocetNavazeni = 0, NavazeneMnozstvo = 0, NavazenyPocetDavok = 0, Nastavenia = "" }
             };
 
             var materialy = new List<Models.Material>

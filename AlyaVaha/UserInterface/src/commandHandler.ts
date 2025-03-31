@@ -4,14 +4,38 @@ import store from '@/store'
 import router from '@/router'
 import * as VahaAPI from '@/types/vahaTypes'
 import { Messages } from './messages'
+// import { testData } from './testData'
 
-let timeoutId = setTimeout(() => {}, 0)
+let timeoutData = undefined as ReturnType<typeof setTimeout> | undefined
+let timeoutNepribuda = undefined as ReturnType<typeof setTimeout> | undefined
+let timeoutNeodbuda = undefined as ReturnType<typeof setTimeout> | undefined
 
 const afterTimeout = () => {
   if (!store.navazovaniaLoading && !store.statistikyLoading) {
     store.connected = false
   } else {
-    timeoutId = setTimeout(afterTimeout, 3000)
+    timeoutData = setTimeout(afterTimeout, 3000)
+  }
+}
+
+const afterTimeoutNepribuda = () => {
+  if (store.actualData.StavRiadeniaNavazovania === VahaAPI.StavRiadeniaNavazovania.NavazujeSa) {
+    sendCommand('SetValues', {
+      StavSireny: VahaAPI.StavSirenyPovel.ZapniSirenu
+    })
+    console.log('Zapni sirenu nepribuda')
+  }
+}
+
+const afterTimeoutNeodbuda = () => {
+  if (
+    store.actualData.StavRiadeniaNavazovania ===
+    VahaAPI.StavRiadeniaNavazovania.PrebiehaVyprazdnovanie
+  ) {
+    sendCommand('SetValues', {
+      StavSireny: VahaAPI.StavSirenyPovel.ZapniSirenu
+    })
+    console.log('Zapni sirenu neodbuda')
   }
 }
 
@@ -62,50 +86,29 @@ function initCommandHandler() {
               }
               break
             }
+            case 'GetNastavenia': {
+              if (response.Value !== '"null"') {
+                store.nastavenia = JSON.parse(response.Value!) as AlyaVaha.Models.INastavenia
+              }
+              break
+            }
             case 'ActualData': {
               if (!store.isUserLoggedIn) {
                 return
               }
               store.connected = true
-              clearTimeout(timeoutId)
-              timeoutId = setTimeout(afterTimeout, 3000)
+              clearTimeout(timeoutData)
+              timeoutData = setTimeout(afterTimeout, 3000)
+
+              store.previousBruttoVaha = store.actualData?.BruttoVaha ?? null
 
               store.actualData = JSON.parse(response.Value!) as VahaAPI.IVahaModel
               // Test data
-              //store.actualData = {
-              //  VahaNavazovania: 100.0,
-              //  BruttoVaha: 100.0,
-              //  CelkovaVaha: 100.0,
-              //  PocetVyrobenychCyklovVazenia: 1,
-              //  PoslednaDokoncenaCelkovaVaha: 0,
-              //  PoslednyDokoncenyPocetDavok: 0,
-              //  PozadovanaVahaDavky: 200,
-              //  CasCykluDavky: 10,
-              //  PozadovanaCelkovaVaha: 500,
-              //  PozadovanyPocetDavok: 0,
-              //  PocetDavokSirena: 0,
-              //  VahaSirena: 0,
-              //  StavNavazovania: VahaAPI.StavNavazovania.NavazovanieUkoncene,
-              //  ErrorStavVahy: VahaAPI.StavVahy.ZiadnaChyba,
-              //  ErrorStavPrevodnikaVahy: VahaAPI.StavPrevodnika.ZiadnaChyba,
-              //  VykonCelkovy: 0,
-              //  VykonAktualny: 0,
-              //  StavSireny: VahaAPI.StavSireny.SirenaVypnuta,
-              //  StavVibratora: VahaAPI.StavVibratora.VibratorVypnuty,
-              //  CasDoKoncaDavky: 0,
-              //  TabulkaUdalosti: '',
-              //  StavHornejKlapky: VahaAPI.StavKlapky.KlapkaOtvorena,
-              //  StavDolnejKlapky: VahaAPI.StavKlapky.KlapkaZatvorena,
-              //  DigitalneVstupy: '00000000',
-              //  DigitalneVystupy: '',
-              //  VerziaSoftware: '1.0.0',
-              //  StavRiadeniaNavazovania: VahaAPI.StavRiadeniaNavazovania.NavazujeSa,
-              //  TabulkaVazeni: '',
-              //  IdCisloMaterialu: 0,
-              //  IdOdbernehoMiesta: 0,
-              //  IdSmerovaciehoMiesta: 0,
-              //  IdCisloPracovnika: 2
-              //}
+              // store.actualData = testData as VahaAPI.IVahaModel
+
+              checkVahaNepribuda()
+              checkVahaNeodbuda()
+
               setActualInputs()
               setActualOutputs()
               setActualStateTexts()
@@ -278,6 +281,7 @@ async function getLoginData() {
 }
 
 async function getAllData() {
+  sendCommand('GetNastavenia')
   sendCommand('GetZariadenia')
   sendCommand('GetMaterialy')
   sendCommand('GetZasobniky')
@@ -392,6 +396,53 @@ async function setActualStateTexts() {
     StavHornejKlapky: getStavHornejKlapky(),
     StavDolnejKlapky: getStavDolnejKlapky(),
     StavRiadeniaNavazovania: getStavRiadeniaNavazovania()
+  }
+}
+
+async function checkVahaNepribuda() {
+  if (store.previousBruttoVaha === null) return
+
+  if (
+    store.actualData.StavRiadeniaNavazovania === VahaAPI.StavRiadeniaNavazovania.NavazujeSa &&
+    store.nastavenia.SirenaPriNepribudani &&
+    store.actualData.BruttoVaha === store.previousBruttoVaha
+  ) {
+    if (!timeoutNepribuda) {
+      timeoutNepribuda = setTimeout(
+        afterTimeoutNepribuda,
+        store.nastavenia.CasSirenyPriNepribudani * 1000
+      )
+    }
+    return
+  }
+
+  if (timeoutNepribuda) {
+    clearTimeout(timeoutNepribuda)
+    timeoutNepribuda = undefined
+  }
+}
+
+async function checkVahaNeodbuda() {
+  if (store.previousBruttoVaha === null) return
+
+  if (
+    store.actualData.StavRiadeniaNavazovania ===
+      VahaAPI.StavRiadeniaNavazovania.PrebiehaVyprazdnovanie &&
+    store.nastavenia.SirenaPriNeodbudani &&
+    store.actualData.BruttoVaha === store.previousBruttoVaha
+  ) {
+    if (!timeoutNeodbuda) {
+      timeoutNeodbuda = setTimeout(
+        afterTimeoutNeodbuda,
+        store.nastavenia.CasSirenyPriNeodbudani * 1000
+      )
+    }
+    return
+  }
+
+  if (timeoutNeodbuda) {
+    clearTimeout(timeoutNeodbuda)
+    timeoutNeodbuda = undefined
   }
 }
 

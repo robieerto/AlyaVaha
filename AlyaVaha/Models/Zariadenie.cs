@@ -12,5 +12,6 @@ namespace AlyaVaha.Models
         public int PocetNavazeni { get; set; }
         public double NavazeneMnozstvo { get; set; }
         public int NavazenyPocetDavok { get; set; }
+        public string? Nastavenia { get; set; }
     }
 }

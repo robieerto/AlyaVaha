@@ -1,7 +1,7 @@
 ; Define the application information
 [Setup]
 AppName=AlyaVaha
-AppVersion=1.0
+AppVersion=1.2
 DefaultDirName={commonpf}\AlyaVaha
 DefaultGroupName=AlyaVaha
 OutputDir=.
@@ -17,6 +17,7 @@ Name: "C:\sqlite"
 ; Define the files to be installed
 [Files]
 Source: "C:\Users\rober\source\repos\AlyaVaha\AlyaVaha\bin\Publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+Source: "C:\Users\rober\source\repos\AlyaVaha\Installer\sqlite3.exe"; DestDir: "C:\sqlite"; Flags: ignoreversion
 Source: "D:\Programs\.net\windowsdesktop-runtime-8.0.7-win-x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 Source: "D:\Programs\.net\aspnetcore-runtime-8.0.7-win-x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 Source: "D:\Programs\.net\MicrosoftEdgeWebView2RuntimeInstallerX64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall

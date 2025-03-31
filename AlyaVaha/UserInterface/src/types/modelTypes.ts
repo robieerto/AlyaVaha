@@ -25,6 +25,13 @@ module AlyaVaha.Models {
 		HmotnostMaterialu?: number;
 		JeAktivny?: boolean;
 	}
+	export interface INastavenia
+	{
+		SirenaPriNepribudani: boolean;
+		SirenaPriNeodbudani: boolean;
+		CasSirenyPriNepribudani: number;
+		CasSirenyPriNeodbudani: number;
+	}
 	export interface INavazovanie
 	{
 		Id: number;
@@ -68,6 +75,7 @@ module AlyaVaha.Models {
 		PocetNavazeni: number;
 		NavazeneMnozstvo: number;
 		NavazenyPocetDavok: number;
+		Nastavenia?: string;
 	}
 	export interface IZasobnik
 	{
