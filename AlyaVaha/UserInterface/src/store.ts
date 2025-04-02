@@ -8,6 +8,7 @@ const initDataUzivatelZariadenie = {
   connected: false,
   user: null as AlyaVaha.Models.IUzivatel | null,
   actualData: {} as VahaAPI.IVahaModel,
+  // previousData: {} as VahaAPI.IVahaModel,
   actualInputs: {
     HornaKlapkaOtvorena: false,
     HornaKlapkaZatvorena: false,
@@ -31,12 +32,12 @@ const initDataUzivatelZariadenie = {
     Odfuk: false,
     Blokovanie1: false
   } as VahaAPI.IProgramVahaOutput,
-  actualStateTexts: {} as Partial<Record<keyof typeof Messages, string>>
+  actualStateTexts: {} as Partial<Record<keyof typeof Messages, string>>,
+  timerNavazovanie: null as any
 }
 
 const store = reactive({
   ...initDataUzivatelZariadenie,
-  previousBruttoVaha: null as number | null,
   zariadenie: null as AlyaVaha.Models.IZariadenie | null,
   nastavenia: {} as AlyaVaha.Models.INastavenia,
   navazovania: [] as AlyaVaha.Models.INavazovanie[],
@@ -58,7 +59,6 @@ const store = reactive({
   statistikyLoading: false,
   isStartNavazovanieModalOpened: false,
   isNavazovanieInitSuccess: false,
-  isDateTimePrehlad: false,
   isDateTimeStatistiky: false,
   isNavazovaniaDeleting: false
 })

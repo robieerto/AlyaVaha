@@ -17,18 +17,21 @@ Najnovšie sú na spodku súboru.
 
 --------------------------------------------------------------------------------
 
-V zložke programu je konfiguračný súbor configuration.json. Dá sa meniť len s administrátorským právom na PC (napr. si nájdeme v Ponuke Štart Poznámkový blok / Notepad, klikneme naňho pravým tlačidlom "Spustiť ako správca" a v ňom potom vyberieme cestu ku konfiguráku).
+V zložke programu je konfiguračný súbor configuration.json. Dá sa meniť len s administrátorským právom na PC (napr. si nájdeme v Ponuke Štart Poznámkový blok / Notepad, klikneme naňho pravým tlačidlom "Spustiť ako správca" a v ňom potom vyberieme cestu ku konfiguráku, napr. C:\Program Files (x86)\AlyaVaha\configuration.json).
 
 Súbor môže vyzerať takto:
 {
   "ConnectionString": "Data Source=C:\\sqlite\\AlyaVaha.db",
-  "Zoom": 130,
+  "Zoom": 125,
   "Timeout": 100,
-  "LightTimeout": 1000
+  "LightTimeout": 1000,
+  "ReadAllHistoryData": false
 }
 
 ConnectionString sa používa na pripojenie k databáze - obsahuje jej cestu. Dá sa zmeniť, ak chceme zmeniť databázu.
 
-Zoom nastavuje rozlíšenie programu - je to údaj v percentách. Môže sa stať, že na veľkom monitore budú texty malé, vtedy môžeme zoom dať väčší. Prípadne na malom monitore ho nastavíme menší, aby sa tam všetko zmestilo.
+Zoom nastavuje rozlíšenie programu - je to údaj v percentách. Môže sa stať, že na veľkom monitore budú texty malé, vtedy môžeme zoom dať väčší. Prípadne na malom monitore ho nastavíme menší.
 
 Timeouty sú v milisekundách a sú 2 - prvý je na väčšinu komunikácie, druhý "Light" sa používa na riadiace príkazy, pri ktorých niekedy váha dlhšie odpovedá. Ak by sa stávalo, že váha v programe vypadáva (vidíme ju často že je Nepripojená), skúste ich nastaviť väčšie.
+
+Príznakom ReadAllHistoryData sa nastavuje, či program vyčíta z váhy (z jej tabuľky vážení) všetky váženia, ktoré tam sú (môžu tam byť nejaké historické, napr. keď sa s váhou vážilo manuálne bez programu). Ak je true, vyčíta všetky a uloží ich do DB. Ak je false, vyčíta vždy len jedno najnovšie váženie.

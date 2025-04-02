@@ -26,20 +26,31 @@ namespace AlyaVaha.DAL.Repositories
         public static void Add(Navazovanie navazovanie)
         {
             var context = new AlyaVahaDbContext();
+            if (!context.Materialy.Any(x => x.Id == navazovanie.MaterialId))
+            {
+                navazovanie.MaterialId = null;
+            }
+            if (!context.Zasobniky.Any(x => x.Id == navazovanie.OdkialId))
+            {
+                navazovanie.OdkialId = null;
+            }
+            if (!context.Zasobniky.Any(x => x.Id == navazovanie.KamId))
+            {
+                navazovanie.KamId = null;
+            }
+            if (!context.Uzivatelia.Any(x => x.Id == navazovanie.UzivatelId))
+            {
+                navazovanie.UzivatelId = null;
+            }
             try
             {
                 context.Navazovania.Add(navazovanie);
                 context.SaveChanges();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Library.WriteLog("Navažovanie s neznámymi evidenčnými ID - pravdepodobne bolo spustené s inou databázou");
-                navazovanie.ZariadenieId = null;
-                navazovanie.MaterialId = null;
-                navazovanie.OdkialId = null;
-                navazovanie.KamId = null;
-                context.Navazovania.Add(navazovanie);
-                context.SaveChanges();
+                Console.WriteLine(ex);
+                Library.WriteLog("Nepodarilo sa pridať navažovanie do databázy");
             }
         }
 

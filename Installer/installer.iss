@@ -1,7 +1,7 @@
 ; Define the application information
 [Setup]
 AppName=AlyaVaha
-AppVersion=1.2
+AppVersion=1.4
 DefaultDirName={commonpf}\AlyaVaha
 DefaultGroupName=AlyaVaha
 OutputDir=.

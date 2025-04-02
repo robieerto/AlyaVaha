@@ -156,14 +156,14 @@ function openStartNavazovanieModal() {
     </div>
     <div class="content-block mt-0">
       <HlavneUdajeStatus />
-      <div class="row mt-3">
-        <div class="col mw-450">
+      <div class="d-flex justify-content-between mt-3">
+        <div class="col mw-400">
           <StavyStatus />
         </div>
         <div class="col-auto">
           <AnimationVaha />
         </div>
-        <div class="col mw-450">
+        <div class="col mw-400">
           <UdajeStatus />
         </div>
       </div>
@@ -185,7 +185,7 @@ function openStartNavazovanieModal() {
 </template>
 
 <style lang="scss">
-.mw-450 {
-  max-width: 450px;
+.mw-400 {
+  max-width: 400px;
 }
 </style>

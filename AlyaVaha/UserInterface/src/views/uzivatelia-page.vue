@@ -118,7 +118,7 @@ function deleteRow(rowEvent) {
         <DxRequiredRule message="Heslo je povinné" />
       </DxColumn>
       <DxColumn data-field="JeAdmin" caption="Admin práva" data-type="boolean" />
-      <DxColumn data-field="JeAktivny" caption="Viditeľný" data-type="boolean" />
+      <!-- <DxColumn data-field="JeAktivny" caption="Viditeľný" data-type="boolean" /> -->
       <!-- <template #poradieTemplate="{ data }">{{ calculatePoradie(data.row.rowIndex) }}</template> -->
     </DxDataGrid>
   </div>

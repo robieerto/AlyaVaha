@@ -380,12 +380,13 @@ const setVibratorControl = () => {
 
 .aktualna-vaha {
   position: absolute;
-  top: 110px;
+  top: 108px;
   left: 152px;
   width: 200px;
   font-size: 45px;
   font-weight: bold;
   color: white;
+  font-family: system-ui;
   -webkit-text-stroke: 1px black;
 }
 

@@ -27,10 +27,13 @@ module AlyaVaha.Models {
 	}
 	export interface INastavenia
 	{
+		DatumACasV1Stlpci: boolean;
 		SirenaPriNepribudani: boolean;
-		SirenaPriNeodbudani: boolean;
 		CasSirenyPriNepribudani: number;
+		VahaSirenyPriNepribudani: number;
+		SirenaPriNeodbudani: boolean;
 		CasSirenyPriNeodbudani: number;
+		VahaSirenyPriNeodbudani: number;
 	}
 	export interface INavazovanie
 	{

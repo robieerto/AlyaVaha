@@ -138,15 +138,13 @@ namespace VahaAPI
 
         public bool ResetTabulky()
         {
-            bool isControl = true;
-            string output = udpCommunicator.SendAndReceive("!NN=-1", isControl);
-            string[] delimitted = output.Split('=');
-            string receivedValue = delimitted[1].Replace(" ", "");
-            if (receivedValue == "OK")
+            bool result = SetTabulkaVazeniRemove(-1);
+            if (result == true)
             {
-                output = udpCommunicator.SendAndReceive("!LG=-1", isControl);
-                delimitted = output.Split('=');
-                receivedValue = delimitted[1].Replace(" ", "");
+                bool isControl = true;
+                string output = udpCommunicator.SendAndReceive("!LG=-1", isControl);
+                string[] delimitted = output.Split('=');
+                string receivedValue = delimitted[1].Replace(" ", "");
                 if (receivedValue == "OK")
                 {
                     var responseValue = SetValues(new VahaModel

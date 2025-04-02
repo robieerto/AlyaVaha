@@ -17,12 +17,14 @@ namespace AlyaVaha
         public static Queue<WindowCommand> CommandQueue { get; set; } = new Queue<WindowCommand>();
         public static int Timeout { get; set; }
         public static int LightTimeout { get; set; }
+        public static bool ReadAllHistoryData { get; set; }
 
-        public static void Init(PhotinoWindow window, int timeout, int lightTimeout)
+        public static void Init(PhotinoWindow window, int timeout, int lightTimeout, bool readAllHistoryData)
         {
             Window = window;
             Timeout = timeout;
             LightTimeout = lightTimeout;
+            ReadAllHistoryData = readAllHistoryData;
         }
 
         public static void InitVahaCommunicator(Zariadenie zariadenie)
@@ -137,10 +139,19 @@ namespace AlyaVaha
                                     var vazenie = NavazovanieParser.Parse(vahaData.TabulkaVazeni);
                                     var externalId = vazenie.Id;
                                     vazenie.Id = 0;
-                                    vazenie.ZariadenieId = SelectedZariadenie?.Id;
+                                    vazenie.ZariadenieId = SelectedZariadenie?.Id ?? 1;
                                     NavazovanieRepository.Add(vazenie);
                                     ZariadenieRepository.UpdateStatistiky((int)vazenie.ZariadenieId!, vazenie.NavazeneMnozstvo, vazenie.NavazenyPocetDavok);
-                                    vahaAPI?.SetTabulkaVazeniRemove(externalId);
+                                    if (ReadAllHistoryData)
+                                    {
+                                        // Delete only current vazenie
+                                        vahaAPI?.SetTabulkaVazeniRemove(externalId);
+                                    }
+                                    else
+                                    {
+                                        // Delete all vazenia
+                                        vahaAPI?.SetTabulkaVazeniRemove(-1);
+                                    }
                                 }
                                 catch (Exception ex)
                                 {

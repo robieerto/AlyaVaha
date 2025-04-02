@@ -63,6 +63,29 @@ const formatDateTime = (dateTime) => {
   return dateTime.replace(/(\d{2}\.\d{2}\.\d{4})(\d{2}:\d{2}:\d{2})/, '$1 $2')
 }
 
+const formatTime = (secondsTime) => {
+  if (!secondsTime) return ''
+  const hours = Math.floor(secondsTime / 3600)
+  const minutes = Math.floor((secondsTime % 3600) / 60)
+  const seconds = secondsTime % 60
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+}
+
+const parseCustomDate = (dateString) => {
+  // Split the date and time parts
+  const formattedDateString = formatDateTime(dateString)
+  const [datePart, timePart] = formattedDateString.split(' ')
+
+  // Extract day, month, and year from the date part
+  const [day, month, year] = datePart.split('.').map(Number)
+
+  // Extract hours, minutes, and seconds from the time part
+  const [hours, minutes, seconds] = timePart.split(':').map(Number)
+
+  // Construct the Date object (months are 0-based in JavaScript)
+  return new Date(year, month - 1, day, hours, minutes, seconds)
+}
+
 const notify = (message, type) => {
   DxNotify({
     message: message,
@@ -99,6 +122,8 @@ export {
   getTomorrow,
   getIncrementByMinute,
   formatDateTime,
+  formatTime,
+  parseCustomDate,
   notify,
   shortNotify
 }

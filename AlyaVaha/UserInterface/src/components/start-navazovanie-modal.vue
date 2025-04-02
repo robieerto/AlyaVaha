@@ -378,11 +378,28 @@ store.isNavazovanieInitSuccess = false
           <hr />
 
           <div class="row mt-3">
-            <div class="col-4 mt-3">
+            <div class="col-3 mt-3">
               <DxCheckBox
                 v-model="store.nastavenia.SirenaPriNepribudani"
                 text="Spustiť sirénu pri nepribúdaní"
               />
+            </div>
+            <div class="col-3 pl-0">
+              <DxNumberBox
+                v-model:value="store.nastavenia.VahaSirenyPriNepribudani"
+                :show-spin-buttons="true"
+                mode="number"
+                :step="1"
+                :min="0"
+                :disabled="!store.nastavenia.SirenaPriNepribudani"
+              />
+            </div>
+            <div class="col-1 ps-0">
+              <div class="align-middle">
+                <p :class="['my-3', !store.nastavenia.SirenaPriNepribudani && 'disabled-text']">
+                  kg
+                </p>
+              </div>
             </div>
             <div class="col-1 ps-0">
               <div class="align-middle">
@@ -410,11 +427,28 @@ store.isNavazovanieInitSuccess = false
             </div>
           </div>
           <div class="row mt-3">
-            <div class="col-4 mt-3">
+            <div class="col-3 mt-3">
               <DxCheckBox
                 v-model="store.nastavenia.SirenaPriNeodbudani"
                 text="Spustiť sirénu pri neodbúdaní"
               />
+            </div>
+            <div class="col-3 pl-0">
+              <DxNumberBox
+                v-model:value="store.nastavenia.VahaSirenyPriNeodbudani"
+                :show-spin-buttons="true"
+                mode="number"
+                :step="1"
+                :min="0"
+                :disabled="!store.nastavenia.SirenaPriNeodbudani"
+              />
+            </div>
+            <div class="col-1 ps-0">
+              <div class="align-middle">
+                <p :class="['my-3', !store.nastavenia.SirenaPriNeodbudani && 'disabled-text']">
+                  kg
+                </p>
+              </div>
             </div>
             <div class="col-1 ps-0">
               <div class="align-middle">

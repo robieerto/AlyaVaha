@@ -45,6 +45,8 @@ class Program
             var lightTimeout = config.GetValue<int>("LightTimeout");
             if (lightTimeout == 0) lightTimeout = 1000;
 
+            bool readAllHistoryData = config.GetValue<bool>("ReadAllHistoryData");
+
 
             //var connectionString = config.GetConnectionString("DefaultConnection");
 
@@ -198,7 +200,7 @@ class Program
             window.LogVerbosity = 0;
 
             // Initialize the DataCommunicator
-            DataCommunicator.Init(window, timeout, lightTimeout);
+            DataCommunicator.Init(window, timeout, lightTimeout, readAllHistoryData);
             // Start the DataCommunicator
             Task.Run(() => Task.FromResult(DataCommunicator.Run()));
 

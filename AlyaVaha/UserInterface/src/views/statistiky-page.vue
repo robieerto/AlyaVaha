@@ -22,8 +22,8 @@ import ReportPdf from './report-pdf.vue'
 const html2pdfRef = ref()
 
 const getZariadenia = () => [{ Id: 0, NazovZariadenia: '(Všetko)' }, ...store.zariadenia]
-const getUzivatelia = () => [{ Id: 0, Login: '(Všetko)' }, ...store.aktivniUzivatelia]
-const getMaterialy = () => [{ Id: 0, NazovMaterialu: '(Všetko)' }, ...store.aktivneMaterialy]
+const getUzivatelia = () => [{ Id: 0, Login: '(Všetko)' }, ...store.uzivatelia]
+const getMaterialy = () => [{ Id: 0, NazovMaterialu: '(Všetko)' }, ...store.materialy]
 const getZasobnikyDoVahy = () => [{ Id: 0, NazovZasobnika: '(Všetko)' }, ...store.zasobnikyDoVahy]
 const getZasobnikyZVahy = () => [{ Id: 0, NazovZasobnika: '(Všetko)' }, ...store.zasobnikyZVahy]
 
@@ -67,14 +67,14 @@ watch(
 )
 
 watch(
-  () => store.aktivniUzivatelia,
+  () => store.uzivatelia,
   () => {
     state.uzivatelia = getUzivatelia()
   }
 )
 
 watch(
-  () => store.aktivneMaterialy,
+  () => store.materialy,
   () => {
     state.materialy = getMaterialy()
   }
@@ -183,11 +183,10 @@ function filterToStr() {
       toDate(state.filterOptions.datumDo) +
       (store.isDateTimeStatistiky ? String(' ' + toTime(state.filterOptions.datumDo)) : ''),
     uzivatel: state.filterOptions.uzivatel
-      ? store.aktivniUzivatelia.find((uzivatel) => uzivatel.Id === state.filterOptions.uzivatel)
-          .Login
+      ? store.uzivatelia.find((uzivatel) => uzivatel.Id === state.filterOptions.uzivatel).Login
       : '(Všetko)',
     material: state.filterOptions.material
-      ? store.aktivneMaterialy.find((material) => material.Id === state.filterOptions.material)
+      ? store.materialy.find((material) => material.Id === state.filterOptions.material)
           .NazovMaterialu
       : '(Všetko)',
     odkial: state.filterOptions.odkial

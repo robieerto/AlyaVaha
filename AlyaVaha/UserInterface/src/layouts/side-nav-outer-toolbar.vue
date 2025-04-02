@@ -49,7 +49,7 @@ export default {
     const route = useRoute()
 
     const scrollViewRef = ref(null)
-    const menuOpened = ref(props.isLarge)
+    const menuOpened = ref(false) //ref(props.isLarge)
     const menuTemporaryOpened = ref(false)
 
     function toggleMenu(e) {

@@ -108,9 +108,10 @@ const state = reactive({
 })
 
 watch(
-  () => store.isDateTimePrehlad,
+  () => store.nastavenia.DatumACasV1Stlpci,
   () => {
     state.dataGridInstance.clearFilter()
+    sendCommand('UpdateNastavenia', store.nastavenia)
     // state.dataGridInstance.repaint()
   }
 )
@@ -131,8 +132,12 @@ function onDataGridInitialized(e) {
 const calculatePoradie = (rowIndex) =>
   rowIndex + state.dataGridInstance.pageIndex() * state.dataGridInstance.pageSize()
 
-function calculateTimeCellValue(rowData) {
+function calculateStartTimeCellValue(rowData) {
   return rowData.CasStartu?.toString()
+}
+
+function calculateEndTimeCellValue(rowData) {
+  return rowData.CasKonca?.toString()
 }
 
 function calculateTimeFilterExpression(filterValue, selectedFilterOperation) {
@@ -233,7 +238,7 @@ async function deleteByFilter() {
         <DxCheckBox
           text="Dátum a čas v 1 stĺpci"
           class="ml-5"
-          v-model:value="store.isDateTimePrehlad"
+          v-model:value="store.nastavenia.DatumACasV1Stlpci"
         />
       </div>
       <div class="d-flex justify-content-start">
@@ -299,23 +304,45 @@ async function deleteByFilter() {
       /> -->
       <DxColumn
         data-field="DatumStartu"
-        caption="Dátum navažovania"
-        :data-type="store.isDateTimePrehlad ? 'datetime' : 'date'"
-        :min-width="170"
-        :format="store.isDateTimePrehlad ? dateTimeFormat : dateFormat"
+        caption="Dátum štart navažovania"
+        :data-type="store.nastavenia.DatumACasV1Stlpci ? 'datetime' : 'date'"
+        :min-width="150"
+        :format="store.nastavenia.DatumACasV1Stlpci ? dateTimeFormat : dateFormat"
         :allow-editing="false"
         :filterOperations="filterOperations"
       />
       <DxColumn
         data-field="CasStartu"
-        caption="Čas navažovania"
+        caption="Čas štart navažovania"
         data-type="datetime"
-        width="140"
-        :visible="!store.isDateTimePrehlad"
+        width="130"
+        :visible="!store.nastavenia.DatumACasV1Stlpci"
         :format="timeFormat"
         :allow-editing="false"
         :editorOptions="{ type: 'time' }"
-        :calculate-cell-value="calculateTimeCellValue"
+        :calculate-cell-value="calculateStartTimeCellValue"
+        :calculate-filter-expression="calculateTimeFilterExpression"
+        :filterOperations="filterOperations"
+      />
+      <DxColumn
+        data-field="DatumKonca"
+        caption="Dátum koniec navažovania"
+        :data-type="store.nastavenia.DatumACasV1Stlpci ? 'datetime' : 'date'"
+        :min-width="150"
+        :format="store.nastavenia.DatumACasV1Stlpci ? dateTimeFormat : dateFormat"
+        :allow-editing="false"
+        :filterOperations="filterOperations"
+      />
+      <DxColumn
+        data-field="CasKonca"
+        caption="Čas koniec navažovania"
+        data-type="datetime"
+        width="130"
+        :visible="!store.nastavenia.DatumACasV1Stlpci"
+        :format="timeFormat"
+        :allow-editing="false"
+        :editorOptions="{ type: 'time' }"
+        :calculate-cell-value="calculateEndTimeCellValue"
         :calculate-filter-expression="calculateTimeFilterExpression"
         :filterOperations="filterOperations"
       />
