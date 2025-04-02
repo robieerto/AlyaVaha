@@ -3,6 +3,7 @@
   flex-grow: 1;
 
   h2 {
+    font-weight: 400;
     font-size: 30px;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -60,6 +61,10 @@
     flex-direction: column;
     min-height: 100%;
   }
+}
+
+.dx-datagrid-headers .dx-datagrid-table .dx-row > td {
+  font-weight: 400;
 }
 
 #app {
